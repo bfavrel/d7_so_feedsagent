@@ -1,0 +1,9 @@
+name = "FeedsAgent connector : Tourinsoft"
+version = "7.x-1.0"
+description = "Interface between FeedsAgent and Tourinsoft. Implements the content type generator and content importer functionalities."
+package = "Saison d'Or"
+core = 7.x
+
+dependencies[] = so_feedsagent
+
+files[] = SoFeedsAgentConnectorTourinsoft.class.php

@@ -1,0 +1,431 @@
+<?php
+
+function so_feedsagent_schema() {
+
+    $schema = array();
+
+    $schema['feedsagent_connectors'] = array(
+        'description' => "Store defined connectors",
+
+        'fields' => array(
+            'id' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The connector's machine name. Primary key.",
+			),
+            'label' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The connector's human readable name.",
+			),
+            'type' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The connector's type.",
+			),
+            'module' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The module which implement this connector.",
+			),
+            'class' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The connector's class name.",
+			),
+            'params' => array(
+				'type' => 'text',
+				'not null' => true,
+				'description' => "The connector's settings.",
+			),
+        ),
+
+        'primary key' => array('id'),
+    );
+
+    $schema['feedsagent_content_types'] = array(
+        'description' => "Store infos for content types created by FeedsAgent.",
+
+        'fields' => array(
+            'id' => array(
+				'type' => 'serial',
+				'not null' => true,
+                'unsigned' => true,
+				'description' => "The content type's id. Primary key.",
+			),
+            'type' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The content type's machine name.",
+			),
+            'connector' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The connector's id used for create the content type.",
+			),
+            'virtual_name' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => true,
+				'description' => "The temporary content type's human readable name. Only used for content types created 'on the fly' by Importer.",
+			),
+            'ignored' => array(
+                'description' => "A boolean indicating whether a content type created 'on the fly' by Importer must be ignored in the future.",
+                'type' => 'int',
+                'not null' => true,
+                'default' => 0,
+            ),
+            'primary_type' => array(
+				'type' => 'text',
+				'size' => 'small',
+				'not null' => false,
+				'description' => "The identifier of the content type, in the context of the feed",
+			),
+            'fields' => array(
+				'type' => 'text',
+				'size' => 'big',
+				'not null' => false,
+				'description' => "The syndicated fields.",
+			),
+            'groups' => array(
+				'type' => 'text',
+				'size' => 'big',
+				'not null' => false,
+				'description' => "The field groups associated with this content type.",
+			),
+            'params' => array(
+				'type' => 'text',
+				'not null' => true,
+				'description' => "The content type's settings.",
+			),
+        ),
+
+        'primary key' => array('id'),
+    );
+
+    $schema['feedsagent_feeds'] = array(
+        'description' => "Store infos for FeedsAgent's feeds.",
+
+        'fields' => array(
+            'id' => array(
+				'type' => 'serial',
+				'not null' => true,
+                'unsigned' => true,
+				'description' => "The feeds id. Primary key.",
+			),
+            'label' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The human readable feed's name.",
+			),
+            'language' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The feed's data language.",
+            ),
+            'connector' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The connector's id used for import.",
+            ),
+            'periodicity' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The update periodicity.",
+			),
+            'active' => array(
+                'description' => "A boolean indicating whether the feed is active or not.",
+                'type' => 'int',
+                'not null' => true,
+                'default' => 0,
+            ),
+            'params' => array(
+				'type' => 'text',
+				'not null' => true,
+				'description' => "The feed's settings.",
+			),
+        ),
+
+        'primary key' => array('id'),
+    );
+
+    $schema['feedsagent_contents'] = array(
+        'description' => "Maintains a link between nodes created by FeedsAgent and its feeds",
+
+        'fields' => array(
+            'nid' => array(
+                'type' => 'int',
+                'not null' => true,
+                'unsigned' => true,
+                'description' => "The identifier of the node.",
+            ),
+            // added in 7004
+            'nid_parent' => array(
+                'type' => 'int',
+                'not null' => true,
+                'unsigned' => true,
+                'description' => "The identifier of the parent node.",
+            ),
+            'feed_id' => array(
+                'type' => 'int',
+                'not null' => true,
+                'unsigned' => true,
+                'description' => "The identifier of the feed.",
+            ),
+            'item_id' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The identifier of the item in it's feed's context.",
+			),
+            // added in 7003
+            'type_id' => array(
+				'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The identifier of the virtual type.",
+			),
+            'weight' => array(
+                'type' => 'int',
+                'not null' => true,
+                'unsigned' => true,
+                'default' => 0,
+                'description' => "The node's weight in the feed's listing.",
+            ),
+            'last_update' => array(
+                'type' => 'int',
+                'not null' => true,
+                'default' => 0,
+                'description' => "Unix timestamp of when the last successful update occurred.",
+            ),
+        ),
+
+        'primary key' => array('nid', 'feed_id'),
+    );
+
+    // $schema['feedsagent_fields_overrides'] dropped in 7001
+
+    // created in 7001
+    $schema['feedsagent_nodes_overrides'] = array(
+        'description' => "Stores overridded fields' names for given nids.",
+
+        'fields' => array(
+            'nid' => array(
+                'description' => "The identifier of the node.",
+                'type' => 'serial',
+                'unsigned' => true,
+                'not null' => true,
+            ),
+            'fields' => array(
+                'type' => 'text',
+                'not null' => true,
+                'size' => 'big',
+                'description' => "Overrided fields' names.",
+            ),
+        ),
+
+        'primary key' => array('nid'),
+    );
+
+    // updated in 7002
+    $schema['feedsagent_logs'] = array(
+        'description' => "Store logs about FeedsAgent's activities.",
+
+        'fields' => array(
+            'id' => array(
+				'type' => 'serial',
+				'not null' => true,
+                'unsigned' => true,
+				'description' => "The log id. Primary key.",
+			),
+            'type' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The log type.",
+            ),
+            'object_id' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The id of the object of the log.",
+            ),
+            'container_id' => array( // added in 7002
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The id of the object's container.",
+            ),
+            'state' => array(       // added in 7002
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => true,
+                'unsigned' => true,
+                'description' => "The object's state (0 = ok, etc.).",
+            ),
+            'data' => array(
+                'type' => 'text',
+                'size' => 'big',
+                'not null' => true,
+                'description' => "Stored data about object's events.",
+            ),
+
+            // 'timestamp'          // dropped in 7002
+        ),
+
+        'primary key' => array('id'),
+    );
+
+    return $schema;
+}
+
+function so_feedsagent_uninstall() {
+    variable_del('feedsagent_settings');
+}
+
+/**
+ * Drop 'feedsagent_fields_overrides'. Add 'feedsagent_nodes_overrides'.
+ */
+function so_feedsagent_update_7001() {
+
+    $output = "";
+
+    db_drop_table('feedsagent_fields_overrides');
+    $output .= t("Table '@table' has been dropped", array('@table' => 'feedsagent_fields_overrides'));
+
+    $schema['feedsagent_nodes_overrides'] = array(
+        'description' => "Stores overridded fields' names for given nids.",
+
+        'fields' => array(
+            'nid' => array(
+                'description' => "The identifier of the node.",
+                'type' => 'serial',
+                'unsigned' => true,
+                'not null' => true,
+            ),
+            'fields' => array(
+                'type' => 'text',
+                'not null' => true,
+                'size' => 'big',
+                'description' => "Overrided fields' names.",
+            ),
+        ),
+
+        'primary key' => array('nid'),
+    );
+
+    db_create_table('feedsagent_nodes_overrides', $schema['feedsagent_nodes_overrides']);
+    $output .= "<br />" . t("Table '@table' has been created", array('@table' => 'feedsagent_nodes_overrides'));
+
+    return $output;
+}
+
+/**
+ * Add fields 'container_id' and 'state' to {feedsagent_logs}
+ */
+function so_feedsagent_update_7002() {
+
+    $output = "";
+
+    $schema['feedsagent_logs'] = array(
+        'description' => "Store logs about FeedsAgent's activities.",
+
+        'fields' => array(
+            'id' => array(
+				'type' => 'serial',
+				'not null' => true,
+                'unsigned' => true,
+				'description' => "The log id. Primary key.",
+			),
+            'type' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The log type.",
+            ),
+            'object_id' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The id of the object of the log.",
+            ),
+            'container_id' => array(
+                'type' => 'text',
+                'size' => 'small',
+                'not null' => true,
+                'description' => "The id of the object's container.",
+            ),
+            'state' => array(
+                'type' => 'int',
+                'size' => 'tiny',
+                'not null' => true,
+                'unsigned' => true,
+                'description' => "The object's state (0 = ok, etc.).",
+            ),
+            'data' => array(
+                'type' => 'text',
+                'size' => 'big',
+                'not null' => true,
+                'description' => "Stored data about object's events.",
+            ),
+        ),
+
+        'primary key' => array('id'),
+    );
+
+    db_drop_table('feedsagent_logs');
+    db_create_table('feedsagent_logs', $schema['feedsagent_logs']);
+
+    $output .= t("Table '@table' has been altered", array('@table' => 'feedsagent_logs'));
+
+    return $output;
+}
+
+/**
+ * Add field 'type_id' to {feedsagent_contents}
+ */
+function so_feedsagent_update_7003() {
+
+    $field = array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => true,
+        'description' => "The identifier of the virtual type.",
+        'initial' => 0,
+    );
+
+    db_add_field('feedsagent_contents', 'type_id', $field);
+
+    return t("Field '@field' has been added", array('@field' => 'type_id'));
+}
+
+/**
+ * Add field 'nid_parent' to {feedsagent_contents} and populate it with nid value.
+ */
+function so_feedsagent_update_7004() {
+
+    $field = array(
+        'type' => 'int',
+        'not null' => true,
+        'unsigned' => true,
+        'default' => 0,
+        'description' => "The identifier of the parent node.",
+    );
+
+    db_add_field('feedsagent_contents', 'nid_parent', $field);
+
+    db_query("UPDATE {feedsagent_contents} SET nid_parent=nid");
+
+    return t("Field '@field' has been added", array('@field' => 'nid_parent'));
+}

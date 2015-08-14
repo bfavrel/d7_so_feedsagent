@@ -1,0 +1,1846 @@
+# $Id$
+#
+# French translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  so_feedsagent.field.inc: n/a
+#  so_feedsagent.module: n/a
+#  so_feedsagent.info: n/a
+#  so_feedsagent.importer.inc: n/a
+#  so_feedsagent.generator.inc: n/a
+#  connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php: n/a
+#  so_feedsagent.install: n/a
+#  connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.info: n/a
+#  connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.info: n/a
+#  connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php: n/a
+#  connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module: n/a
+#  connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module: n/a
+#  connectors/so_feedsagent_connector_tourinsoft/import_filters.inc: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-05-21 14:38+0200\n"
+"PO-Revision-Date: 2015-05-21 16:00+0100\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: French <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: so_feedsagent.field.inc:7 so_feedsagent.module:46;126;145;173;205
+#: so_feedsagent.info:0
+msgid "FeedsAgent"
+msgstr ""
+
+#: so_feedsagent.field.inc:8
+msgid "Display FeedsAgent data elements."
+msgstr "Affiche des éléments de données de FeedsAgent."
+
+#: so_feedsagent.field.inc:26
+msgid "Coupled items"
+msgstr "Fiches couplées"
+
+#: so_feedsagent.field.inc:28
+msgid "Display associated items."
+msgstr "Affiche les fiches couplées."
+
+#: so_feedsagent.field.inc:54 so_feedsagent.importer.inc:1561
+msgid "This item is a child of this item"
+msgstr "Cette fiche est un enfant de cette fiche"
+
+#: so_feedsagent.field.inc:70 so_feedsagent.importer.inc:1577
+msgid "This item is the parent of these items"
+msgstr "Cette fiche est le parent de ces fiches"
+
+#: so_feedsagent.field.inc:96
+msgid "Default"
+msgstr "Par défaut"
+
+#: so_feedsagent.field.inc:123;162
+msgid "Label for parent"
+msgstr "Label pour les fiches parent"
+
+#: so_feedsagent.field.inc:124;131
+msgid "In default language"
+msgstr "En langage par défaut"
+
+#: so_feedsagent.field.inc:130;174
+msgid "Label for childs"
+msgstr "Label pour les fiches enfants"
+
+#: so_feedsagent.field.inc:137
+msgid "View mode used to display items"
+msgstr "View mode utilisé pour afficher la fiche"
+
+#: so_feedsagent.field.inc:151
+msgid "View mode"
+msgstr ""
+
+#: so_feedsagent.generator.inc:5
+msgid "FeedsAgent content type wizard"
+msgstr "Wizard FeedsAgent"
+
+#: so_feedsagent.generator.inc:22 so_feedsagent.importer.inc:2110;2584;2630
+#: so_feedsagent.module:1680
+msgid "Operations"
+msgstr "Actions"
+
+#: so_feedsagent.generator.inc:44
+msgid "Content type : '@type'"
+msgstr "Type de contenu : '@type'"
+
+#: so_feedsagent.generator.inc:45
+msgid "Connector : '@connector'"
+msgstr "Connecteur : '@connector'"
+
+#: so_feedsagent.generator.inc:46
+msgid "Virtual name : '@virtual_name'"
+msgstr "Nom virtuel : '@virtual_name'"
+
+#: so_feedsagent.generator.inc:47
+msgid "Primary type : '@primary_type'"
+msgstr "Type primaire : '@primary_type'"
+
+#: so_feedsagent.generator.inc:95
+msgid "Previous"
+msgstr "Précédent"
+
+#: so_feedsagent.generator.inc:119
+msgid "Finish"
+msgstr "Terminer"
+
+#: so_feedsagent.generator.inc:119
+msgid "Next"
+msgstr "Suivant"
+
+#: so_feedsagent.generator.inc:364
+msgid "At least a connector must be created first : <br />!link"
+msgstr "Un connecteur doit avoir été créé au préalable"
+
+#: so_feedsagent.generator.inc:367
+msgid "create a connector"
+msgstr "Créer un connecteur"
+
+#: so_feedsagent.generator.inc:490 so_feedsagent.importer.inc:143;2582;2628
+msgid "Connector"
+msgstr "Connecteur"
+
+#: so_feedsagent.generator.inc:525
+msgid "Primary type"
+msgstr "Type primaire"
+
+#: so_feedsagent.generator.inc:527;585 so_feedsagent.importer.inc:2350
+msgid "none"
+msgstr "aucun(e)"
+
+#: so_feedsagent.generator.inc:583
+msgid "Drupal type"
+msgstr "Type Drupal"
+
+#: so_feedsagent.generator.inc:639
+msgid "The present virtual type will be mapped on '@type' type."
+msgstr "Le type virtuel sera mappé sur le type '@type'"
+
+#: so_feedsagent.generator.inc:689
+msgid "Human readable name"
+msgstr "Nom"
+
+#: so_feedsagent.generator.inc:696 so_feedsagent.module:1678
+msgid "Machine name"
+msgstr "Nom système"
+
+#: so_feedsagent.generator.inc:703
+msgid "Description"
+msgstr "Description"
+
+#: so_feedsagent.generator.inc:716
+msgid "The node type '@type' ('@label') already exists."
+msgstr "Le type de node '@type' ('@label') existe déjà."
+
+#: so_feedsagent.generator.inc:960
+msgid "Node type '@type' has been created"
+msgstr "Le type de node '@type' a été créé"
+
+#: so_feedsagent.generator.inc:961
+msgid "Node type '@type' has been edited"
+msgstr "Le type de node '@type' a été édité"
+
+#: so_feedsagent.generator.inc:966
+msgid "Because of node type remapping"
+msgstr "A cause du remappage de type de node"
+
+#: so_feedsagent.generator.inc:973
+msgid "Report"
+msgstr "Rapport"
+
+#: so_feedsagent.generator.inc:1257 so_feedsagent.module:1239
+msgid "undefined"
+msgstr "indéfini"
+
+#: so_feedsagent.generator.inc:1335;1958
+msgid "Legend"
+msgstr "Légende"
+
+#: so_feedsagent.generator.inc:1339
+msgid "Used in the virtual type"
+msgstr "Utilisé dans le type virtuel"
+
+#: so_feedsagent.generator.inc:1341
+msgid "Used in the Drupal's type"
+msgstr "Utilisé dans le type Drupal"
+
+#: so_feedsagent.generator.inc:1343
+msgid "Used in the connector"
+msgstr "Utilisé dans le connecteur"
+
+#: so_feedsagent.generator.inc:1455
+msgid "Unionize"
+msgstr "Syndiquer"
+
+#: so_feedsagent.generator.inc:1461
+msgid "Field label"
+msgstr "Label du champ"
+
+#: so_feedsagent.generator.inc:1462
+msgid "System name"
+msgstr "Nom système"
+
+#: so_feedsagent.generator.inc:1463
+msgid "Type family"
+msgstr "Famille du type"
+
+#: so_feedsagent.generator.inc:1487
+msgid "Locked"
+msgstr "Verrouillé"
+
+#: so_feedsagent.generator.inc:1633
+msgid "virtual type"
+msgstr "Type virtuel"
+
+#: so_feedsagent.generator.inc:1634
+msgid "Drupal's type"
+msgstr "Type Drupal"
+
+#: so_feedsagent.generator.inc:1635
+msgid "connector"
+msgstr "connecteur"
+
+#: so_feedsagent.generator.inc:1640
+msgid "off"
+msgstr ""
+
+#: so_feedsagent.generator.inc:1809
+msgid "Existing mappings in connector"
+msgstr "Mappages existants dans le connecteur"
+
+#: so_feedsagent.generator.inc:1812
+msgid "Create new field or map on existing non-SFA one"
+msgstr "Créer un nouveau champ ou mapper sur un existant non-SFA"
+
+#: so_feedsagent.generator.inc:1817
+msgid "Current mapping"
+msgstr "Mappage courant"
+
+#: so_feedsagent.generator.inc:1851
+msgid "Possibly compatible fields in @typeof"
+msgstr "Champs éventuellement compatibles dans le @typeof"
+
+#: so_feedsagent.generator.inc:1962
+msgid "New fields"
+msgstr "Nouveaux champs"
+
+#: so_feedsagent.generator.inc:2124 so_feedsagent.importer.inc:359
+msgid ""
+"These params are inherited from connector's settings but can be overridden "
+"here."
+msgstr ""
+"Ces paramètres sont hérités de ceux du connecteur, mais peuvent être "
+"outrepassés ici."
+
+#: so_feedsagent.generator.inc:2196
+msgid "Weight"
+msgstr "Poids"
+
+#: so_feedsagent.generator.inc:2197 so_feedsagent.importer.inc:347
+msgid "Title"
+msgstr "Titre"
+
+#: so_feedsagent.generator.inc:2198
+msgid "Label"
+msgstr "Étiquette"
+
+#: so_feedsagent.generator.inc:2199
+msgid "Drupal field mapping"
+msgstr "Mappage de champ Drupal"
+
+#: so_feedsagent.generator.inc:2200 so_feedsagent.module:1679
+msgid "Type"
+msgstr "Type"
+
+#: so_feedsagent.generator.inc:2201
+msgid "Mult."
+msgstr "Mult."
+
+#: so_feedsagent.generator.inc:962
+msgid "1 new field has been defined"
+msgid_plural "@count new fields have been defined"
+msgstr[0] "1 nouveau champ a été défini"
+msgstr[1] "@count nouveaux champs ont été définis"
+
+#: so_feedsagent.generator.inc:963
+msgid "1 new group has been defined"
+msgid_plural "@count new groups have been defined"
+msgstr[0] "1 nouveau groupe a été défini"
+msgstr[1] "@count nouveaux groupes ont été définis"
+
+#: so_feedsagent.generator.inc:964
+msgid "1 field has been instantiated"
+msgid_plural "@count fields have been instantiated"
+msgstr[0] "1 champ a été instancié"
+msgstr[1] "@count champs ont été instanciés"
+
+#: so_feedsagent.generator.inc:965
+msgid "1 feed field has been registered"
+msgid_plural "@count feed fields have been registered"
+msgstr[0] "1 champ a été enregistré"
+msgstr[1] "@count champs ont été enregistrés"
+
+#: so_feedsagent.generator.inc:966
+msgid "1 node has been deleted"
+msgid_plural "@count nodes have been deleted"
+msgstr[0] "1 nodes a été supprimé"
+msgstr[1] "@count nodes ont été supprimés"
+
+#: so_feedsagent.importer.inc:61
+msgid ""
+"Importer : <br />Queue : @id<br />Creation : @created<br />Last try : "
+"@retried<br />Total tries : @tries"
+msgstr ""
+"Importer : <br />Queue : @id<br />Creation : @created<br />Dernière "
+"tentative : @retried<br />Tentatives totales : @tries"
+
+#: so_feedsagent.importer.inc:89 so_feedsagent.module:739
+msgid "configure"
+msgstr "configurer"
+
+#: so_feedsagent.importer.inc:90 so_feedsagent.module:740
+msgid "delete"
+msgstr "supprimer"
+
+#: so_feedsagent.importer.inc:91;503
+msgid "update"
+msgstr "mettre à jour"
+
+#: so_feedsagent.importer.inc:92
+msgid "import"
+msgstr "importer"
+
+#: so_feedsagent.importer.inc:102
+msgid "Feed informations"
+msgstr "Paramètres du flux"
+
+#: so_feedsagent.importer.inc:113 so_feedsagent.module:745
+msgid "Not configured yet"
+msgstr "Pas encore configuré"
+
+#: so_feedsagent.importer.inc:123;280;531 so_feedsagent.module:552;947
+msgid "Save"
+msgstr "Enregistrer"
+
+#: so_feedsagent.importer.inc:132;207;302;2580;2626
+#: so_feedsagent.module:762;865;1677
+msgid "Name"
+msgstr "Nom"
+
+#: so_feedsagent.importer.inc:133
+msgid ""
+"Don't add language information : it will be specified everywhere it's needed."
+msgstr ""
+"Ne pas ajouter d'information de langue : elle sera automatiquement spécifiée "
+"là où c'est nécessaire."
+
+#: so_feedsagent.importer.inc:137;307;2581;2627
+msgid "Language"
+msgstr "Langue"
+
+#: so_feedsagent.importer.inc:149 so_feedsagent.module:783
+msgid "Add"
+msgstr "Ajouter"
+
+#: so_feedsagent.importer.inc:166
+msgid "Based on feed"
+msgstr "Basé sur le flux"
+
+#: so_feedsagent.importer.inc:167
+msgid "Feed to copy parameters from."
+msgstr "Flux à partir duquel copier les paramètres"
+
+#: so_feedsagent.importer.inc:168 so_feedsagent.module:599;611
+msgid "None"
+msgstr "Aucun(e)"
+
+#: so_feedsagent.importer.inc:201;405;553 so_feedsagent.module:709;1001
+msgid "Configuration has been saved"
+msgstr "La configuration a été sauvegardée"
+
+#: so_feedsagent.importer.inc:207
+msgid "!name field is required."
+msgstr "Le champ !name est requis."
+
+#: so_feedsagent.importer.inc:231
+msgid "Feed created.<br />It has to be configured now :"
+msgstr "Le flux a été créé.<br />Il doit maintenant être configuré :"
+
+#: so_feedsagent.importer.inc:243
+msgid "Are you sure you want to delete the feed '@feed' ?"
+msgstr "Êtes-vous sûr de vouloir supprimer le flux '@feed' ?"
+
+#: so_feedsagent.importer.inc:243 so_feedsagent.module:821
+msgid "Delete"
+msgstr "Supprimer"
+
+#: so_feedsagent.importer.inc:265
+msgid "'@feed' feed configuration"
+msgstr "Configuration du flux '@feed'"
+
+#: so_feedsagent.importer.inc:283 so_feedsagent.module:951
+msgid "Back"
+msgstr "Retour"
+
+#: so_feedsagent.importer.inc:293 so_feedsagent.module:861
+msgid "Basic parameters"
+msgstr "Paramètres de base"
+
+#: so_feedsagent.importer.inc:296;2067;2579;2625
+msgid "Active"
+msgstr "Actif"
+
+#: so_feedsagent.importer.inc:297
+msgid "Inactive feeds will be discarded from updates."
+msgstr "Les flux inactifs sont ignorés lors des mises à jours."
+
+#: so_feedsagent.importer.inc:313;2629
+msgid "Update periodicity"
+msgstr "Periodicité des mises à jour"
+
+#: so_feedsagent.importer.inc:334;975;1200;1245
+#: so_feedsagent.module:354;417;435
+msgid "Importer"
+msgstr ""
+
+#: so_feedsagent.importer.inc:337
+msgid "Cron mode"
+msgstr "Mode du cron"
+
+#: so_feedsagent.importer.inc:340
+msgid ""
+"During next update, feed's items must be updated, regardless their last "
+"update date."
+msgstr ""
+"Durant la prochaine mise à jour, les fiches du flux doivent être mises à "
+"jour, sans tenir compte de la date de leur dernière mise à jour."
+
+#: so_feedsagent.importer.inc:341
+msgid "This parameter will be automatically reseted after successful update"
+msgstr ""
+"Ce paramètre sera automatiquement réinitialisé après la réussite de la mise "
+"à jour."
+
+#: so_feedsagent.importer.inc:350 so_feedsagent.module:914
+msgid "Default title field"
+msgstr "Champ de titre par défaut"
+
+#: so_feedsagent.importer.inc:351 so_feedsagent.module:915
+msgid ""
+"As it appears in data source.<br />Several fields can be set (separated by "
+"commas). They will be processed in order, until a title is found."
+msgstr ""
+"Sous la forme exacte où il apparaît dans la source de données.<br /"
+">Plusieurs champs peuvent être spécifiés (séparés par des virgules). Ils "
+"seront traités dans l'ordre, jusqu'à ce qu'un titre soit trouvé."
+
+#: so_feedsagent.importer.inc:351
+msgid "These setting can be overriden in each content type."
+msgstr "Ces paramètres peuvent être outrepassés dans chaque type de contenu."
+
+#: so_feedsagent.importer.inc:411
+msgid "Update FeedsAgent's contents"
+msgstr "Mettre à jour les contenus FeedsAgent"
+
+#: so_feedsagent.importer.inc:416
+msgid "No feed was created."
+msgstr "Aucun flux disponible"
+
+#: so_feedsagent.importer.inc:437
+msgid "launched by @username (@datetime)"
+msgstr "lancé par @username (@datetime)"
+
+#: so_feedsagent.importer.inc:448
+msgid "One or more updates are already running"
+msgstr "Une ou plusieurs mises à jour sont déjà en cours"
+
+#: so_feedsagent.importer.inc:450
+msgid ""
+"Updates consume a lot of server ressources. Launch several updates in the "
+"same time may put the site down."
+msgstr ""
+"Les mises à jour consomment énormément de ressources serveur. En lancer "
+"plusieurs en même-temps est susceptible de crasher le serveur."
+
+#: so_feedsagent.importer.inc:452
+msgid ""
+"If you note this situation lasts an unreasonable time, that probably means a "
+"problem happens during update and the update system is frozen."
+msgstr ""
+"Si vous remarquez que cette opération dure un temps anormalement long, cela "
+"signifie probablement qu'un problème est survenu durant la mise à jour, et "
+"que le système de mise à jour est bloqué."
+
+#: so_feedsagent.importer.inc:454
+msgid "Feel free to contact the Technical Support"
+msgstr "Dans ce cas, merci de contacter le support technique."
+
+#: so_feedsagent.importer.inc:495
+msgid "Currently processed"
+msgstr "En cours de traitement"
+
+#: so_feedsagent.importer.inc:572
+msgid "Update@feed"
+msgstr "Mise à jour@feed"
+
+#: so_feedsagent.importer.inc:573;574
+msgid "Periodic update@feed"
+msgstr "Mise à jour périodique@feed"
+
+#: so_feedsagent.importer.inc:575
+msgid "Import@feed"
+msgstr "Importation@feed"
+
+#: so_feedsagent.importer.inc:586
+msgid "@op of '@feed' feed (@id)"
+msgstr "@op du flux '@feed' (@id)"
+
+#: so_feedsagent.importer.inc:596
+msgid "Connector didn't return any listing XML data"
+msgstr "Le connecteur n'a retourné aucune donnée XML de listing"
+
+#: so_feedsagent.importer.inc:649
+msgid ""
+"The virtual content type '@type' referenced under primary type '@primary' "
+"was created"
+msgstr ""
+"Le type de contenu virtuel '@type' référencé par le type primaire '@primary' "
+"a été créé"
+
+#: so_feedsagent.importer.inc:704
+msgid "No node was created, imported or updated."
+msgstr "Aucun node n'a été créé, importé ou mis à jour."
+
+#: so_feedsagent.importer.inc:807;855
+msgid "Calling feed's server an preparing data"
+msgstr "Appel du server de flux et préparation des données"
+
+#: so_feedsagent.importer.inc:808;856
+msgid "Processing node @current out of @total"
+msgstr "Traitement du node @current sur @total"
+
+#: so_feedsagent.importer.inc:833
+msgid "@op of '@feed' feed"
+msgstr "@op du flux '@feed'"
+
+#: so_feedsagent.importer.inc:835
+msgid "Deletion"
+msgstr "Suppression"
+
+#: so_feedsagent.importer.inc:851
+msgid "Feed '@feed' has been deleted."
+msgstr "Le flux '@feed' a été supprimé."
+
+#: so_feedsagent.importer.inc:950;1102;2342
+msgid "@op of feed '@feed'"
+msgstr "@op du flux '@feed'"
+
+#: so_feedsagent.importer.inc:999
+msgid ""
+"An error occurs while saving new node matching item '@item' : <br />@data"
+msgstr ""
+"Une erreur est survenue lors de la sauvegarde du nouveau node correspondant "
+"à la fiche '@item' : <br />@data"
+
+#: so_feedsagent.importer.inc:1009
+msgid "Node was created and published (node type : '@type')"
+msgstr "Le node a été créé et publié (type de node : '@type')"
+
+#: so_feedsagent.importer.inc:1064
+msgid "An error occurs while creating node matching item '@item'"
+msgstr ""
+"Une erreur est survenue lors de la création du node correspondant à la fiche "
+"'@item'"
+
+#: so_feedsagent.importer.inc:1158
+msgid "Item was up to date"
+msgstr "La fiche était à jour"
+
+#: so_feedsagent.importer.inc:1185;1200
+msgid ""
+"Node '@nid', in feed '@feed', was supposed to be part of Drupal's type "
+"'@old_drupal_type' but it's now appears to be part of SFA's type "
+"'@new_sfa_type' which is mapped on Drupal's type '@new_drupal_type'.<br /"
+">Node has been deleted."
+msgstr ""
+"Le node '@nid' du flux '@feed' était supposé être du type Drupal "
+"'@old_drupal_type' seulement, il apparaît maintenant comme faisant partie du "
+"type SFA '@new_sfa_type' qui, lui,  est mappé sur le type Drupal "
+"'@new_drupal_type'.<br />Le node a été supprimé."
+
+#: so_feedsagent.importer.inc:1194;1238
+msgid "Some errors hapend during update. See logs for further details."
+msgstr ""
+"Des erreurs se sont produites durant la mise à jour. Veuillez consulter les "
+"logs pour de plus amples détails."
+
+#: so_feedsagent.importer.inc:1264
+msgid "Item was existing again in feed. It has been republished."
+msgstr "La fiche est réapparue dans le flux. Elle a été republiée."
+
+#: so_feedsagent.importer.inc:1268
+msgid "Item was existing again in feed. It has been left unpublished."
+msgstr "La fiche est réapparue dans le flux. Elle a été laissé non-publiée."
+
+#: so_feedsagent.importer.inc:1406
+msgid "An error has occured."
+msgstr "Une erreur est survenue."
+
+#: so_feedsagent.importer.inc:1406
+msgid ""
+"Node '@nid', in feed '@feed', is supposed to be part of Drupal's type "
+"'@old_drupal_type' but it's now appears to be part of SFA's type "
+"'@new_sfa_type' which is mapped on Drupal's type '@new_drupal_type'.<br /"
+">Node has to be deleted."
+msgstr ""
+"Le node '@nid' du flux '@feed' était supposé être du type Drupal "
+"'@old_drupal_type' seulement, il apparaît maintenant comme faisant partie du "
+"type SFA '@new_sfa_type' qui, lui,  est mappé sur le type Drupal "
+"'@new_drupal_type'.<br />Le node doit être supprimé."
+
+#: so_feedsagent.importer.inc:1437
+msgid "manual update of item"
+msgstr "mise à jour manuelle de la fiche"
+
+#: so_feedsagent.importer.inc:1459
+msgid ""
+"An error has occured. Values have not been updated from feed.<br /> See "
+"below for details."
+msgstr ""
+"Une erreur est survenue. Les valeurs n'ont pas été mises à jour à partir du "
+"flux.<br />Voir ci-dessous pour les détails."
+
+#: so_feedsagent.importer.inc:1472
+msgid "Values has been updated from feed"
+msgstr "Les valeurs ont été mises à jour."
+
+#: so_feedsagent.importer.inc:1482
+msgid "Update '!title' from feed"
+msgstr "Mise à jour de '!title' à partir du flux"
+
+#: so_feedsagent.importer.inc:1487
+msgid "Lauch update"
+msgstr "Lancer la mise à jour"
+
+#: so_feedsagent.importer.inc:1515
+msgid "Fiche ID"
+msgstr "ID de la fiche"
+
+#: so_feedsagent.importer.inc:1524 so_feedsagent.module:1909
+msgid "SFA id"
+msgstr "id SFA"
+
+#: so_feedsagent.importer.inc:1533
+msgid "This node is provided by these feeds"
+msgstr "Ce node est fourni par ces flux"
+
+#: so_feedsagent.importer.inc:1585
+msgid "Coupling"
+msgstr "Couplage"
+
+#: so_feedsagent.importer.inc:1675
+msgid "Data are out of date !"
+msgstr "Les données ne sont pas à jour !"
+
+#: so_feedsagent.importer.inc:1684
+msgid "The last successful update took place on @date at @time @type."
+msgstr "La dernière mise à jour réussie a eu lieu le @date à @time @type"
+
+#: so_feedsagent.importer.inc:1694
+msgid "No successful item update has been recorded yet."
+msgstr "Aucune mise à jour réussie n'a été enregistrée pour le moment."
+
+#: so_feedsagent.importer.inc:1715;1738;1755;1772
+msgid "On @date at @time @type"
+msgstr "Le @date à @time @type"
+
+#: so_feedsagent.importer.inc:1728
+msgid ""
+"During last successful update, one or more minor problems have been detected"
+msgstr ""
+"Lors de la dernière mise à jour, un ou plusieurs problèmes sans gravité ont "
+"été détectés"
+
+#: so_feedsagent.importer.inc:1790 so_feedsagent.module:536
+msgid "Node's diary"
+msgstr "Journal du node"
+
+#: so_feedsagent.importer.inc:1827;1834
+msgid "Error"
+msgstr "Erreur"
+
+#: so_feedsagent.importer.inc:1829
+msgid "Query"
+msgstr "Requête"
+
+#: so_feedsagent.importer.inc:1830
+msgid "Arguments"
+msgstr "Arguments"
+
+#: so_feedsagent.importer.inc:1838
+msgid "Unknown error. See watchdog for further details."
+msgstr "Erreur inconnue. Consulter le watchdog pour les détails."
+
+#: so_feedsagent.importer.inc:1921
+msgid "by @user"
+msgstr "par @user"
+
+#: so_feedsagent.importer.inc:1942
+msgid "Node was successfully updated"
+msgstr "Le node a été mis à jour avec succès"
+
+#: so_feedsagent.importer.inc:1962
+msgid "Update failed"
+msgstr "La mise à jour a échoué"
+
+#: so_feedsagent.importer.inc:2065
+msgid "by @username"
+msgstr "par @username"
+
+#: so_feedsagent.importer.inc:2067
+msgid "Inactive"
+msgstr "Inactif"
+
+#: so_feedsagent.importer.inc:2080
+msgid "Restart"
+msgstr "Relancer"
+
+#: so_feedsagent.importer.inc:2086
+msgid "Cancel"
+msgstr "Annuler"
+
+#: so_feedsagent.importer.inc:2093
+msgid "Batches' current activity"
+msgstr "Activité courante des batches"
+
+#: so_feedsagent.importer.inc:2094
+msgid "Batch's elapsed time is updated each time a new item is processed."
+msgstr ""
+"Le temps passé du batch est mis à jour dès qu'une nouvelle fiche est traitée."
+
+#: so_feedsagent.importer.inc:2096
+msgid ""
+"If values remain unchanged during a long time, that probably means the "
+"operation has crashed."
+msgstr ""
+"Si la valeur demeure inchangée durant un temps anormalement long, cela "
+"signifie probablement que l'opération a crashé."
+
+#: so_feedsagent.importer.inc:2098
+msgid ""
+"Using 'restart' operation while a batch is already running starts a parallel "
+"batch (two more items processed in the same time)."
+msgstr ""
+"Utiliser l'opération 'Relancer' alors qu'un batch est déjà en cours de "
+"traitement démarrera le même batch en parallèle (deux fois plus de fiches a "
+"traiter dans le même temps)."
+
+#: so_feedsagent.importer.inc:2100
+msgid ""
+"That's not a real problem (if server's CPU is ok), but when second batch "
+"will finish, the first one will be frozen (but all items will have been "
+"processed)."
+msgstr ""
+"Cela ne constitue pas un réel problème (dans la mesure où le CPU le "
+"supporte), toutefois, quand le second batch s'achèvera, le premier sera "
+"bloqué (mais toutes les fiches auront été traitées)."
+
+#: so_feedsagent.importer.inc:2105
+msgid "Current operation"
+msgstr "Opération en cours"
+
+#: so_feedsagent.importer.inc:2106
+msgid "State"
+msgstr "Etat"
+
+#: so_feedsagent.importer.inc:2107
+msgid "Started"
+msgstr "Démarré"
+
+#: so_feedsagent.importer.inc:2108
+msgid "Elapsed time"
+msgstr "Temps écoulé"
+
+#: so_feedsagent.importer.inc:2109
+msgid "Processed"
+msgstr "Traité"
+
+#: so_feedsagent.importer.inc:2113
+msgid "Currently, no activity has been detected."
+msgstr "Actuellement, aucune activité n'a été détectée."
+
+#: so_feedsagent.importer.inc:2143
+msgid "Batch has been canceled"
+msgstr "Le batch a été annulé"
+
+#: so_feedsagent.importer.inc:2365
+msgid "node was relegated at bottom of listing"
+msgstr "le node a été relégué en fin de listing"
+
+#: so_feedsagent.importer.inc:2378;2401
+msgid "since node was existing in several feed, no action was performed"
+msgstr ""
+"dans la mesure où le node existait dans plusieurs flux, aucune action n'a "
+"été prise"
+
+#: so_feedsagent.importer.inc:2383
+msgid "node was unpublished"
+msgstr "le node a été dépublié"
+
+#: so_feedsagent.importer.inc:2410
+msgid "node was deleted"
+msgstr "le node a été supprimé"
+
+#: so_feedsagent.importer.inc:2419
+msgid "Item was no longer exist in feed."
+msgstr "La fiche n'existait plus dans le flux."
+
+#: so_feedsagent.importer.inc:2419
+msgid "Action taken"
+msgstr "Action prise"
+
+#: so_feedsagent.importer.inc:2433
+msgid ""
+"An unknown error occurred while processing item : '@item'.<br />Reference of "
+"the batch : '@batchid'"
+msgstr ""
+"Une erreur inconnue s'est produite, lors du traitement de cet fiche : "
+"'@item'.<br />Référence du traitement : '@batchid'"
+
+#: so_feedsagent.importer.inc:2499
+msgid "Hourly@fai"
+msgstr "Horaire@fai"
+
+#: so_feedsagent.importer.inc:2500
+msgid "Daily@fai"
+msgstr "Journalière@fai"
+
+#: so_feedsagent.importer.inc:2501
+msgid "Weekly@fai"
+msgstr "Hebdomadaire@fai"
+
+#: so_feedsagent.importer.inc:2502
+msgid "Monthly@fai"
+msgstr "Mensuelle@fai"
+
+#: so_feedsagent.importer.inc:2538
+msgid "No feed set yet"
+msgstr "Aucun flux paramétré"
+
+#: so_feedsagent.importer.inc:2583
+msgid "Periodicity"
+msgstr "Périodicité"
+
+#: so_feedsagent.importer.inc:2585
+msgid "Forced"
+msgstr "Forcé"
+
+#: so_feedsagent.importer.inc:2589;2634 so_feedsagent.module:1684
+msgid "Warnings"
+msgstr "Alertes"
+
+#: so_feedsagent.importer.inc:975;1245
+msgid "Error hapend during update : <br />@data"
+msgstr "Une erreur est survenue durant la mise à jour : <br />@data"
+
+#: so_feedsagent.importer.inc:172
+msgid "One feed is currently in error state"
+msgid_plural "@count feeds are currently in error state"
+msgstr[0] "Un flux est actuellement en état d'erreur"
+msgstr[1] "@count flux sont actuellement en état d'erreur"
+
+#: so_feedsagent.importer.inc:2453
+msgid "1 node created"
+msgid_plural "@count nodes created"
+msgstr[0] "1 node a été créé"
+msgstr[1] "@count nodes ont été créés"
+
+#: so_feedsagent.importer.inc:2457
+msgid "1 node was up to date"
+msgid_plural "@count nodes were up to date"
+msgstr[0] "1 node était à jour"
+msgstr[1] "@count nodes étaient à jour"
+
+#: so_feedsagent.importer.inc:2461
+msgid "1 node was updated"
+msgid_plural "@count nodes were updated"
+msgstr[0] "1 node a été mis à jour"
+msgstr[1] "@count nodes ont été mis à jour"
+
+#: so_feedsagent.importer.inc:2465
+msgid "1 node was (re)imported"
+msgid_plural "@count nodes were (re)imported"
+msgstr[0] "1 node a été (ré)importé"
+msgstr[1] "@count nodes ont été (ré)importés"
+
+#: so_feedsagent.importer.inc:2469
+msgid "1 obsolete node was left untouched"
+msgid_plural "@count obsolete nodes were left untouched"
+msgstr[0] "1 node obsolète est demeuré inchangé"
+msgstr[1] "@count nodes obsolètes sont demeurés inchangés"
+
+#: so_feedsagent.importer.inc:2473
+msgid "1 obsolete node was relegated"
+msgid_plural "@count obsolete nodes were relegated"
+msgstr[0] "1 node a été relégué"
+msgstr[1] "@count nodes ont été relégués"
+
+#: so_feedsagent.importer.inc:2477
+msgid "1 obsolete node was removed from feed"
+msgid_plural "@count obsolete nodes were removed from feed"
+msgstr[0] "1 node obsolète a été retiré du flux"
+msgstr[1] "@count nodes obsolètes ont été retirés du flux"
+
+#: so_feedsagent.importer.inc:2481
+msgid "1 obsolete node was unpublished"
+msgid_plural "@count obsolete nodes were unpublished"
+msgstr[0] "1 node obsolète a été dépublié"
+msgstr[1] "@count nodes obsolètes ont été dépubliés"
+
+#: so_feedsagent.importer.inc:2485
+msgid "1 obsolete node was deleted"
+msgid_plural "@count obsolete nodes were deleted"
+msgstr[0] "1 node obsolète a été supprimé"
+msgstr[1] "@count nodes obsolètes ont été supprimés"
+
+#: so_feedsagent.module:23
+msgid "Administer FeedsAgent"
+msgstr "Administrer FeedsAgent"
+
+#: so_feedsagent.module:24
+msgid ""
+"Configure module's params, create connectors and feeds, and launch imports."
+msgstr ""
+"Configurer le module, créer des connecteurs et des flux, et lancer des "
+"imports."
+
+#: so_feedsagent.module:27
+msgid "Use FeedsAgent Generator"
+msgstr "Utiliser FeedsAgent Generator"
+
+#: so_feedsagent.module:28
+msgid "Create or edit content types."
+msgstr "Créer ou éditer des types de contenus."
+
+#: so_feedsagent.module:31
+msgid "Use FeedsAgent Importer"
+msgstr "Utiliser FeedsAgent Importer"
+
+#: so_feedsagent.module:32
+msgid "Enable/disable feeds, set periodicities and lauch updates."
+msgstr ""
+"Activer/désactiver des flux, régler les périodicités et lancer des mises à "
+"jour."
+
+#: so_feedsagent.module:57
+msgid "General settings, connectors, and feeds"
+msgstr "Paramètres généraux, connecteurs, et feeds"
+
+#: so_feedsagent.module:443
+msgid "FeedsAgent general settings"
+msgstr "Paramètres globaux de FeedsAgent"
+
+#: so_feedsagent.module:475
+msgid "Widgets default options"
+msgstr "Options par défaut des widgets"
+
+#: so_feedsagent.module:476
+msgid ""
+"These settings can be overriden in each connector and in each content type."
+msgstr ""
+"Ces paramètres peuvent être outrepassés dans chaque connecteur, puis dans "
+"chaque type de contenu."
+
+#: so_feedsagent.module:492
+msgid "Schedules"
+msgstr "Programmations"
+
+#: so_feedsagent.module:496
+msgid "Activate cron updates"
+msgstr "Activer le cron des mises à jour"
+
+#: so_feedsagent.module:502
+msgid "Day of month for monthly cron"
+msgstr "Jour du mois pour le cron mensuel"
+
+#: so_feedsagent.module:509
+msgid "Day of week for weekly cron"
+msgstr "Jour de la semaine pour le cron hebdomadaire"
+
+#: so_feedsagent.module:510
+msgid "From 1 (monday) to 7 (sunday)"
+msgstr "De 1 (lundi) à 7 (dimanche)"
+
+#: so_feedsagent.module:517
+msgid "Time window for monthly, weekly and daily cron"
+msgstr "Fenêtre horaire pour les crons mensuels, hebdomadaires et journaliers"
+
+#: so_feedsagent.module:518
+msgid ""
+"Two hours, separated by '-'.<br />Exemple : '0-6' = \"between 0h00 "
+"(included) and 06h00 (not included)\"."
+msgstr ""
+"Deux heures, séparées par '-'.<br />Exemple : '0-6' = \"entre 00h00 (inclus) "
+"et 06h00 (non inclus)\""
+
+#: so_feedsagent.module:526
+msgid "Default behaviors"
+msgstr "Comportements par défaut"
+
+#: so_feedsagent.module:527
+msgid "These settings can be overriden in each connector and in each feed."
+msgstr ""
+"Ces paramètres peuvent être outrepassés dans chaque connecteur, puis dans "
+"chaque flux."
+
+#: so_feedsagent.module:532
+msgid "Logs"
+msgstr "Logs"
+
+#: so_feedsagent.module:537
+msgid "keep only the last"
+msgstr "conserver seulement les"
+
+#: so_feedsagent.module:538
+msgid "events"
+msgstr "derniers événements"
+
+#: so_feedsagent.module:573
+msgid "Content types"
+msgstr "Types de contenu"
+
+#: so_feedsagent.module:577
+msgid "Action to take when an unknown content type is found in a feed"
+msgstr ""
+"Que faire quand un type de contenu inconnu est rencontré dans un flux ?"
+
+#: so_feedsagent.module:582
+msgid "Ignore"
+msgstr "L'ignorer"
+
+#: so_feedsagent.module:583
+msgid "Create a virtual content type"
+msgstr "Créer un type de contenu virtuel"
+
+#: so_feedsagent.module:591
+msgid "Nodes"
+msgstr "Nœuds"
+
+#: so_feedsagent.module:595
+msgid "Action to take when a feed node no longer exists in a feed"
+msgstr "Que faire quand un node de flux n'existe plus dans ce flux ?"
+
+#: so_feedsagent.module:600
+msgid "Unpublish (only if it exists in one feed)"
+msgstr "Le dépublier (seulement s'il n'existe que dans un seul flux)"
+
+#: so_feedsagent.module:601
+msgid "Delete (only if it exists in one feed)"
+msgstr "Le supprimer (seulement s'il n'existe que dans un seul flux)"
+
+#: so_feedsagent.module:602
+msgid "Relegate it to the end of the feed's contents"
+msgstr "Le réléguer à la fin de la liste des contenus du flux"
+
+#: so_feedsagent.module:609
+msgid "Action to take when an unpublished node exists in a feed"
+msgstr "Que faire lorsqu'un node dépublié existe dans un flux ?"
+
+#: so_feedsagent.module:612
+msgid "Publish and possibly restore his weight"
+msgstr "Le publier et, si besoin, restaurer son poids"
+
+#: so_feedsagent.module:619
+msgid "Existing node's title must be updated only if it's empty"
+msgstr "Le titre d'un node, s'il est paramétré, ne doit plus être mis à jour"
+
+#: so_feedsagent.module:640;1355
+msgid "Image"
+msgstr "Image"
+
+#: so_feedsagent.module:644;672
+msgid "Folder"
+msgstr "Dossier"
+
+#: so_feedsagent.module:645;673
+msgid "Without trailing slash"
+msgstr "Sans le slash de fin"
+
+#: so_feedsagent.module:653
+msgid "Default image"
+msgstr "Image par défaut"
+
+#: so_feedsagent.module:668;1366
+msgid "File"
+msgstr "Fichier"
+
+#: so_feedsagent.module:777
+msgid "Connector type"
+msgstr "Type de connecteur"
+
+#: so_feedsagent.module:806
+msgid "Connector created.<br />It has to be configured now :"
+msgstr "Le connecteur a été créé.<br />Il doit maintenant être configuré :"
+
+#: so_feedsagent.module:818
+msgid "Are you sure you want to delete the connector '@connector' ?"
+msgstr "Êtes-vous sûr de vouloir supprimer le connecteur  '@connector' ?"
+
+#: so_feedsagent.module:835
+msgid "Connector '@connector' has been deleted"
+msgstr "Le connecteur '@connector' a été supprimé"
+
+#: so_feedsagent.module:844
+msgid "'@connector' connector configuration"
+msgstr "Configuration du connecteur '@connector'"
+
+#: so_feedsagent.module:872
+msgid "Connector params"
+msgstr "Paramètres du connecteur"
+
+#: so_feedsagent.module:883
+msgid "Widgets options"
+msgstr "Options des widgets"
+
+#: so_feedsagent.module:886;926
+msgid ""
+"These params are inherited from FeedsAgent general settings but can be "
+"overridden here."
+msgstr ""
+"Ces paramètres sont hérités des paramètres généraux de FeedsAgent, mais "
+"peuvent être outrepassés ici."
+
+#: so_feedsagent.module:915
+msgid "These setting can be overriden in each feed and in each content type."
+msgstr ""
+"Ces paramètres peuvent être outrepassé dans chaque flux, et dans chaque type "
+"de contenu."
+
+#: so_feedsagent.module:923
+msgid "Behaviors"
+msgstr "Comportements"
+
+#: so_feedsagent.module:1238
+msgid "Undefined"
+msgstr "Indéfini"
+
+#: so_feedsagent.module:1260;1261
+msgid "Custom"
+msgstr "Personnalisé"
+
+#: so_feedsagent.module:1269
+msgid "Textfield"
+msgstr "Champ texte"
+
+#: so_feedsagent.module:1270;1285
+msgid "text"
+msgstr "texte"
+
+#: so_feedsagent.module:1284
+msgid "Textarea"
+msgstr "Zone de texte"
+
+#: so_feedsagent.module:1292
+msgid "Number integer"
+msgstr "Nombre entier"
+
+#: so_feedsagent.module:1293
+msgid "integer"
+msgstr "entier"
+
+#: so_feedsagent.module:1303
+msgid "Number decimal"
+msgstr "Nombre décimal"
+
+#: so_feedsagent.module:1304
+msgid "decimal"
+msgstr "décimal"
+
+#: so_feedsagent.module:1313
+msgid "Date"
+msgstr "Date"
+
+#: so_feedsagent.module:1314
+msgid "date"
+msgstr "date"
+
+#: so_feedsagent.module:1323
+msgid "Select list"
+msgstr "Liste de sélection"
+
+#: so_feedsagent.module:1324;1333
+msgid "unique selection"
+msgstr "sélection unique"
+
+#: so_feedsagent.module:1332
+msgid "Radios buttons"
+msgstr "Boutons radios"
+
+#: so_feedsagent.module:1341
+msgid "Checkboxes"
+msgstr "Cases à cocher"
+
+#: so_feedsagent.module:1342
+msgid "multiple selection"
+msgstr "sélection multiple"
+
+#: so_feedsagent.module:1348
+msgid "Checkbox (on/off)"
+msgstr "Case à cocher (on/off)"
+
+#: so_feedsagent.module:1349
+msgid "boolean"
+msgstr "booléen"
+
+#: so_feedsagent.module:1356;1367
+msgid "url/image/file"
+msgstr "url/image/fichier"
+
+#: so_feedsagent.module:1474
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:72
+msgid "default"
+msgstr "défaut"
+
+#: so_feedsagent.module:1500
+msgid "Nodes in feed"
+msgstr "Nodes du flux"
+
+#: so_feedsagent.module:1517
+msgid "Regroup childs items with their parents."
+msgstr "Regrouper les fiches enfants avec leurs parents."
+
+#: so_feedsagent.module:1518
+msgid ""
+"If not checked parents and childs items will appear in listings each as a "
+"standalone item."
+msgstr ""
+"Si non coché, les fiches parents et enfant apparaîtront chacune dans le "
+"listing comme des fiches distinctes."
+
+#: so_feedsagent.module:1520
+msgid ""
+"If checked only parents items will appear, though search results take also "
+"childs items' data in account."
+msgstr ""
+"Si coché, seuls les fiches parent apparaîtront, bien que les résultats de "
+"recherchent prennent également en compte les données des fiches enfants."
+
+#: so_feedsagent.module:1588
+msgid "Sorting by feed listing order"
+msgstr "Trier par ordre des fiches du flux"
+
+#: so_feedsagent.module:1659
+msgid "No connector set yet"
+msgstr "Aucun connecteur pour le moment"
+
+#: so_feedsagent.module:1743
+msgid "override on"
+msgstr "Activer la supplantation"
+
+#: so_feedsagent.module:1747
+msgid "Click here to override feed's values"
+msgstr "Cliquer ici pour supplanter les valeurs de ce champ"
+
+#: so_feedsagent.module:1754
+msgid "override off"
+msgstr "Désactiver la supplantation"
+
+#: so_feedsagent.module:1758
+msgid "Click here to remove feed's values override"
+msgstr "Cliquer ici pour restaurer les valeurs du serveur"
+
+#: so_feedsagent.module:1839
+msgid ""
+"Field '@field' has been removed from FeedsAgent content type '@virtual_name'"
+msgstr "Le champ '@field' a été supprimé du type FeedsAgent '@virtual_name'"
+
+#: so_feedsagent.module:1874
+msgid ""
+"Group '@group' has been removed from FeedsAgent content type '@virtual_name'"
+msgstr "Le groupe '@group' a été supprimé du type FeedsAgent '@virtual_name'"
+
+#: so_feedsagent.module:1898
+msgid "Feedsagent type(s) mapping"
+msgstr "Mappage des types FeedsAgent"
+
+#: so_feedsagent.module:1918
+msgid "Node type mapped from"
+msgstr "Type de node mappé à partir de"
+
+#: so_feedsagent.module:1933
+msgid "Unionized in"
+msgstr "Syndiqué dans"
+
+#: so_feedsagent.module:354
+msgid "Update started : @type"
+msgstr "Début de la mise à jour : @type"
+
+#: so_feedsagent.module:417
+msgid "Feeds processed : @feed"
+msgstr "Flux traité : @feed"
+
+#: so_feedsagent.module:435
+msgid "Update finished"
+msgstr "Mise à jour terminée"
+
+#: so_feedsagent.module:56;65
+msgid "Configuration"
+msgstr "Configuration"
+
+#: so_feedsagent.module:73
+msgid "Connectors"
+msgstr "Connecteurs"
+
+#: so_feedsagent.module:98
+msgid "Feeds"
+msgstr "Flux"
+
+#: so_feedsagent.module:181
+msgid "Summary"
+msgstr "Résumé"
+
+#: so_feedsagent.install:305
+msgid "Table '@table' has been dropped"
+msgstr "La table '@table' a été supprimée"
+
+#: so_feedsagent.install:329
+msgid "Table '@table' has been created"
+msgstr "La table '@table' a été créée"
+
+#: so_feedsagent.install:390
+msgid "Table '@table' has been altered"
+msgstr "La table '@table' a été altérée"
+
+#: so_feedsagent.install:410;430
+msgid "Field '@field' has been added"
+msgstr "Le champ '@field' a été ajouté"
+
+#: so_feedsagent.info:0
+msgid ""
+"Provides tools for content types creation and contents importation from "
+"various feeds."
+msgstr ""
+"Fourni des outils de création de types de contenus et d'importation de "
+"contenus en provenance de divers flux."
+
+#: so_feedsagent.info:0
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.info:0
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.info:0
+msgid "Saison d'Or"
+msgstr "Saison d'Or"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:31
+msgid "Connection"
+msgstr "Connection"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:35
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:64
+msgid "Without trailing slash."
+msgstr "Sans le slash de fin."
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:36
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:55
+msgid "Base URL"
+msgstr "URL de base"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:43
+msgid "User"
+msgstr "Utilisateur"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:51
+msgid "Key"
+msgstr "Clef"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:60
+msgid "Schema"
+msgstr "Schéma"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:81
+msgid "Listing"
+msgstr "Listing"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:85;117
+msgid "Script"
+msgstr "Script"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:93;125
+msgid "URL params"
+msgstr "Paramètres d'URL"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:94;126
+msgid "Raw format (with &amp;)"
+msgstr "Format brut (avec &amps;)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:102
+msgid "Listing section max length"
+msgstr "Longueur maximum des tronçons de listings"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:103
+msgid "0 = unlimited"
+msgstr "0 = pas de limite"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:113
+msgid "Fiche"
+msgstr "Fiche"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:179
+msgid "Produit ID"
+msgstr "ID du produit"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:180
+msgid "To use as reference"
+msgstr "A utiliser comme référence"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:188
+msgid "Use an input mask"
+msgstr "Utiliser un masque de saisie"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:194;481
+msgid "Input mask"
+msgstr "Masque de saisie"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:195
+msgid ""
+"URL starting with : 'http://'.<br />Format : listeproduits.asp?"
+"rfrom=1&rto=1&user=<em>[user]</em>&pwkey=<em>[key]</"
+"em>&urlnames=tous&lepool=<em>[pool]</em>"
+msgstr ""
+"URL commençant par : 'http://'.<br />Format : listeproduits.asp?"
+"rfrom=1&rto=1&user=<em>[user]</em>&pwkey=<em>[key]</"
+"em>&urlnames=tous&lepool=<em>[pool]</em>"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:207
+msgid "Content type fields"
+msgstr "Champs du type de contenu"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:209
+msgid "Include whole criteria definitions"
+msgstr "Inclure l'ensemble des définition de critères"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:210
+msgid "Include prestataire informations"
+msgstr "Inclure les informations du prestataire"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:217
+msgid "Create fields for these additional features"
+msgstr "Créer des champs pour ces fonctionnalités additionnelles"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:219;437
+msgid "Schedule"
+msgstr "Dates programmées"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:261
+msgid ""
+"A LEI virtual type named '@name' and matching the primary type '@primary' "
+"already exists.<br />It's mapped on '@type' Drupal's content type."
+msgstr ""
+"Un type virtuel nommé '@name' et correspondant à type primaire '@primary' "
+"existe déjà.<br />Il est mappé sur le type Drupal : '@type'."
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:281
+msgid ""
+"A LEI virtual type named '@name' and matching the primary type '@primary' "
+"already exists.<br />Since it's not mapped on any Drupal's content type, it "
+"can be redefined."
+msgstr ""
+"Un type virtuel nommé '@name' et correspondant à type primaire '@primary' "
+"existe déjà.<br />Dans la mesure où il n'est mappé sur aucun type Drupal, il "
+"peut être redéfini."
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:339
+msgid "Map to virtual type(s)"
+msgstr "Mapper sur le(s) type(s) virtuel(s)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:407
+msgid "Produit"
+msgstr "Produit"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:414
+msgid "Produit type"
+msgstr "Type de produit"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:421
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:286
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:443
+msgid "Dates"
+msgstr "Dates"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:554
+msgid "URL clause params"
+msgstr "Paramètres de l'URL de la clause"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:555
+msgid "'PVALUES', 'PNAMES', 'leshoraires', etc.<br />Raw format (with &amp;)"
+msgstr "'PVALUES', 'PNAMES', 'leshoraires', etc.<br />Format brut (avec &amp;)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:563
+msgid "Couplages code for \"is parent of\""
+msgstr "Code de couplage pour \"est parent de\""
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:590
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:620
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:387
+msgid "See XML"
+msgstr "Voir le XML"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:663
+msgid "Server didn't return any XML data (rfom=@rfrom, rto=@rto)"
+msgstr "Le serveur n'a retourné aucune donnée XML (rfom=@rfrom, rto=@rto)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:666
+msgid "Server didn't respond (rfom=@rfrom, rto=@rto)"
+msgstr "Le serveur n'a pas répondu (rfom=@rfrom, rto=@rto)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:672
+msgid "XML was empty (rfom=@rfrom, rto=@rto)"
+msgstr "Le XML était vide (rfom=@rfrom, rto=@rto)"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:707
+msgid "Feed is invalid. One or more parameters missing : @missing"
+msgstr ""
+"Le flux est invalide. Un ou plusieurs paramètres sont manquants : @missing"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:767
+msgid "Server didn't provide any XML data"
+msgstr "Le serveur n'a fourni aucunes données XML"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:769
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:410;553
+msgid "XML was empty"
+msgstr "Le fichier XML était vide"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:1256
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:643
+msgid "No title"
+msgstr "Sans titre"
+
+#: connectors/so_feedsagent_connector_lei/SoFeedsAgentConnectorLEI.class.php:380
+msgid "1 virtual type has been set"
+msgid_plural "@count virtual types have been set"
+msgstr[0] "1 type virtuel a été paramétré"
+msgstr[1] "@count types virtuels ont été paramétrés"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:9
+msgid "LEI"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:23
+msgid "Define and map a LEI virtual type"
+msgstr "Définir et mapper un type virtuel LEI"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:26;121;223
+msgid "LEI connector"
+msgstr "Connecteur LEI"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:36;233
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:36
+msgid "Use"
+msgstr "Utiliser"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:44;157
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:44;157
+msgid "Mapping parameters"
+msgstr "Paramètres de mappage"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:55
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:55
+msgid "Map from orphan virtual type"
+msgstr "Mapper à partir d'un type virtuel orphelin"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:56
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:56
+msgid "no"
+msgstr "non"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:63;166
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:63;166
+msgid "Drupal type mapping target"
+msgstr "Type Drupal cible"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:64;167
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:64;167
+msgid "create a new one"
+msgstr "en créer un nouveau"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:73;176
+msgid "LEI data"
+msgstr "Données LEI"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:80;183
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:80;183
+msgid "Fields to unionize"
+msgstr "Champs à syndiquer"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:87;190
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:87;190
+msgid "Fields definitions and mappings"
+msgstr "Définition des champs et mappages"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:88;191
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:88;191
+msgid ""
+"'Title' parameter : if one or more values have been set in feed/connector, "
+"they can be overridden partially or totally, with correct index assignement."
+msgstr ""
+"Paramètre 'Titre' : si une ou plusieurs valeurs ont été définies dans le "
+"flux/connecteur, celles-ci peuvent être supplantées en tout ou partie, avec "
+"un assignement correct des indexes."
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:94;197
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:94;197
+msgid "Media params"
+msgstr "Paramètre des médias"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:101;204
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:101;204
+msgid "Drupal new node type params"
+msgstr "Paramètres du nouveau type Drupal"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:118
+msgid "Edit an LEI virtual type"
+msgstr "Editer un type virtuel LEI"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:131
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:131
+msgid "Edit virtual types which use"
+msgstr "Editer les types virtuels qui utilisent"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:139
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:139
+msgid "Virtual type"
+msgstr "Type virtuel"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:220
+msgid ""
+"Duplicate existing LEI type parameters on one or more orphan virtual types"
+msgstr ""
+"Dupliquer les paramètres d'un type LEI existant sur un ou plusieurs types "
+"virtuels orphelins"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:241
+msgid "Source type"
+msgstr "Type source"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:251
+msgid "Map from virtual type"
+msgstr "Mapper à partir du type virtuel"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:260
+msgid "Target type(s)"
+msgstr "Type(s) cible(s)"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.module:268
+msgid "Operation completed"
+msgstr "Opération achevée"
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.info:0
+msgid "FeedsAgent connector : LEI"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_lei/so_feedsagent_connector_lei.info:0
+msgid ""
+"Interface between FeedsAgent and the LEI. Implements the content type "
+"generator and content importer functionalities."
+msgstr ""
+"Interface entre FeedsAgent et le LEI. Implémente les fonctionnalités de "
+"génération de types de contenu ainsi que d'importation de contenus."
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:34
+msgid "File was found. Last update : @date at @time."
+msgstr "Le fichier a été trouvé. Dernière mise à jour : @date à @time."
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:37
+msgid "FILE WAS NOT FOUND !"
+msgstr "LE FICHIER N'A PAS ETE TROUVE !"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:41
+msgid "After saving, check here to see if file is found."
+msgstr "Après sauvegarde, vérifiez ici que le fichier a été trouvé."
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:51;350
+msgid "Webservice"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:63
+msgid "Media contents base URL"
+msgstr "Base URL des contenus MEDIA"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:74;363
+msgid "Data import"
+msgstr "Import de données"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:78
+msgid "Import script path"
+msgstr "Chemin du script d'import"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:85
+msgid "Values separator"
+msgstr "Séparateur de valeurs"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:93;367
+msgid "Import filters"
+msgstr "Filtres d'import"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:93
+msgid "overridable in each feeds"
+msgstr "supplantable dans chaque flux"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:94;368
+msgid ""
+"One condition per line. Relation between conditions : 'OR'. Format : [field]"
+"[operator (either '=', '!=', '~' or '!~')][value].<br />Exemple : "
+"\"zoneOT~OT Périgueux\", \"categorie!=Excursion en autocar\""
+msgstr ""
+"Une condition par ligne. Relation entre les conditions : 'OR'. Format : "
+"[champ][opérateur (soit '=', '!=', '~' ou '!~')][valeur].<br />Exemple : "
+"\"zoneOT~OT Périgueux\", \"categorie!=Excursion en autocar\""
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:208
+msgid ""
+"A Tourinsoft virtual type named '@name' and matching the primary type "
+"'@primary' already exists.<br />It's mapped on '@type' Drupal's content type."
+msgstr ""
+"Un type virtuel Tourinsoft nommé '@name' correspondant au type primaire "
+"'@primary' existe déjà.<br />Il est mappé sur le type Drupal '@type'."
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:228
+msgid ""
+"A Tourinsoft virtual type named '@name' and matching the primary type "
+"'@primary' already exists.<br />Since it's not mapped on any Drupal's "
+"content type, it can be redefined."
+msgstr ""
+"Un type virtuel Tourinsoft nommé '@name' correspondant au type primaire "
+"'@primary' existe déjà.<br />Dans la mesure où il n'est mappé sur aucun type "
+"Drupal, il peut être redéfini."
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:279
+msgid "Created"
+msgstr "Créé(e)"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:408
+msgid "Server didn't provide any listing XML data"
+msgstr "Le serveur n'a fourni aucune donnée XML de listing"
+
+#: connectors/so_feedsagent_connector_tourinsoft/SoFeedsAgentConnectorTourinsoft.class.php:551
+msgid "Server didn't provide any fiche XML data"
+msgstr "Le serveur n'a fourni aucune donnée XML de fiche"
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:70
+msgid "from"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:71
+msgid "to"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:345;388
+msgid "The @begindate"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:348;391
+msgid "From @begindate to @enddate"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:353;364;396;407
+msgid "The @begindate, at @openhour"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:356;367;399;410
+msgid "From @begindate to @enddate, at @openhour"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:361;404
+msgid "The @begindate, from @openhour to @closurehour"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:370;413
+msgid "From @begindate to @enddate, from @openhour to @closurehour"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:375;418
+msgid ""
+"The @begindate, from @openhour to @closurehour and from @openhour2 to "
+"@closurehour2"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:378;421
+msgid ""
+"From @begindate to @enddate, from @openhour to @closurehour and from "
+"@openhour2 to @closurehour2"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:382
+msgid "Closed on @closedday"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:592
+msgid "@locomotion @duree"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/import_filters.inc:620
+msgid "@activite (@detail)"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:9
+msgid "Tourinsoft"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:23
+msgid "Define and map a Tourinsoft virtual type"
+msgstr "Définir et mapper un type virtuel Tourinsoft"
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:26;121
+msgid "Tourinsoft connector"
+msgstr "Connecteur Tourinsoft"
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:73;176
+msgid "Tourinsoft data"
+msgstr "Données Tourinsoft"
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.module:118
+msgid "Edit a Tourinsoft virtual type"
+msgstr "Editer un type virtuel Tourinsoft"
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.info:0
+msgid "FeedsAgent connector : Tourinsoft"
+msgstr ""
+
+#: connectors/so_feedsagent_connector_tourinsoft/so_feedsagent_connector_tourinsoft.info:0
+msgid ""
+"Interface between FeedsAgent and Tourinsoft. Implements the content type "
+"generator and content importer functionalities."
+msgstr ""

@@ -1,0 +1,103 @@
+
+fieldset.sfa_importer_report {
+}
+
+.sfa_importer_report_wrapper {
+    clear: both;
+}
+
+.sfa_alert {
+    margin: 10px;
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.sfa_section {
+    padding : 5px;
+    margin-bottom: 10px;
+}
+
+.sfa_success_section {
+    padding : 5px 15px;
+    border: 1px solid #008800;
+    font-size: 12pt;
+    color: #008800;
+}
+
+.sfa_fail_section {
+    border: 1px solid #ff0000;
+}
+
+.sfa_fail_section h3 {
+    color: #ff0000;
+}
+
+.sfa_warning_section {
+    border: 1px solid #ff8800;
+}
+
+.sfa_warning_section h3 {
+    color: #ff8800;
+}
+
+.sfa_diary_section {
+    border: 1px solid #444444;
+}
+
+.sfa_diary_section h3 {
+    color: #444444;
+}
+
+.sfa_gravity_0 {
+    color: inherit;
+}
+
+.sfa_gravity_1 {
+    color: #008800;
+}
+
+.sfa_gravity_2 {
+    color: #ff8800;
+}
+
+.sfa_gravity_3 {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.sfa_outline {
+    font-weight: bold;
+}
+
+.sfa_importer_node_lauch {
+    display: block;
+    float: right;
+    margin: 10px;
+    text-align: right;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.sfa_feeds_section {
+    padding : 5px;
+    margin-bottom: 10px;
+    border: 1px solid #444444;
+}
+
+.sfa_feeds_section h3 {
+    margin: 0;
+    color: #444444;
+}
+
+.sfa_coupling_section {
+    padding : 5px;
+    margin-bottom: 10px;
+    border: 1px solid #444444;
+}
+
+.sfa_coupling_section h3 {
+    margin: 0;
+    color: #444444;
+}

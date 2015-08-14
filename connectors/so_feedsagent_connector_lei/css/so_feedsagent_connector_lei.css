@@ -1,0 +1,19 @@
+
+.connector_lei_see_xml {
+    float: left;
+    clear: both;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #eeeeee;
+}
+
+.connector_lei_see_xml .form-item {
+    float: left;
+    margin: 5px 10px !important;
+}
+
+.connector_lei_see_xml a.connector_lei_see_xml_link {    
+    display: block;
+    font-weight: bold;
+    text-align: center;
+}

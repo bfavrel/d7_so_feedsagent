@@ -1,0 +1,199 @@
+
+.overview_empty_msg {
+    padding: 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.overview_warning {
+    padding-left: 20px;
+    line-height: 20px;
+    background-image: url("/misc/message-16-warning.png");
+    background-repeat: no-repeat;
+    background-position: left top;
+    color: #ff0000;
+}
+
+/* ----- correctifs pour SEVEN ----- */
+/* nested vertical tabs */
+form.feedsagent_admin_form .vertical-tabs .vertical-tabs fieldset.vertical-tabs-pane legend {
+    display: none;
+}
+
+/* les textfields sont en width 100% */
+form.feedsagent_admin_form .vertical-tabs .form-type-textfield input {
+    width: auto;
+}
+
+/* les fieldset prennent trop de place dans un tableau */
+div#edit-feeds-overview fieldset {
+    margin: 0;
+}
+div#edit-feeds-overview fieldset.collapsible {
+    padding-top: 21px;
+    border: none;
+}
+div#edit-feeds-overview fieldset.collapsible span.fieldset-legend {
+    margin-top: 0;
+}
+div#edit-feeds-overview fieldset.collapsible fieldset {
+    padding-top: 15px;
+}
+
+/* ----- wizzard -----*/
+
+form.feedsagent_wizzard h2.feedsagent_wizzard_title span {
+    font-size: 8pt;
+    font-weight: normal;
+}
+
+form.feedsagent_wizzard .feedsagent_wizzard_help {
+    padding: 5px;
+    border: 1px solid #cccccc;
+}
+
+form.feedsagent_wizzard .hide_col {
+    width: 0;
+    padding: 0;
+    border: none;
+}
+
+form.feedsagent_wizzard fieldset.form-wrapper {
+    padding-top: 13px;
+}
+form.feedsagent_wizzard fieldset.collapsible {
+    padding-top: 2.5em;
+}
+/* legend.fieldset-legend */
+
+form.feedsagent_wizzard .fields_overview_legend {
+    padding-top: 20px;
+}
+
+form.feedsagent_wizzard .fields_overview_legend .fieldset-legend {
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+    font-size: 8pt;
+    color: #999999;
+}
+
+form.feedsagent_wizzard .fields_overview_legend .legend_item {
+    float: left;
+    width: 20%;
+    max-width: 350px;
+    margin: 4px 1%;
+}
+
+form.feedsagent_wizzard .fields_overview_legend .legend_item div.symbol {
+    float: left;
+    width: 20px;
+    height: 15px;
+    margin-right: 6px;
+    border: 1px solid #999999;
+    line-height: 15px;
+}
+
+form.feedsagent_wizzard .fields_overview_legend .legend_item div.form-item {
+    display: inline;
+}
+
+form.feedsagent_wizzard .fields_overview_legend .legend_item span {
+    line-height: 15px;
+}
+
+/* existing fields backgrounds */
+
+form.feedsagent_wizzard .fields_overview_legend .in_virtual_type_legend,
+form.feedsagent_wizzard tr.in_virtual_type > td {
+    background-color: rgba(127, 255, 127, 0.65);
+}
+form.feedsagent_wizzard tr.in_virtual_type_container > td {
+    background-color: rgba(127, 255, 127, 0.2);
+}
+
+form.feedsagent_wizzard .fields_overview_legend .in_custom_selection_legend,
+form.feedsagent_wizzard tr.in_custom_selection > td {
+    background-color: rgba(255, 246, 108, 0.65);
+}
+form.feedsagent_wizzard tr.in_custom_selection_container > td {
+    background-color: rgba(255, 246, 108, 0.2);
+}
+
+form.feedsagent_wizzard .fields_overview_legend .in_drupal_type_legend,
+form.feedsagent_wizzard tr.in_drupal_type > td {
+    background-color: rgba(255, 127, 127, 0.65);
+}
+form.feedsagent_wizzard tr.in_drupal_type_container > td {
+    background-color: rgba(255, 127, 127, 0.2);
+}
+
+form.feedsagent_wizzard .fields_overview_legend .in_connector_legend,
+form.feedsagent_wizzard tr.in_connector > td {
+    background-color: rgba(127, 127, 255, 0.65);
+}
+form.feedsagent_wizzard tr.in_connector_container > td {
+    background-color: rgba(127, 127, 255, 0.2);
+}
+
+/* new fields / groups background */
+
+form.feedsagent_wizzard .fields_overview_legend .new_field_legend,
+form.feedsagent_wizzard tr.new_field > td {
+    background-color: rgba(255, 127, 127, 0.2);
+}
+
+/* old / new groups labels */
+
+form.feedsagent_wizzard tr div.fieldset-wrapper > div.form-type-textfield input.form-text {
+    display: none;
+}
+
+form.feedsagent_wizzard tr.new_field div.fieldset-wrapper > div.form-type-textfield input.form-text {
+    display: block;
+}
+
+form.feedsagent_wizzard tr div.fieldset-wrapper > div.form-type-textfield div.description {
+    font-size: 11pt;
+}
+form.feedsagent_wizzard tr.new_field div.fieldset-wrapper > div.form-type-textfield div.description {
+    font-size: 0.923em;
+}
+
+/* ----- node form (fields overrides) ----- */
+
+form.node-form div.overridable_field {
+    position: relative;
+}
+
+form.node-form div.override_controls {
+    width: 99%;
+    padding-right: 1%;
+    text-align: right;
+    position: absolute;
+    z-index: 10000;
+    top : 8px;
+    right: 0;
+    border-bottom: 1px dotted #aaaaaa;
+    pointer-events: none;
+}
+
+form.node-form div.override_controls a {
+    pointer-events: auto;
+}
+
+form.node-form div.override_controls a {
+    text-decoration: none;
+}
+
+form.node-form div.overrided_field {
+    background-color: #fff0f0;
+}
+
+/* ----- manage fields ----- */
+
+form#field-ui-field-overview-form img.sfa_infos {
+    vertical-align: middle;
+    cursor: pointer;
+}

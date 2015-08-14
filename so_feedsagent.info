@@ -1,0 +1,14 @@
+name = "FeedsAgent"
+version = "7.x-1.0"
+description = "Provides tools for content types creation and contents importation from various feeds."
+package = "Saison d'Or"
+core = 7.x
+
+dependencies[] = i18n
+dependencies[] = i18n_string
+dependencies[] = field_group
+dependencies[] = date
+dependencies[] = date_popup
+dependencies[] = image
+
+files[] = connectors/_classes/SoFeedsAgentConnectorAbstract.class.php

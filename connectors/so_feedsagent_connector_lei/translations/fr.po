@@ -1,0 +1,193 @@
+# $Id$
+#
+# French translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  SoFeedsAgentConnectorLEI.class.php: n/a
+#  so_feedsagent_connector_lei.module: n/a
+#  so_feedsagent_connector_lei.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-11-08 15:52+0100\n"
+"PO-Revision-Date: 2013-11-08 15:53+0100\n"
+"Last-Translator: David PIVERON\n"
+"Language-Team: French <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+
+#: SoFeedsAgentConnectorLEI.class.php:31
+msgid "Connection"
+msgstr "Connection"
+
+#: SoFeedsAgentConnectorLEI.class.php:35
+msgid "Without trailing slash."
+msgstr "Sans le slash de fin."
+
+#: SoFeedsAgentConnectorLEI.class.php:36
+msgid "Base URL"
+msgstr "URL de base"
+
+#: SoFeedsAgentConnectorLEI.class.php:43
+msgid "User"
+msgstr "Utilisateur"
+
+#: SoFeedsAgentConnectorLEI.class.php:51
+msgid "Key"
+msgstr "Clef"
+
+#: SoFeedsAgentConnectorLEI.class.php:60
+msgid "Schema"
+msgstr "Schéma"
+
+#: SoFeedsAgentConnectorLEI.class.php:72
+msgid "default"
+msgstr "défaut"
+
+#: SoFeedsAgentConnectorLEI.class.php:81
+msgid "Listing"
+msgstr "Listing"
+
+#: SoFeedsAgentConnectorLEI.class.php:85;107
+msgid "Script"
+msgstr "Script"
+
+#: SoFeedsAgentConnectorLEI.class.php:93;115
+msgid "URL params"
+msgstr "Paramètres d'URL"
+
+#: SoFeedsAgentConnectorLEI.class.php:94;116
+msgid "Raw format (with &amp;)"
+msgstr "Format brut (avec &amp;)"
+
+#: SoFeedsAgentConnectorLEI.class.php:103
+msgid "Fiche"
+msgstr "Fiche"
+
+#: SoFeedsAgentConnectorLEI.class.php:142
+msgid "Produit ID"
+msgstr "ID du produit"
+
+#: SoFeedsAgentConnectorLEI.class.php:143
+msgid "To use as reference"
+msgstr "A utiliser comme référence"
+
+#: SoFeedsAgentConnectorLEI.class.php:151
+msgid "Content type fields"
+msgstr "Champs du type de contenu"
+
+#: SoFeedsAgentConnectorLEI.class.php:153
+msgid "Include whole criteria definitions"
+msgstr "Inclure l'ensemble des définition de critères"
+
+#: SoFeedsAgentConnectorLEI.class.php:154
+msgid "Include prestataire informations"
+msgstr "Inclure les informations du prestataire"
+
+#: SoFeedsAgentConnectorLEI.class.php:161
+msgid "Create fields for these additional features"
+msgstr "Créer des champs pour ces fonctionnalités additionnelles"
+
+#: SoFeedsAgentConnectorLEI.class.php:163;217
+msgid "Schedule"
+msgstr "Dates programmées"
+
+#: SoFeedsAgentConnectorLEI.class.php:187
+msgid "Produit"
+msgstr "Produit"
+
+#: SoFeedsAgentConnectorLEI.class.php:193
+msgid "Produit type"
+msgstr "Type de produit"
+
+#: SoFeedsAgentConnectorLEI.class.php:199
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: SoFeedsAgentConnectorLEI.class.php:223
+msgid "Dates"
+msgstr "Dates"
+
+#: SoFeedsAgentConnectorLEI.class.php:282
+msgid "URL clause params"
+msgstr "Paramètres de l'URL de la clause"
+
+#: SoFeedsAgentConnectorLEI.class.php:283
+msgid "'PVALUES', 'PNAMES', 'leshoraires', etc.<br />Raw format (with &amp;)"
+msgstr "'PVALUES', 'PNAMES', 'leshoraires', etc.<br />Format brut (avec &amp;)"
+
+#: SoFeedsAgentConnectorLEI.class.php:291;321
+msgid "Listing max length"
+msgstr "Longueur max du listing"
+
+#: SoFeedsAgentConnectorLEI.class.php:292
+msgid "Max 1500"
+msgstr "Max 1500"
+
+#: SoFeedsAgentConnectorLEI.class.php:318
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: SoFeedsAgentConnectorLEI.class.php:322
+msgid "See XML"
+msgstr "Voir le XML"
+
+#: SoFeedsAgentConnectorLEI.class.php:376
+msgid "Server didn't provide any XML data"
+msgstr "Le serveur n'a fourni aucunes données XML"
+
+#: SoFeedsAgentConnectorLEI.class.php:378
+msgid "XML was empty"
+msgstr "Le fichier XML était vide"
+
+#: SoFeedsAgentConnectorLEI.class.php:722
+msgid "No title"
+msgstr "Sans titre"
+
+#: so_feedsagent_connector_lei.module:9
+msgid "LEI"
+msgstr ""
+
+#: so_feedsagent_connector_lei.module:23
+msgid "Content type basic parameters"
+msgstr "Paramètres de base du type de contenu"
+
+#: so_feedsagent_connector_lei.module:28;50
+msgid "LEI data"
+msgstr "Données LEI"
+
+#: so_feedsagent_connector_lei.module:33
+msgid "Fields to create"
+msgstr "Champs à créer"
+
+#: so_feedsagent_connector_lei.module:38
+msgid "Widgets options"
+msgstr "Options des widgets"
+
+#: so_feedsagent_connector_lei.module:42
+msgid "Create the content type"
+msgstr "Créer le type de contenu"
+
+#: so_feedsagent_connector_lei.module:55
+msgid "Avaiblable fields"
+msgstr "Champs disponibles"
+
+#: so_feedsagent_connector_lei.module:59
+msgid "Save the content type"
+msgstr "Sauvegarder le type de contenu"
+
+#: so_feedsagent_connector_lei.info:0
+msgid "FeedsAgent connector : LEI"
+msgstr ""
+
+#: so_feedsagent_connector_lei.info:0
+msgid "Interface between FeedsAgent and the LEI. Implements the content type generator and content importer functionalities."
+msgstr "Interface entre FeedsAgent et le LEI. Implémente les fonctionnalités de génération de types de contenu ainsi que d'importation de contenus."
+
+#: so_feedsagent_connector_lei.info:0
+msgid "Saison d'Or"
+msgstr ""
+

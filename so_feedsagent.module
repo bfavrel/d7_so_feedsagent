@@ -1,0 +1,1937 @@
+<?php
+
+/*
+ * Implementation of hook_boot()
+ */
+function so_feedsagent_boot() {
+    require_once 'so_feedsagent.field.inc';
+}
+
+/*
+ * Implementation of hook_init()
+ */
+function so_feedsagent_init() {
+    error_reporting(error_reporting() & ~E_NOTICE); // "undefined index" messages.
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function so_feedsagent_permission() {
+    return array(
+        'administer feedsagent' => array(
+            'title' => t("Administer FeedsAgent"),
+            'description' => t("Configure module's params, create connectors and feeds, and launch imports."),
+        ),
+        'use feedsagent generator' => array(
+            'title' => t("Use FeedsAgent Generator"),
+            'description' => t("Create or edit content types."),
+        ),
+        'use feedsagent importer' => array(
+            'title' => t("Use FeedsAgent Importer"),
+            'description' => t("Enable/disable feeds, set periodicities and lauch updates."),
+        ),
+    );
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function so_feedsagent_menu() {
+    $items = array();
+
+    // ----- MODULE'S SETTINGS -----
+
+    $items['admin/config/so_feedsagent'] = array(
+        'title' => "FeedsAgent",
+        'access arguments' => array('administer feedsagent'),
+        'page callback' => 'system_admin_menu_block_page',
+        'file' => 'system.admin.inc',
+        'file path' => drupal_get_path('module', 'system'),
+        'position' => 'right',
+        'weight' => -30,
+    );
+
+    $items['admin/config/so_feedsagent/settings'] = array(
+        'title' => "Configuration",
+        'description' => t("General settings, connectors, and feeds"),
+        'type' => MENU_NORMAL_ITEM,
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_settings_form'),
+        'access arguments' => array('administer feedsagent'),
+    );
+
+    $items['admin/config/so_feedsagent/settings/global'] = array(
+        'title' => "Configuration",
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'access arguments' => array('administer feedsagent'),
+    );
+
+    // ----- CONNECTORS' SETTINGS -----
+
+    $items['admin/config/so_feedsagent/settings/connectors'] = array(
+        'title' => "Connectors",
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_connectors_overview_form'),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_LOCAL_TASK,
+        'weight' => 1,
+    );
+
+    $items['admin/config/so_feedsagent/connectors/edit/%'] = array(
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_edit_connector_form', 5),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['admin/config/so_feedsagent/connectors/delete/%'] = array(
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_delete_connector_confirm', 5),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_CALLBACK,
+    );
+
+    // ----- FEEDS' SETTINGS -----
+
+    $items['admin/config/so_feedsagent/settings/feeds'] = array(
+        'title' => "Feeds",
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_importer_overview_form'),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'so_feedsagent.importer.inc',
+        'weight' => 2,
+    );
+
+    $items['admin/config/so_feedsagent/feeds/edit/%'] = array(
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_importer_edit_feed_form', 5),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_CALLBACK,
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    $items['admin/config/so_feedsagent/feeds/delete/%'] = array(
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_importer_delete_feed_confirm', 5),
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_CALLBACK,
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    // ----- CONTENT TYPE WIZZARD -----
+
+    $items['admin/structure/types/so_feedsagent'] = array(
+        'title' => "FeedsAgent",
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_generator_form'),
+        'access arguments' => array('use feedsagent generator'),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'so_feedsagent.generator.inc',
+    );
+
+    $items['admin/so_feedsagent/generator/drupal_field_autocomplete/%'] = array(
+        'page callback' => 'so_feedsagent_generator_drupal_field_autocomplete',
+        'page arguments' => array(4),
+        'access arguments' => array('use feedsagent generator'),
+        'type' => MENU_CALLBACK,
+        'file' => 'so_feedsagent.generator.inc',
+    );
+
+    // ----- IMPORTER
+
+    $items['admin/content/feedsagent'] = array(
+        'title' => "FeedsAgent",
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('so_feedsagent_importer_update_form'),
+        'access arguments' => array('use feedsagent importer'),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'so_feedsagent.importer.inc',
+        'weight' => 3,
+    );
+
+    $items['admin/content/feedsagent/importer/update/%'] = array(
+        'page callback' => 'so_feedsagent_importer_batch_process_feed',
+        'page arguments' => array(5, 'update'),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('use feedsagent importer'),
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    $items['admin/content/feedsagent/importer/import/%'] = array(
+        'page callback' => 'so_feedsagent_importer_batch_process_feed',
+        'page arguments' => array(5, 'import'),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('administer feedsagent'),
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    // ----- LOGS
+
+    $items['admin/reports/feedsagent'] = array(
+        'title' => "FeedsAgent",
+        'page callback' => 'so_feedsagent_report_summary',
+        'access arguments' => array('administer feedsagent'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    $items['admin/reports/feedsagent/summary'] = array(
+        'title' => "Summary",
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'access arguments' => array('administer feedsagent'),
+    );
+
+    $items['admin/reports/feedsagent/batch/restart/%/%'] = array( // batch_id / is_active
+        'page callback' => 'so_feedsagent_importer_batch_restart',
+        'page arguments' => array(5, 6),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('administer feedsagent'),
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    $items['admin/reports/feedsagent/batch/cancel/%'] = array( // batch_id / is_active
+        'page callback' => 'so_feedsagent_importer_batch_cancel',
+        'page arguments' => array(5),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('administer feedsagent'),
+        'file' => 'so_feedsagent.importer.inc',
+    );
+
+    // ----- NODE IMPORTER TAB
+
+    $items['node/%node/importer'] = array( // param3 = 'launch' : lance l'import
+        'title' => 'FeedsAgent',
+        'page callback' => 'so_feedsagent_importer_single_node_update',
+        'page arguments' => array(1),
+        'access callback' => 'so_feedsagent_node_importer_perm',
+        'access arguments' => array(1),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'so_feedsagent.importer.inc',
+        'weight' => 4,
+    );
+
+    // ----- FICHE
+
+    $items['item/%sfa_item'] = array(
+        'page callback' => 'so_feedsagent_sfa_item_redirect',
+        'page arguments' => array(1),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function sfa_item_load($item_id) {
+
+    global $language;
+
+    $nid = db_query(
+        "SELECT c.nid FROM {feedsagent_contents} AS c
+        LEFT JOIN {node} AS n ON n.nid=c.nid
+        WHERE c.item_id=? AND (n.language=? OR n.language='und')",
+        array(
+            $item_id,
+            $language->language,
+        )
+    )->fetchColumn();
+
+    return $nid;
+}
+
+function so_feedsagent_sfa_item_redirect($nid = null) {
+
+    if($nid == null) {
+        drupal_not_found();
+        exit();
+    }
+
+    drupal_goto(drupal_get_path_alias('node/' . $nid), array(), 301);
+}
+
+function so_feedsagent_node_importer_perm($node) {
+
+    if(user_access('use feedsagent importer') == false) {return false;}
+
+    $is_feedsagent_node = db_query("SELECT * FROM {feedsagent_content_types} WHERE type=?", array($node->type))->fetchAssoc();
+
+    return $is_feedsagent_node != false;
+}
+
+function so_feedsagent_cron() {
+
+    $settings = variable_get('feedsagent_settings', array());
+
+    if($settings['importer']['schedules']['cron'] != true) {return;}
+
+    ini_set('max_execution_time', 7200);
+
+    $last_execution = variable_get('sfa_importer_executions', array('monthly' => 0, 'weekly' => 0, 'daily' => 0, 'hourly' => 0));
+
+    $feeds_types = array();
+
+    $time_window = explode('-', $settings['importer']['schedules']['time_window']);
+
+    $now = DateTime::createFromFormat('U', time());
+    $now->setTimezone(new DateTimeZone('Europe/Paris'));
+
+    $hour = $now->format('G');
+    $date = $now->format('j');
+
+    if(($date == $settings['importer']['schedules']['monthly'] || $last_execution['monthly'] == 0)
+            && ($hour >= $time_window[0] && $hour < $time_window[1])) {
+
+        $monthly_previous = DateTime::createFromFormat('U', $last_execution['monthly']);
+        $monthly_diff = $now->diff($monthly_previous, true);
+
+        if($monthly_diff->m >= 1) {
+            $feeds_types[] = 'monthly';
+
+            if($last_execution['monthly'] == 0) {
+                $last_execution['monthly'] = 1;
+            } else {
+                $rounded_time = DateTime::createFromFormat('d/m/Y H:i:s', $now->format('d/m/Y 00:00:00'));
+                $last_execution['monthly'] = $rounded_time->format('U');
+            }
+        }
+    }
+
+    $day = $now->format('N');
+
+    if(($day == $settings['importer']['schedules']['weekly'] || $last_execution['weekly'] == 0)
+            && ($hour >= $time_window[0] && $hour < $time_window[1])) {
+
+        $weekly_previous = DateTime::createFromFormat('U', $last_execution['weekly']);
+        $weekly_diff = $now->diff($weekly_previous, true);
+
+        if($weekly_diff->d >= 7) {
+            $feeds_types[] = 'weekly';
+
+            if($last_execution['weekly'] == 0) {
+                $last_execution['weekly'] = 1;
+            } else {
+                $rounded_time = DateTime::createFromFormat('d/m/Y H:i:s', $now->format('d/m/Y 00:00:00'));
+                $last_execution['weekly'] = $rounded_time->format('U');
+            }
+        }
+    }
+
+    if(($hour >= $time_window[0] && $hour < $time_window[1]) || $last_execution['daily'] == 0) {
+
+        $daily_previous = DateTime::createFromFormat('U', $last_execution['daily']);
+        $daily_diff = $now->diff($daily_previous, true);
+
+        if($daily_diff->d >= 1) {
+            $feeds_types[] = 'daily';
+
+            if($last_execution['daily'] == 0) {
+                $last_execution['daily'] = 1;
+            } else {
+                $rounded_time = DateTime::createFromFormat('d/m/Y H:i:s', $now->format('d/m/Y 00:00:00'));
+                $last_execution['daily'] = $rounded_time->format('U');
+            }
+        }
+    }
+
+    $hourly_previous = DateTime::createFromFormat('U', $last_execution['hourly']);
+    $hourly_diff = $now->diff($hourly_previous, true);
+
+    if($hourly_diff->h >= 1 || $last_execution['hourly'] == 0) {
+        $feeds_types[] = 'hourly';
+
+        if($last_execution['hourly'] == 0) {
+            $last_execution['hourly'] = 1;
+        } else {
+            $rounded_time = DateTime::createFromFormat('d/m/Y H:i:s', $now->format('d/m/Y H:00:00'));
+            $last_execution['hourly'] = $rounded_time->format('U');
+        }
+    }
+
+    if(empty($feeds_types)) {return;}
+
+    watchdog('Importer', "Update started : @type", array(
+        '@type' => implode(' | ', $feeds_types),
+    ));
+
+    variable_set('sfa_importer_executions', $last_execution);
+
+    module_load_include('inc', 'so_feedsagent', 'so_feedsagent.importer');
+
+    $feeds = so_feedsagent_get_feeds_definitions();
+    $queue = DrupalQueue::get('feedsagent_importer');
+
+    $remaining_tasks = array();
+
+    while($item = $queue->claimItem()) {
+
+        $remaining_tasks[$item->data['fid']] = $item->data;
+
+        $queue->deleteItem($item);
+    }
+
+    $new_tasks = array();
+
+    foreach($feeds as $feed) {
+        if($feed->active == false) {
+            unset($remaining_tasks[$feed->id]);
+            continue;
+        }
+
+        if(!in_array($feed->periodicity, $feeds_types) || array_key_exists($feed->id, $remaining_tasks)) {continue;}
+
+        $new_tasks[] = array(
+            'fid' => $feed->id,
+            'periodicity' => $feed->periodicity,
+            'created' => $now->format('d/m/Y - H:i:s'),
+            'retried' => 0,
+            'tries' => 0,
+            'force_update' => $feed->params['importer']['cron_mode']['force_update'],
+        );
+
+        if($feed->params['importer']['cron_mode']['force_update'] == 1) {
+            $feed->params['importer']['cron_mode']['force_update'] = 0;
+            $feed->params = serialize($feed->params);
+
+            drupal_write_record('feedsagent_feeds', $feed, 'id');
+        }
+    }
+
+    $doubtful_task = array(array_shift($remaining_tasks));
+
+    $tasks = array_filter(array_merge($remaining_tasks, $new_tasks, $doubtful_task));
+
+    foreach($tasks as $task) {
+        $queue->createItem($task);
+    }
+
+    while($item = $queue->claimItem(3600)) {
+
+        $item->data['retried'] = $now->format('d/m/Y - H:i:s');
+        $item->data['tries']++;
+
+        db_query("UPDATE {queue} SET data=:data WHERE item_id=:id", array(':data' => serialize($item->data), ':id' => $item->item_id));
+
+        $feed_processed = db_query("SELECT label, language FROM {feedsagent_feeds} WHERE id=?", array($item->data['fid']))->fetchObject();
+        watchdog('Importer', "Feeds processed : @feed", array(
+            '@feed' => "[" . $feed_processed->language . "]" . $feed_processed->label . " (" . $item->data['fid'] . ")",
+        ));
+
+        $cron_mode = $item->data['force_update'] == 1 ? 'cron_import' : 'cron';
+        so_feedsagent_importer_batch_process_feed($item->data['fid'], $cron_mode);
+
+        $queue->deleteItem($item);
+    }
+
+    // cache des traductions
+    require_once DRUPAL_ROOT . '/includes/locale.inc';
+    _locale_invalidate_js();
+    cache_clear_all('locale:', 'cache', TRUE);
+
+    // cache des 'allowed values'
+    field_cache_clear();
+
+    watchdog('Importer', "Update finished", array());
+}
+
+/*
+ * The global module's settings
+ */
+function so_feedsagent_settings_form($form, &$form_state) {
+
+    drupal_set_title(t("FeedsAgent general settings"));
+
+    $settings = variable_get('feedsagent_settings', array());
+
+    $form = array(
+        '#tree' => true,
+        '#attached' => array(
+            'css' => array(drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css'),
+        ),
+        '#attributes' => array(
+            'class' => 'feedsagent_admin_form',
+        ),
+
+        'configuration' => array(
+            '#type' => 'vertical_tabs',
+        ),
+    );
+
+    $form['configuration']['generator'] = array(
+        '#type' => 'vertical_tabs',
+        '#title' => "Generator",
+        '#theme_wrappers' => array('vertical_tabs', 'fieldset'),
+
+        /* // DEV : vide pour le moment
+        'editor' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Wizzard"),
+        ),
+        */
+
+        'widgets_options' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Widgets default options"),
+            '#description' => t("These settings can be overriden in each connector and in each content type."),
+        ),
+    );
+
+    $form['configuration']['generator']['widgets_options'] = array_merge(
+        $form['configuration']['generator']['widgets_options'],
+        so_feedsagent_get_widgets_configuration_elements($settings['generator']['widgets_options'])
+    );
+
+    $form['configuration']['importer'] = array(
+        '#type' => 'vertical_tabs',
+        '#title' => "Importer",
+        '#theme_wrappers' => array('vertical_tabs', 'fieldset'),
+
+        'schedules' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Schedules"),
+
+            'cron' => array(
+                '#type' => 'checkbox',
+                '#title' => t("Activate cron updates"),
+                '#default_value' => $settings['importer']['schedules']['cron'],
+            ),
+
+            'monthly' => array(
+                '#type' => 'textfield',
+                '#title' => t("Day of month for monthly cron"),
+                '#default_value' => array_key_exists('monthly', (array)$settings['importer']['schedules']) ? $settings['importer']['schedules']['monthly'] : 1,
+                '#size' => 2,
+            ),
+
+            'weekly' => array(
+                '#type' => 'textfield',
+                '#title' => t("Day of week for weekly cron"),
+                '#description' => t("From 1 (monday) to 7 (sunday)"),
+                '#default_value' => array_key_exists('weekly', (array)$settings['importer']['schedules']) ? $settings['importer']['schedules']['weekly'] : 7,
+                '#size' => 2,
+            ),
+
+            'time_window' => array(
+                '#type' => 'textfield',
+                '#title' => t("Time window for monthly, weekly and daily cron"),
+                '#description' => t("Two hours, separated by '-'.<br />Exemple : '0-6' = \"between 0h00 (included) and 06h00 (not included)\"."),
+                '#default_value' => array_key_exists('time_window', (array)$settings['importer']['schedules']) ? $settings['importer']['schedules']['time_window'] : '0-6',
+                '#size' => 4,
+            ),
+        ),
+
+        'behaviors' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Default behaviors"),
+            '#description' => t("These settings can be overriden in each connector and in each feed."),
+        ),
+
+        'logs' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Logs"),
+
+            'num_diary_entries' => array(
+                '#type' => 'textfield',
+                '#title' => t("Node's diary"),
+                '#field_prefix' => t("keep only the last"),
+                '#field_suffix' => t("events"),
+                '#size' => 1,
+                '#default_value' => array_key_exists('num_diary_entries', (array)$settings['importer']['logs']) ? $settings['importer']['logs']['num_diary_entries'] : 5,
+            ),
+        ),
+    );
+
+    $form['configuration']['importer']['behaviors'] = array_merge(
+        $form['configuration']['importer']['behaviors'],
+        so_feedsagent_get_behaviors_configuration_elements($settings['importer']['behaviors'])
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t("Save"),
+    );
+
+    return $form;
+}
+
+/**
+ * Returns a set of configuration form's element for Importer nodes' behaviors
+ *
+ * @param array $default_value
+ *
+ * @return array
+ */
+function so_feedsagent_get_behaviors_configuration_elements($default_value = array()) {
+
+    // TODO : étudier la possibilité d'un ensemble de hooks. Des modules comme 'alertes' souhaiteraient peut-être
+    // proposer des actions, telles "qu'envoyer un mail lorsqu'un node apparaît" afin que le node soit validé manuellement...
+
+    return array(
+        'content_types' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Content types"),
+
+            'new' => array(
+                '#type' => 'select',
+                '#title' => t("Action to take when an unknown content type is found in a feed"),
+                '#description' => t("A virtual FeedsAgent's content type is recorded but not physically created." .
+                                    "It can be created afterward.<br />" .
+                                    "Such content type are available in FeedsAgent Wizard, and their basics parameters are automatically preconfigured."),
+                '#options' => array(
+                    'none' => t("Ignore"),
+                    'prepare' => t("Create a virtual content type"),
+                ),
+                '#default_value' => !empty($default_value['content_types']['new']) ? $default_value['content_types']['new'] : 'prepare',
+            ),
+        ),
+
+        'nodes' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Nodes"),
+
+            'obsolete' => array(
+                '#type' => 'select',
+                '#title' => t("Action to take when a feed node no longer exists in a feed"),
+                '#description' => t("An existing node present in more than one feed, can't be deleted or unpublished." .
+                                    "It can only be removed from the feed"),
+                '#options' => array(
+                    'none' => t("None"),
+                    'unpublish' => t("Unpublish (only if it exists in one feed)"),
+                    'delete' => t("Delete (only if it exists in one feed)"),
+                    'relegate' => t("Relegate it to the end of the feed's contents"),
+                ),
+                '#default_value' => $default_value['nodes']['obsolete'],
+            ),
+
+            'reborn' => array(
+                '#type' => 'select',
+                '#title' => t("Action to take when an unpublished node exists in a feed"),
+                '#options' => array(
+                    'none' => t("None"),
+                    'publish' => t("Publish and possibly restore his weight"),
+                ),
+                '#default_value' => $default_value['nodes']['reborn'],
+            ),
+
+            'ignore_title' => array(
+                '#type' => 'checkbox',
+                '#title' => t("Existing node's title must be updated only if it's empty"),
+                '#default_value' => $default_value['nodes']['ignore_title'],
+            ),
+        ),
+    );
+}
+
+/**
+ * Returns a set of configuration form's element for Fields' widgets.
+ *
+ * @param array $default_value
+ *
+ * @return array
+ */
+function so_feedsagent_get_widgets_configuration_elements($default_value = array()) {
+
+    return array(
+        'advice' => array(), // placeholder si besoin
+
+        'image' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Image"),
+
+            'folder' => array(
+                '#type' => 'textfield',
+                '#title' => t("Folder"),
+                '#description' => t("Without trailing slash"),
+                '#size' => 40,
+                '#field_prefix' => variable_get('file_public_path', conf_path() . '/files') . '/',
+                '#default_value' => $default_value['image']['folder'],
+            ),
+
+            'default' => array(
+                '#type' => 'managed_file',
+                '#title' => t("Default image"),
+                '#upload_location' => 'public://default_images/',
+                '#upload_validators' => array(
+                    'file_validate_is_image' => array(),
+                    'file_validate_extensions' => array('png gif jpg jpeg'),
+                ),
+                '#default_value' => $default_value['image']['default'],
+            ),
+            'fid' => array(
+                '#type' => 'value',
+                '#value' => $default_value['image']['default'],
+            ),
+        ),
+        'file' => array(
+            '#type' => 'fieldset',
+            '#title' => t("File"),
+
+            'folder' => array(
+                '#type' => 'textfield',
+                '#title' => t("Folder"),
+                '#description' => t("Without trailing slash"),
+                '#size' => 40,
+                '#field_prefix' => variable_get('file_public_path', conf_path() . '/files') . '/',
+                '#default_value' => $default_value['file']['folder'],
+            ),
+        ),
+    );
+}
+
+function so_feedsagent_settings_form_submit($form, &$form_state) {
+
+    $configuration = $form_state['values']['configuration'];
+
+    if(!empty($configuration['generator']['widgets_options']['image']['default']) // une image a été uploadée
+            && empty($configuration['generator']['widgets_options']['image']['fid'])) {
+
+        $file = file_load($configuration['generator']['widgets_options']['image']['default']);
+        $file->status = FILE_STATUS_PERMANENT;
+        file_save($file);
+        file_usage_add($file, 'so_feedsagent', 'default_image', 1); // level 1 de l'arborescence des overrides
+
+    } elseif(empty($configuration['generator']['widgets_options']['image']['default']) // l'image a été supprimée
+            && !empty($configuration['generator']['widgets_options']['image']['fid'])) {
+
+        $file = file_load($configuration['generator']['widgets_options']['image']['fid']);
+        file_usage_delete($file, 'so_feedsagent', 'default_image', 1);
+        file_delete($file, false);
+    }
+
+    // pas besoin de sauvegarder ça
+    unset($configuration['configuration__active_tab']);
+    unset($configuration['generator']['configuration__generator__active_tab']);
+    unset($configuration['generator']['widgets_options']['image']['fid']);
+
+    variable_set('feedsagent_settings', $configuration);
+
+    drupal_set_message(t("Configuration has been saved"), 'status');
+}
+
+/*
+ * The connectors overview
+ */
+function so_feedsagent_connectors_overview_form($form, &$form_state) {
+
+    $form = array();
+
+    $form['#tree'] = true;
+    $form['#attached']['css'] = array(drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css');
+
+    $form['connectors_overview'] = array(
+        '#type' => 'container',
+        '#theme' => 'so_feedsagent_connectors_overview',
+        '##warnings' => array(),
+    );
+
+    $connectors_definitions = so_feedsagent_get_connectors_definitions();
+
+    foreach($connectors_definitions as $definition) {
+
+        $is_configurable = so_feedsagent_load_connector($definition->id, $definition)->connectorConfigurationForm($form, $form_state, true);
+
+        $form['connectors_overview'][$definition->id] = array(
+            'label' => array('#markup' => $definition->label),
+            'id' => array('#markup' => $definition->id),
+            'type' => array('#markup' => $definition->type),
+            'operations' => array(
+                'edit' => $is_configurable == false ? '' : array('#markup' => l(t("configure"), 'admin/config/so_feedsagent/connectors/edit/' . $definition->id, array('query' => drupal_get_destination()))),
+                'delete' => array('#markup' => l(t("delete"), 'admin/config/so_feedsagent/connectors/delete/' . $definition->id, array('query' => drupal_get_destination()))),
+            ),
+        );
+
+        if(empty($definition->params)) {
+            $form['connectors_overview']['##warnings'][$definition->id] = t("Not configured yet");
+        }
+    }
+
+    $connectors_types = so_feedsagent_get_available_connectors_types();
+    $options = array();
+
+    foreach($connectors_types as $connector_type => $infos) {
+        $options[$connector_type] = $infos['label'];
+    }
+
+    $form['new_connector'] = array(
+        '#type' => 'container',
+        '#theme' => 'so_feedsagent_new_connector',
+
+        'label' => array(
+            '#type' => 'textfield',
+            '#title' => t("Name"),
+            '#required' => true,
+        ),
+
+        'id' => array(
+            '#type' => 'machine_name',
+            '#machine_name' => array(
+                'source' => array('new_connector', 'label'),
+                'exists' => 'so_feedsagent_connector_id_exists',
+                'standalone' => true,
+            ),
+        ),
+
+        'type' => array(
+            '#type' => 'select',
+            '#title' => t("Connector type"),
+            '#options' => $options,
+        ),
+
+        'add' => array(
+            '#type' => 'submit',
+            '#value' => t("Add"),
+        ),
+    );
+
+    return $form;
+}
+
+function so_feedsagent_connectors_overview_form_submit($form, &$form_state) {
+
+    $connectors_types = so_feedsagent_get_available_connectors_types();
+    $connector_infos = $connectors_types[$form_state['values']['new_connector']['type']];
+
+    $new_connector = array(
+        'id' => $form_state['values']['new_connector']['id'],
+        'label' => $form_state['values']['new_connector']['label'],
+        'type' => $form_state['values']['new_connector']['type'],
+        'module' => $connector_infos['module'],
+        'class' => $connector_infos['class'],
+        'params' => serialize(array()),
+    );
+
+    drupal_write_record('feedsagent_connectors', $new_connector);
+
+    drupal_set_message(t("Connector created.<br />It has to be configured now :"), 'status');
+    drupal_goto('admin/config/so_feedsagent/connectors/edit/' . $new_connector['id']);
+}
+
+function so_feedsagent_delete_connector_confirm($form, &$form_state, $connector_id) {
+
+    $form['connector_id'] = array('#type' => 'value', '#value' => $connector_id);
+
+    $connector_definition = so_feedsagent_get_connectors_definitions($connector_id);
+
+    return confirm_form(
+        $form,
+        t("Are you sure you want to delete the connector '@connector' ?", array('@connector' => $connector_definition->label)),
+        null,
+        null,
+        t("Delete")
+    );
+}
+
+function so_feedsagent_delete_connector_confirm_submit($form, &$form_state) {
+
+    $connector_definition = so_feedsagent_get_connectors_definitions($form_state['values']['connector_id']);
+
+    // on informe les modules qu'un connecteur est sur le point d'être supprimé
+    module_invoke_all('so_feedsagent_connector_delete', $connector_definition);
+
+    $req = "DELETE FROM {feedsagent_connectors} WHERE id=?";
+    db_query($req, array($connector_definition->id));
+
+    drupal_set_message(t("Connector '@connector' has been deleted", array('@connector' => $connector_definition->label)), 'status');
+    drupal_goto();
+}
+
+function so_feedsagent_edit_connector_form($form, &$form_state, $id) {
+
+    $general_settings = variable_get('feedsagent_settings', array());
+
+    $connector_definition = so_feedsagent_get_connectors_definitions($id);
+    drupal_set_title(t("'@connector' connector configuration", array('@connector' => $connector_definition->label)));
+
+    $connector = so_feedsagent_load_connector($id, $connector_definition);
+
+    $form = array();
+    $form['#tree'] = true;
+    $form['#attached']['css'] = array(drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css');
+    $form['#attributes'] = array(
+        'class' => 'feedsagent_admin_form',
+    );
+
+    $form['configuration'] = array(
+        '#type' => 'vertical_tabs',
+    );
+
+    $form['configuration']['common'] = array(
+        '#type' => 'fieldset',
+        '#title' => t("Basic parameters"),
+
+        'label' => array(
+            '#type' => 'textfield',
+            '#title' => t("Name"),
+            '#default_value' => $connector_definition->label,
+        ),
+    );
+
+    $form['configuration']['connector'] = array(
+        '#type' => 'fieldset',
+        '#title' => t("Connector params"),
+    );
+
+    $connector->connectorConfigurationForm($form['configuration']['connector'], $form_state);
+
+    $form['configuration']['generator'] = array(
+        '#type' => 'fieldset',
+        '#title' => "Generator",
+
+        'widgets_options' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Widgets options"),
+
+            'advice' => array(
+                '#markup' => "<p><strong>" . t("These params are inherited from FeedsAgent general settings but can be overridden here.") . "</strong></p>",
+            ),
+        ),
+    );
+
+    $widgets_settings = array_merge(
+        (array)$general_settings['generator']['widgets_options'],
+        (array)$connector_definition->params['generator']['widgets_options']
+    );
+
+    $form['configuration']['generator']['widgets_options'] = array_merge(
+        $form['configuration']['generator']['widgets_options'],
+        so_feedsagent_get_widgets_configuration_elements($widgets_settings)
+    );
+
+    // on passe le fid a la valeur du fid de l'image du level en cours (2)
+    $form['configuration']['generator']['widgets_options']['image']['fid']['#value'] = $connector_definition->params['generator']['widgets_options']['image']['default'];
+
+    $form['configuration']['importer'] = array(
+        '#type' => 'fieldset',
+        '#title' => "Importer",
+
+        'title' => array(
+            '#type' => 'fieldset',
+            '#title' => "Title",
+
+            'title_fields' => array(
+                '#type' => 'textfield',
+                '#title' => t("Default title field"),
+                '#description' => t("As it appears in data source.<br />Several fields can be set (separated by commas). They will be processed in order, until a title is found.") . "<br />" . t("These setting can be overriden in each feed and in each content type."),
+                '#default_value' => $connector_definition->params['importer']['title']['title_fields'],
+                '#size' => 30,
+            ),
+        ),
+
+        'behaviors' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Behaviors"),
+
+            'advice' => array(
+                '#markup' => "<p><strong>" . t("These params are inherited from FeedsAgent general settings but can be overridden here.") . "</strong></p>",
+            ),
+        ),
+    );
+
+    $behaviors_settings = array_merge(
+        (array)$general_settings['importer']['behaviors'],
+        (array)$connector_definition->params['importer']['behaviors']
+    );
+
+    $form['configuration']['importer']['behaviors'] = array_merge(
+        $form['configuration']['importer']['behaviors'],
+        so_feedsagent_get_behaviors_configuration_elements($behaviors_settings)
+    );
+
+    $form['configuration']['importer']['title']['ignore_title'] = $form['configuration']['importer']['behaviors']['nodes']['ignore_title'];
+    $form['configuration']['importer']['title']['ignore_title']['#default_value'] = $connector_definition->params['importer']['title']['ignore_title'];
+    unset($form['configuration']['importer']['behaviors']['nodes']['ignore_title']);
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t("Save"),
+    );
+
+    $form['back'] = array(
+        '#markup' => l(t("Back"), 'admin/config/so_feedsagent/settings/connectors'),
+    );
+
+    return $form;
+}
+
+function so_feedsagent_edit_connector_form_validate($form, &$form_state) {
+
+    $connector = so_feedsagent_load_connector($form_state['build_info']['args'][0]);
+    $connector->connectorConfigurationFormValidate($form['configuration']['connector'], $form_state['values']['configuration']['connector']);
+}
+
+function so_feedsagent_edit_connector_form_submit($form, &$form_state) {
+
+    $connector_id = $form_state['build_info']['args'][0];
+    $configuration = $form_state['values']['configuration'];
+
+    $image = $configuration['generator']['widgets_options']['image'];
+
+    if(!empty($image['default']) && empty($image['fid'])) { // upload ou utilisation de l'image parent
+
+        // est-ce l'image parent ?
+        $file = file_load($image['default']);
+        $usages = file_usage_list($file);
+
+        if(empty($usages)) { // c'est bien une nouvelle image
+
+            $file->status = FILE_STATUS_PERMANENT;
+            file_save($file);
+        }
+
+        file_usage_add($file, 'so_feedsagent', 'default_image', 2); // level 2 de l'arborescence des overrides
+
+    } elseif(!empty($image['fid']) && empty($image['default'])) { // suppression de l'image
+
+        $file = file_load($image['fid']);
+        file_usage_delete($file, 'so_feedsagent', 'default_image', 2);
+        file_delete($file, false);
+    }
+
+    // pas besoin de sauvegarder ça en bdd
+    unset($configuration['configuration__active_tab']);
+    unset($configuration['connector']['configuration__connector__active_tab']);
+    unset($configuration['generator']['widgets_options']['image']['fid']);
+
+    $params = serialize($configuration);
+
+    $req = "UPDATE {feedsagent_connectors} SET label=?, params=? WHERE id=?";
+    db_query($req, array($configuration['common']['label'], $params, $connector_id));
+
+    drupal_set_message(t("Configuration has been saved"), 'status');
+    drupal_goto('admin/config/so_feedsagent/settings/connectors');
+}
+
+/**
+ * Return a fully loaded connector object.
+ * The connector definition can be provided, to avoid unnecessary additional function call.
+ *
+ * @param string $id
+ * @param stdClass $connector_definition
+ * @return \class
+ */
+function so_feedsagent_load_connector($id, $connector_definition = null) {
+
+    if($connector_definition == null) {
+        $connector_definition = so_feedsagent_get_connectors_definitions($id);
+    }
+
+    $configuration = (array)$connector_definition->params['connector'];
+
+    // on ajoute quelques renseignements utiles, aux paramètres passés au constructeur
+    $configuration['id'] = $connector_definition->id;
+    $configuration['label'] = $connector_definition->label;
+
+    return new $connector_definition->class($configuration);
+}
+
+/*
+ * Collects all connectors types provided by modules
+ */
+function so_feedsagent_get_available_connectors_types() {
+    return module_invoke_all('so_feedsagent_connectors');
+}
+
+/*
+ * Callback function for machine_name element
+ */
+function so_feedsagent_connector_id_exists($id) {
+    $connector_definition = so_feedsagent_get_connectors_definitions($id);
+    return !empty($connector_definition);
+}
+
+/**
+ * Provides connectors' definitions stored in database.
+ * If $id is not provided, whole definitions will be returned.
+ *
+ * @param string $id
+ * @param string $type
+ *
+ * @return mixed : array of stdClass indexed by 'id', or single stdClass if $id is provided
+ */
+function so_feedsagent_get_connectors_definitions($id = null, $type = null) {
+
+    // TODO : étudier la possibilité d'une mise en cache statique
+
+    $filters = array(
+        'id' => $id,
+        'type' => $type,
+    );
+
+    $filters = array_filter($filters);
+    $where = array_keys($filters);
+    $filters = array_values($filters);
+
+    array_walk($where, function(&$value){
+        $value .= "=?";
+    });
+
+    $where[] = "1"; // pour meubler, s'il n'y a aucun filtre.
+
+    $where = implode(" AND ", $where);
+
+    $req = "SELECT * FROM {feedsagent_connectors} WHERE " . $where . " ORDER BY label ASC";
+    $result = db_query($req, $filters);
+
+    $connectors = array();
+
+    while($row = $result->fetchObject()) {
+        $row->params = unserialize($row->params);
+
+        $connectors[$row->id] = $row;
+    }
+
+    if(!empty($id)) {
+        $connectors = $connectors[$id];
+    }
+
+    return $connectors;
+}
+
+/**
+ * Provides content types' definitions stored in database.
+ * If $id is not provided, whole definitions will be returned.
+ *
+ * @param int $id
+ * @param string $connector
+ * @param string $primary_type
+ * @param boolean $include_orphans : include NON IGNORED virtual content types matching none Drupal's content type ?
+ * @param string $index : name of the cols to use as array's index : either 'id' (default), 'virtual_name' or 'primary_type'.
+ *
+ * @return mixed : array of stdClass indexed by $index, or stdClass if $id is provided
+ */
+function so_feedsagent_get_content_types_definitions($id = null, $connector = null, $primary_type = null, $include_orphans = false, $index = 'id') {
+
+    // TODO : étudier la possibilité d'une mise en cache statique
+
+    $where = array("1");
+    $values = array();
+
+    if($include_orphans == false) {
+        $where[] = "fct.type!=''";
+    }
+
+    if($connector != null) {
+        $where[] = "fct.connector=?";
+        $values[] = $connector;
+    }
+
+    if($id != null) {
+        $where = array("fct.id=?"); // si on a un id, on n'a pas besoin d'autres filtres.
+        $values = array($id);       // .
+    } elseif($primary_type != null) {
+        $where = array("fct.primary_type=?");   // si on a un primary_type, on n'a pas besoin d'autres filtres.
+        $values = array($id);                   // .
+        $values = array($primary_type);
+    }
+
+    $where = implode(" AND ", $where);
+
+    $req = "SELECT fct.*, nt.name FROM {feedsagent_content_types} AS fct
+            LEFT JOIN {node_type} AS nt ON nt.type=fct.type
+            WHERE ignored!=1 AND " . $where . "
+            ORDER BY name ASC, virtual_name ASC";
+
+    $result = db_query($req, $values);
+
+    $content_types = array();
+
+    while($row = $result->fetchObject()) {
+        $row->fields = unserialize($row->fields);
+        $row->groups = unserialize($row->groups);
+        $row->params = unserialize($row->params);
+        $content_types[$row->{$index}] = $row;
+    }
+
+    if(!empty($id) && $index == 'id') {
+        $content_types = $content_types[$id];
+    }
+
+    return $content_types;
+}
+
+/**
+ * Return a list of ignored virtual content types
+ *
+ * @param string $index : name of the cols to use as array's index
+ *
+ * return array : indexed by $index
+ */
+function so_feedsagent_get_ignored_content_types($index = 'id') {
+    $content_types = array();
+
+    $result = db_query("SELECT * FROM {feedsagent_content_types} WHERE ignored=1 ORDER BY virtual_name ASC");
+
+    while($row = $result->fetchObject()) {
+        $row->fields = unserialize($row->fields);
+        $row->params = unserialize($row->params);
+        $content_types[$row->{$index}] = $row;
+    }
+
+    return $content_types;
+}
+
+/**
+ * Provides feeds' definitions stored in database.
+ * If $id is not provided, whole definitions will be returned.
+ *
+ * @param string $id
+ *
+ * @return mixed : array of stdClass indexed by 'id', or single stdClass if $id is provided
+ */
+function so_feedsagent_get_feeds_definitions($id = null) {
+
+    // TODO : étudier la possibilité d'une mise en cache statique
+
+    $filters = array(
+        'id' => $id,
+    );
+
+    $filters = array_filter($filters);
+    $where = array_keys($filters);
+    $filters = array_values($filters);
+
+    array_walk($where, function(&$value){
+        $value .= "=?";
+    });
+
+    $where[] = "1"; // pour meubler, s'il n'y a aucun filtre.
+
+    $where = implode(" AND ", $where);
+
+    $req = "SELECT * FROM {feedsagent_feeds} WHERE " . $where . " ORDER BY label ASC";
+    $result = db_query($req, $filters);
+
+    $feeds = array();
+
+    while($row = $result->fetchObject()) {
+        $row->params = unserialize($row->params);
+
+        $feeds[$row->id] = $row;
+    }
+
+    if(!empty($id)) {
+        $feeds = $feeds[$id];
+    }
+
+    return $feeds;
+}
+
+/**
+ * Provides a list of fields widgets implemented by the generator.
+ *
+ * @return array : indexed by FeedsAgent internal type
+ *                 Each group consists in an array indexed by generator widget name :
+ *                      - 'label' : string : the human readable name.
+ *                      - 'family' : string : general type of widget.
+ *                      - 'allowed_values' : boolean : is widget based on allowed values ?
+ *                      - 'multiple' : boolean : can this widget be multiple ?
+ *                      - 'format_callback' : the name of the function which format raw values in Field's valid format // DEV : lister les possibilités
+ *                      - 'compatible_types' : array : the other types which can be choosen as an alternative
+ *
+ * @todo : offer to connector, the faculty to define their own types.
+ */
+function so_feedsagent_get_available_fields_types() {
+
+    return array(
+        'undefined' => array(
+            'label' => t("Undefined"),
+            'family' => t("undefined"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => null,
+            'compatible_types' => array(
+                'textfield',
+                'textarea',
+                'integer',
+                'decimal',
+                'date',
+                'select',
+                'radios',
+                'checkboxes',
+                'onoff',
+                'image',
+                'file',
+                'custom',
+            ),
+        ),
+
+        'custom' => array(
+            'label' => t("Custom"),
+            'family' => t("Custom"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_custom_format_callback',
+            'compatible_types' => array(),
+        ),
+
+        'textfield' => array(
+            'label' => t("Textfield"),
+            'family' => t("text"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(
+                'textarea',
+                'integer',
+                'decimal',
+                'date',
+                'image',
+                'file',
+            ),
+        ),
+        'textarea' => array(
+            'label' => t("Textarea"),
+            'family' => t("text"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_text_format_callback',
+            'compatible_types' => array(),
+        ),
+        'integer' => array(
+            'label' => t("Number integer"),
+            'family' => t("integer"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(
+                'decimal',
+                'textfield',
+            ),
+        ),
+        'decimal' => array(
+            'label' => t("Number decimal"),
+            'family' => t("decimal"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(
+                'textfield',
+            ),
+        ),
+        'date' => array(
+            'label' => t("Date"),
+            'family' => t("date"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_2values_format_callback',
+            'compatible_types' => array(
+                'textfield',
+            ),
+        ),
+        'select' => array(
+            'label' => t("Select list"),
+            'family' => t("unique selection"),
+            'allowed_values' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(
+                'radios',
+            ),
+        ),
+        'radios' => array(
+            'label' => t("Radios buttons"),
+            'family' => t("unique selection"),
+            'allowed_values' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(
+                'select',
+            ),
+        ),
+        'checkboxes' => array(
+            'label' => t("Checkboxes"),
+            'family' => t("multiple selection"),
+            'allowed_values' => true,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(),
+        ),
+        'onoff' => array(
+            'label' => t("Checkbox (on/off)"),
+            'family' => t("boolean"),
+            'allowed_values' => false,
+            'format_callback' => '_so_feedsagent_value_format_callback',
+            'compatible_types' => array(),
+        ),
+        'image' => array(
+            'label' => t("Image"),
+            'family' => t("url/image/file"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_file_format_callback',
+            'compatible_types' => array(
+                'file',
+                'textfield',
+            ),
+        ),
+        'file' => array(
+            'label' => t("File"),
+            'family' => t("url/image/file"),
+            'allowed_values' => false,
+            'multiple' => true,
+            'format_callback' => '_so_feedsagent_file_format_callback',
+            'compatible_types' => array(
+                'image',
+                'textfield',
+            ),
+        ),
+    );
+}
+
+/**
+ * Return nids associated with a given nid
+ *
+ * @param int $nid
+ * @param string $type : coupling type to search either 'parent', 'childs' or 'auto'.
+ *                       In the last case, the function will try to find associated
+ *                       nids and determine the relationship type.
+ *
+ * @return array :
+ *          - 'type' : (string)
+ *          - 'sfa_contents' : (array) of {sfa_content} oject(s) indexed bid nid(s)
+ */
+function so_feedsagent_get_coupled_items_by_nid($nid, $type = 'auto') {
+
+    $coupling = array();
+
+    if($type == 'childs' || $type == 'auto') {
+
+        $results = db_query(
+            "SELECT * FROM {feedsagent_contents}
+             WHERE nid_parent=:nid
+             AND nid!=:nid",
+            array(
+                ':nid' => $nid,
+            )
+        );
+
+        if($results->rowCount() > 0) {
+
+            $coupling = array(
+                'type' => 'childs',
+                'sfa_contents' => array(),
+            );
+
+            while($row = $results->fetchObject()) {
+                $coupling['sfa_contents'][$row->nid] = $row;
+            }
+        }
+    }
+
+    if($type == 'parent' || ($type == 'auto' && empty($coupling))) {
+
+        $result = db_query(
+                "SELECT sfa_parent.* FROM {feedsagent_contents} AS sfa_child
+                 LEFT JOIN {feedsagent_contents} AS sfa_parent ON sfa_parent.nid=sfa_child.nid_parent
+                 WHERE sfa_child.nid=:nid
+                 AND sfa_child.nid_parent!=:nid",
+                array(
+                    ':nid' => $nid,
+                )
+            );
+
+            if($result->rowCount() > 0) {
+
+                $row = $result->fetchObject();
+
+                $coupling = array(
+                    'type' => 'parent',
+                    'sfa_contents' => array(
+                        $row->nid => $row,
+                    ),
+                );
+            }
+    }
+
+    return $coupling;
+}
+
+/**
+ * Implementation of hook_node_type_delete()
+ */
+function so_feedsagent_node_type_delete($infos) {
+
+    db_query("DELETE FROM {feedsagent_content_types} WHERE type=?", array($infos->type));
+}
+
+/*
+ * Implementation of hook_node_delete()
+ * Cleans the feedsagent_contents table.
+ * Cleans the feedsagent_nodes_overrides table.
+ */
+function so_feedsagent_node_delete($node) {
+    db_query("DELETE FROM {feedsagent_nodes_overrides} WHERE nid=?", array($node->nid));
+    db_query("DELETE FROM {feedsagent_contents} WHERE nid=?", array($node->nid));
+}
+
+/**
+ * Helper : provide an array of well formated human readable language list.
+ *
+ * @return array : indexed by language code.
+ */
+function so_feedsagent_language_list() {
+    $language_list = array();
+
+    foreach(language_list() as $language => $infos) {
+        $language_list[$language] = t($infos->name) . ($language == language_default('language') ? " (" . t("default") . ")" : "");
+    }
+
+    return $language_list;
+}
+
+function so_feedsagent_so_listings() {
+
+    $sources = array();
+
+    $language_list = so_feedsagent_language_list();
+    $feeds_definitions = so_feedsagent_get_feeds_definitions();
+    $connectors_definition = so_feedsagent_get_connectors_definitions();
+
+    $feeds_pool = array();
+
+    foreach($feeds_definitions as $id => $definition) {
+        $feeds_pool[$definition->connector][$id] = array(
+            'label' =>  $definition->label . " (" . $language_list[$definition->language] . ")",
+            'args' => array($id),
+        );
+    }
+
+    foreach($feeds_pool as $connector => $feeds) {
+
+        $sources[$connector] = array(
+            'label' => $connectors_definition[$connector]->label . " : " . t("Nodes in feed"),
+            'callback' => 'so_feedsagent_sources_callback',
+            'sources' => $feeds,
+        );
+    }
+
+    return $sources;
+}
+
+/*
+ * Implementation of hook_so_listings_settings()
+ */
+function so_feedsagent_so_listings_settings($values = array()) {
+
+    return array(
+        'activate_couplages' => array(
+            '#type' => 'checkbox',
+            '#title' => t("Regroup childs items with their parents."),
+            '#description' => t("If not checked parents and childs items will appear in listings each as a standalone item.") .
+                              "<br />" .
+                              t("If checked only parents items will appear, though search results take also childs items' data in account."),
+            '#default_value' => array_key_exists('activate_couplages', $values) ? $values['activate_couplages'] : 0,
+        ),
+    );
+}
+
+/*
+ * Implementation of hook_prestataires_node_data()
+ */
+function so_feedsagent_prestataires_node_data($nid, $uid) {
+
+    $data = array();
+
+    $results = db_query("SELECT feed_id, item_id FROM {feedsagent_contents} WHERE nid=?", array($nid));
+
+    while($row = $results->fetchObject()) {
+        $data[] = array(
+            'feed_id' => $row->feed_id,
+            'item_id' => $row->item_id,
+        );
+    }
+
+    return serialize($data);
+}
+
+/**
+ * Callback for hook_so_listings()
+ *
+ * @param array &$query
+ * @param array $args
+ * @param array $options
+ */
+function so_feedsagent_sources_callback(&$query, $args, $options) {// TODO : $options est toujours vide. Pourquoi ? Est-il seulement utilisé ?
+    $query['join'][] = "LEFT JOIN {feedsagent_contents} AS feedsagent_contents ON feedsagent_contents.nid=n.nid";
+    $query['where'][] = "feedsagent_contents.feed_id=?";
+    $query['args'][] = $args[0];
+}
+
+/*
+ * Implementation of hook_so_listings_query()
+ * We extract parents items when exists, which will be used in @see : so_feedsagent_so_listings_wrapping_query()
+ */
+function so_feedsagent_so_listings_query(&$query, &$data, $sources = null) {//$sources = null : rétrocompatibilité
+
+    if(empty($sources) || $data['activate_couplages'] != true) {return;}
+
+    $query['fields'][] = "feedsagent_contents.nid_parent AS sfa_nid_processed";
+    $query['join'][] = "LEFT JOIN {feedsagent_contents} AS feedsagent_contents ON feedsagent_contents.nid=n.nid";
+}
+
+/*
+ * Implementation of hook_so_listings_wrapping_query()
+ * Defines parent items field defined in @see : so_feedsagent_so_listings_query() as nid source field for higher level queries.
+ */
+function so_feedsagent_so_listings_wrapping_query(&$query, $nid_alias, &$data, $sources) {
+
+    if(empty($sources) || $data['activate_couplages'] != true) {return;}
+
+    return 'sfa_nid_processed';
+}
+
+/*
+ * Implementation of hook_so_listings_sorting()
+ */
+function so_feedsagent_so_listings_sorting() {
+
+    return array(
+        'sfa_feed_order' => array(
+            'label' => t("Sorting by feed listing order"),
+            'clause' => "feedsagent_contents.weight ASC",
+            'join' => array("LEFT JOIN {feedsagent_contents} AS feedsagent_contents ON feedsagent_contents.nid=n.nid"),
+            'contexts' => array(),
+        ),
+    );
+}
+
+/*
+ * Implementation of hook_theme()
+ */
+function so_feedsagent_theme() {
+    return array(
+        'so_feedsagent_new_connector' => array(
+            'render element' => 'element',
+        ),
+        'so_feedsagent_connectors_overview' => array(
+            'render element' => 'element',
+        ),
+        'so_feedsagent_generator_feed_fields_overview' => array(
+            'render element' => 'element',
+            'file' => 'so_feedsagent.generator.inc',
+        ),
+        'so_feedsagent_generator_fields_definition_overview' => array(
+            'render element' => 'element',
+            'file' => 'so_feedsagent.generator.inc',
+        ),
+        'so_feedsagent_new_feed' => array(
+            'render element' => 'element',
+            'file' => 'so_feedsagent.importer.inc',
+        ),
+        'so_feedsagent_feeds_overview' => array(
+            'render element' => 'element',
+            'file' => 'so_feedsagent.importer.inc',
+        ),
+        'so_feedsagent_importer_update' => array(
+            'render element' => 'element',
+            'file' => 'so_feedsagent.importer.inc',
+        ),
+    );
+}
+
+function theme_so_feedsagent_new_connector($vars) {
+    $output = "";
+
+    $element = $vars['element'];
+
+    $rows = array(
+        array(
+            render($element['label']),
+            render($element['id']),
+            render($element['type']),
+            render($element['add']),
+        ),
+    );
+
+    $output .= theme('table', array('header' => null, 'rows' => $rows));
+
+    return $output;
+}
+
+function theme_so_feedsagent_connectors_overview($vars) {
+    $output = "";
+
+    $element = $vars['element'];
+
+    $rows = array();
+
+    $connectors = element_children($element);
+
+    if(empty($connectors)) {
+        return "<div class='overview_empty_msg'>- " . t("No connector set yet") . " -</div>";
+    }
+
+    foreach($connectors as $connector) {
+
+        $rows[$connector] = array(
+            render($element[$connector]['label']),
+            render($element[$connector]['id']),
+            render($element[$connector]['type']),
+            render($element[$connector]['operations']['edit']) . " " . render($element[$connector]['operations']['delete']),
+        );
+
+        if(!empty($element['##warnings'])) {
+            $rows[$connector][] = !empty($element['##warnings'][$connector]) ? "<span class='overview_warning'>" . $element['##warnings'][$connector] . "</div>" : "";
+        }
+    }
+
+    $headers = array(
+        t("Name"),
+        t("Machine name"),
+        t("Type"),
+        t("Operations"),
+    );
+
+    if(!empty($element['##warnings'])) {
+        $headers[] = t("Warnings");
+    }
+
+    $output .= theme('table', array('header' => $headers, 'rows' => $rows));
+
+    return $output;
+}
+
+function so_feedsagent_form_node_form_alter(&$form, &$form_state) {
+
+    if(arg(1) == 'add') {return;}
+
+    $sfa_fields = db_query(
+        "SELECT t.fields FROM {feedsagent_contents} AS c
+        LEFT JOIN {feedsagent_content_types} AS t ON t.id=c.type_id
+        WHERE c.nid=?",
+        array($form['#node']->nid)
+    )->fetchColumn();
+
+    if(empty($sfa_fields)) {return;}
+
+    $sfa_fields = unserialize($sfa_fields);
+
+    $o_fields = unserialize(db_query("SELECT fields FROM {feedsagent_nodes_overrides} WHERE nid=?", array($form['#node']->nid))->fetchColumn());
+    if(empty($o_fields)) {$o_fields = array();}
+
+    $form['#attached']['js'][] = drupal_get_path('module', 'so_feedsagent') . '/scripts/so_feedsagent_admin.js';
+    $form['#attached']['css'][] = drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css';
+
+    $form['actions']['submit']['#submit'][] = 'so_feedsagent_node_form_submit'; // DOIT être sur le bouton, et non le $form pour $form_state['redirect]
+
+    foreach($sfa_fields as $sfa_field) {
+        $field = $sfa_field['field'];
+
+        $overrided = in_array($field, $o_fields);
+
+        $form[$field]['#attributes']['class'][] = 'overridable_field';
+
+        if($overrided == true) {
+            $form[$field]['#attributes']['class'][] = 'overrided_field';
+        }
+
+        $form[$field]['override'] = array(
+            'op' => array(
+                '#type' => 'hidden',
+                '#default_value' => $overrided,
+                '#attributes' => array(
+                    'class' => array('override_op'),
+                ),
+            ),
+            'controls' => array(
+                '#type' => 'container',
+                '#attributes' => array(
+                    'class' => array('override_controls'),
+                    'style' => "display: none;",
+                ),
+
+                'on' => array(
+                    '#type' => 'link',
+                    '#title' => t("override on"),
+                    '#href' => '',
+                    '#attributes' => array(
+                        'class' => array('override_on'),
+                        'title' => t("Click here to override feed's values"),
+                        'style' => $overrided == false ? "" : "display: none;",
+                    ),
+                ),
+
+                'off' => array(
+                    '#type' => 'link',
+                    '#title' => t("override off"),
+                    '#href' => '',
+                    '#attributes' => array(
+                        'class' => array('override_off'),
+                        'title' => t("Click here to remove feed's values override"),
+                        'style' => $overrided == true ? "" : "display: none;",
+                    ),
+                ),
+            ),
+        );
+    }
+}
+
+function so_feedsagent_node_form_submit($form, &$form_state) {
+
+    $sfa_fields = db_query(
+        "SELECT t.fields FROM {feedsagent_contents} AS c
+        LEFT JOIN {feedsagent_content_types} AS t ON t.id=c.type_id
+        WHERE c.nid=?",
+        array($form['#node']->nid)
+    )->fetchColumn();
+
+    if(empty($sfa_fields)) {return;}
+
+    $sfa_fields = unserialize($sfa_fields);
+
+    $o_fields = array();
+
+    foreach($sfa_fields as $sfa_field) {
+
+        $field = $sfa_field['field'];
+
+        if($form_state['values'][$field]['override']['op'] == true) {
+            $o_fields[] = $field;
+        }
+    }
+
+    $previous_o_fields = db_query("SELECT fields FROM {feedsagent_nodes_overrides} WHERE nid=?", array($form['#node']->nid))->fetchColumn();
+    if(empty($previous_o_fields)) {
+        $previous_o_fields = array();
+    } else {
+        $previous_o_fields = unserialize($previous_o_fields);
+    }
+
+    if(!empty($o_fields)) {
+        db_query("REPLACE INTO {feedsagent_nodes_overrides} SET nid=?, fields=?", array($form['#node']->nid, serialize($o_fields)));
+    } else {
+        db_query("DELETE FROM {feedsagent_nodes_overrides} WHERE nid=?", array($form['#node']->nid));
+    }
+
+    $diff = array_diff($previous_o_fields, $o_fields);
+
+    if(!empty($diff)) {
+        $form_state['redirect'] = array(
+            'node/' . $form['#node']->nid . '/importer/launch',
+            array(
+                'query' => array(
+                    'destination' => drupal_get_path_alias('node/' . $form['#node']->nid),
+                ),
+            ),
+        );
+    }
+}
+
+/*
+ * Implementation of hook_field_delete_instance()
+ */
+function so_feedsagent_field_delete_instance($instance) {
+
+    if($instance['entity_type'] != 'node') {return;}
+
+    $results = db_query("SELECT * FROM {feedsagent_content_types} WHERE type=?", array($instance['bundle']));
+
+    while($row = $results->fetchObject()) {
+
+        $row->fields = unserialize($row->fields);
+
+        foreach($row->fields as $index => $sfa_field) {
+
+            if($sfa_field['field'] == $instance['field_name']) {
+
+                unset($row->fields[$index]);
+                $row->fields = serialize($row->fields);
+                drupal_write_record('feedsagent_content_types', $row, 'id');
+
+                drupal_set_message(t(
+                    "Field '@field' has been removed from FeedsAgent content type '@virtual_name'",
+                    array(
+                        '@field' => $instance['label'],
+                        '@virtual_name' => $row->virtual_name,
+                    )
+                ));
+
+                break;
+            }
+        }
+    }
+}
+
+/*
+ * Implementation of hook_field_group_delete_field_group()
+ */
+function so_feedsagent_field_group_delete_field_group($group) {
+
+    if($group->entity_type != 'node' || $group->mode != 'form') {return;}
+
+    $results = db_query("SELECT * FROM {feedsagent_content_types} WHERE type=?", array($group->bundle));
+
+    while($row = $results->fetchObject()) {
+
+        $row->groups = unserialize($row->groups);
+
+        foreach($row->groups as $index => $sfa_group) {
+
+            if($sfa_group['group'] == $group->group_name) {
+
+                unset($row->groups[$index]);
+                $row->groups = serialize($row->groups);
+                drupal_write_record('feedsagent_content_types', $row, 'id');
+
+                drupal_set_message(t(
+                    "Group '@group' has been removed from FeedsAgent content type '@virtual_name'",
+                    array(
+                        '@group' => $group->label,
+                        '@virtual_name' => $row->virtual_name,
+                    )
+                ));
+
+                break;
+            }
+        }
+    }
+}
+
+function so_feedsagent_form_field_ui_field_overview_form_alter(&$form, &$form_state, $form_id) {
+
+    module_load_include('inc', 'so_feedsagent', 'so_feedsagent.generator');
+
+    $tree = so_feedsagent_build_nodes_types_tree($form['#bundle']);
+
+    if($tree == false || (empty($tree['connectors']) && empty($tree['fields']))) {return;}
+
+    $form['sfa_infos'] = array(
+        '#type' => 'fieldset',
+        '#title' => t("Feedsagent type(s) mapping"),
+        '#collapsible' => true,
+        '#collapsed' => true,
+        '#weight' => -50,
+    );
+
+    foreach($tree['connectors'] as $connector => $connector_infos) {
+
+        $list_items = array();
+
+        foreach($tree['connectors'][$connector]['primary_types'] as $primary_type => $primary_type_infos) {
+            $list_items[] = $primary_type_infos['virtual_name'] . " (" . t("SFA id") . " : " . $primary_type_infos['id'] . ")";
+        }
+
+        $form['sfa_infos'][$connector] = array(
+            '#type' => 'fieldset',
+            '#title' => $connector_infos['label'],
+
+            'primary_types' => array(
+                '#theme' => 'item_list',
+                '#title' => t("Node type mapped from"),
+                '#type' => 'ul',
+                '#items' => $list_items,
+            ),
+        );
+    }
+
+    if(!array_key_exists('#attached', $form)) {
+        $form['#attached'] = array('css' => array());
+    }
+
+    $form['#attached']['css'][] = drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css';
+
+    foreach($tree['fields'] as $field => $infos) {
+
+        $img_title = t("Unionized in") . " : " . PHP_EOL . implode($infos, PHP_EOL);
+
+        $form['fields'][$field]['label']['#markup'] .= " <img class='sfa_infos' src='" . base_path() . "misc/help.png' title='" . $img_title . "' />";
+    }
+}

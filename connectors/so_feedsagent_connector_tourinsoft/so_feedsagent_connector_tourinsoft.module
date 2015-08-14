@@ -1,0 +1,222 @@
+<?php
+
+/*
+ * Implementation of hook_so_feedsagent_connectors()
+ */
+function so_feedsagent_connector_tourinsoft_so_feedsagent_connectors() {
+    return array(
+        'tourinsoft' => array(
+            'label' => t("Tourinsoft"),
+            'module' => 'so_feedsagent_connector_tourinsoft',
+            'class' => 'SoFeedsAgentConnectorTourinsoft',
+        )
+    );
+}
+
+/*
+ * Implementation of hook_sfa_generator_form_map()
+ */
+function so_feedsagent_connector_tourinsoft_sfa_generator_form_map() {
+
+    $form_map = array(
+        'tourinsoft_new' => array(
+            'label' => t("Define and map a Tourinsoft virtual type"),
+            'steps' => array(
+                1 => array(
+                    'title' => t("Tourinsoft connector"),
+                    'help' => "",
+                    'previous_button' => false,
+                    'function' => 'so_feedsagent_generator_virtual_type_params_step',
+                    'args' => array(
+                        'needs' => array(
+                            array(
+                                'param' => 'connector',
+                                'args' => array(
+                                    'type' => 'tourinsoft',
+                                    'label' => t("Use"),
+                                    'weight' => 1,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                2 => array(
+                    'title' => t("Mapping parameters"),
+                    'help' => "",
+                    'previous_button' => false,
+                    'method' => 'generatorMappingParamsStep',
+                    'args' => array(
+                        'needs' => array(
+                            array(
+                                'param' => 'primary_type',
+                                'args' => array(
+                                    'orphans' => true,
+                                    'filter' => 'orphans_only',
+                                    'label' => t("Map from orphan virtual type"),
+                                    'null_label' => "- " . t("no") . " -",
+                                    'weight' => 1,
+                                ),
+                            ),
+                            array(
+                                'param' => 'drupal_type',
+                                'args' => array(
+                                    'label' => t("Drupal type mapping target"),
+                                    'null_label' => "- " . t("create a new one") . " -",
+                                    'index' => 'type',
+                                    'weight' => 2,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                3 => array(
+                    'title' => t("Tourinsoft data"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'method' => 'generatorListingParamsStep',
+                    'args' => array(),
+                ),
+                4 => array(
+                    'title' => t("Fields to unionize"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_feed_fields_step',
+                    'args' => array(),
+                ),
+                5 => array(
+                    'title' => t("Fields definitions and mappings"),
+                    'help' => t("'Title' parameter : if one or more values have been set in feed/connector, they can be overridden partially or totally, with correct index assignement."),
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_fields_definition_step',
+                    'args' => array(),
+                ),
+                6 => array(
+                    'title' => t("Media params"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_widgets_options_step',
+                    'args' => array(),
+                ),
+                7 => array(
+                    'title' => t("Drupal new node type params"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_content_type_params_step',
+                    'args' => array(),
+                ),
+                8 => array(
+                    'title' => "Type registration",
+                    'help' => "",
+                    'previous_button' => false,
+                    'function' => 'so_feedsagent_generator_type_registration_step',
+                    'args' => array(),
+                ),
+            ),
+        ),
+
+        'tourinsoft_edit' => array(
+            'label' => t("Edit a Tourinsoft virtual type"),
+            'steps' => array(
+                1 => array(
+                    'title' => t("Tourinsoft connector"),
+                    'help' => "",
+                    'previous_button' => false,
+                    'function' => 'so_feedsagent_generator_virtual_type_params_step',
+                    'args' => array(
+                        'needs' => array(
+                            array(
+                                'param' => 'connector',
+                                'args' => array(
+                                    'type' => 'tourinsoft',
+                                    'label' => t("Edit virtual types which use"),
+                                    'weight' => 1,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                2 => array(
+                    'title' => t("Virtual type"),
+                    'help' => "",
+                    'previous_button' => false,
+                    'method' => 'generatorEditVirtualParamsStep',
+                    'args' => array(
+                        'needs' => array(
+                            array(
+                                'param' => 'primary_type',
+                                'args' => array(
+                                    'orphans' => false,
+                                    'label' => null,
+                                    'null_option' => false,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                3 => array(
+                    'title' => t("Mapping parameters"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'method' => 'generatorMappingParamsStep',
+                    'args' => array(
+                        'needs' => array(
+                            array(
+                                'param' => 'drupal_type',
+                                'args' => array(
+                                    'label' => t("Drupal type mapping target"),
+                                    'null_label' => "- " . t("create a new one") . " -",
+                                    'index' => 'type',
+                                    'weight' => 2,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                4 => array(
+                    'title' => t("Tourinsoft data"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'method' => 'generatorListingParamsStep',
+                    'args' => array(),
+                ),
+                5 => array(
+                    'title' => t("Fields to unionize"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_feed_fields_step',
+                    'args' => array(),
+                ),
+                6 => array(
+                    'title' => t("Fields definitions and mappings"),
+                    'help' => t("'Title' parameter : if one or more values have been set in feed/connector, they can be overridden partially or totally, with correct index assignement."),
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_fields_definition_step',
+                    'args' => array(),
+                ),
+                7 => array(
+                    'title' => t("Media params"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_widgets_options_step',
+                    'args' => array(),
+                ),
+                8 => array(
+                    'title' => t("Drupal new node type params"),
+                    'help' => "",
+                    'previous_button' => false, // disabled - @see bug
+                    'function' => 'so_feedsagent_generator_content_type_params_step',
+                    'args' => array(),
+                ),
+                9 => array(
+                    'title' => "Type registration",
+                    'help' => "",
+                    'previous_button' => false,
+                    'function' => 'so_feedsagent_generator_type_registration_step',
+                    'args' => array(),
+                ),
+            ),
+        ),
+    );
+
+    return $form_map;
+}
