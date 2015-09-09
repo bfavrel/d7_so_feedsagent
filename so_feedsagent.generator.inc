@@ -1687,7 +1687,14 @@ function so_feedsagent_generator_fields_definition_step(&$step_elements, &$form_
         }
 
         if($is_group == true) { //-- groupe de champs
-            $structure[$field_name] = array();
+
+            // à cause de la nouvelle mécanique des weights Drupal, un groupe peut se retrouver après ses champs.
+            // l'entrée existera donc déjà dans la structure, et contiendra déjà des champs. Et donc, il ne faut
+            // surtout pas réinitialiser.
+            if(!array_key_exists($field_name, $structure)) {
+                $structure[$field_name] = array();
+            }
+
         } elseif(array_key_exists('group', $definition) && !empty($definition['group'])) { //-- champ de groupe
             $structure[$definition['group']][] = $field_name;
         } elseif(array_key_exists('type', $definition) && !empty($definition['type'])) { //-- champ simple
@@ -2139,9 +2146,9 @@ function so_feedsagent_build_nodes_types_tree($node_type) {
          WHERE fct.type=? AND fct.ignored=0",
         array($node_type)
     );
-    
+
     if(empty($results)) {return false;}
-    
+
     $connector_pattern = array(
         'label' => "",
         'primary_types' => array(),
@@ -2151,7 +2158,7 @@ function so_feedsagent_build_nodes_types_tree($node_type) {
         'virtual_name' => "",
         'id' => 0,
     );
-    
+
     $tree = array(
         'connectors' => array(),
         'fields' => array(),
@@ -2176,9 +2183,9 @@ function so_feedsagent_build_nodes_types_tree($node_type) {
             if(!array_key_exists($field['field'], $tree['fields'])) {
                 $tree['fields'][$field['field']] = array();
             }
-            
+
             $tree['fields'][$field['field']][] = $row->connector_label . " - " . $row->virtual_name;
-        }        
+        }
     }
 
     return $tree;
