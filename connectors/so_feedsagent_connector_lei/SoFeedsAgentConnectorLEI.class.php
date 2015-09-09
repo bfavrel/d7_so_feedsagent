@@ -1214,12 +1214,21 @@ class SoFeedsAgentConnectorLEI extends SoFeedsAgentConnectorAbstract
 
                         if(array_key_exists('allowed_values', $field_definition['settings'])) {
 
+                            // 06/08/2015 : pourquoi ai-je fait ça ? Au vu de la condition ci-dessus, $field_definition est FORCEMENT non-vide quand
+                            // on atteind cette ligne de code :
                             $field_definition = empty($field_definition) ? field_info_field($fields[$critere['CRITERE']]['field']) : $field_definition;
 
                             if($language == language_default('language')) {
-                                $field_definition['settings']['allowed_values'] += $allowed_values;
-                                asort($field_definition['settings']['allowed_values']);
-                                field_update_field($field_definition);
+                                                                
+                                $new_allowed_values = array_diff_key($allowed_values, $field_definition['settings']['allowed_values']);
+                                
+                                // on ne traite que s'il y a des valeurs inédites
+                                if(!empty($new_allowed_values)) {
+                                
+                                    $field_definition['settings']['allowed_values'] += $allowed_values;
+                                    asort($field_definition['settings']['allowed_values']);
+                                    field_update_field($field_definition);
+                                }
 
                             } elseif(module_exists('i18n_field')) {
 
