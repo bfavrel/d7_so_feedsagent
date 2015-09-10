@@ -1384,7 +1384,7 @@ function so_feedsagent_get_available_fields_types() {
  *                       In the last case, the function will try to find associated
  *                       nids and determine the relationship type.
  *
- * @return array :
+ * @return array : empty array if no results or associative array :
  *          - 'type' : (string)
  *          - 'sfa_contents' : (array) of {sfa_content} oject(s) indexed bid nid(s)
  */
@@ -1460,6 +1460,8 @@ function so_feedsagent_node_type_delete($infos) {
 function so_feedsagent_node_delete($node) {
     db_query("DELETE FROM {feedsagent_nodes_overrides} WHERE nid=?", array($node->nid));
     db_query("DELETE FROM {feedsagent_contents} WHERE nid=?", array($node->nid));
+    
+    // TODO : si un parent est supprimé, reparamétrer le nid_parent des enfants.
 }
 
 /**
