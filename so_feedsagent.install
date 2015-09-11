@@ -209,6 +209,13 @@ function so_feedsagent_schema() {
                 'default' => 0,
                 'description' => "Unix timestamp of when the last successful update occurred.",
             ),
+            // added in 7005
+            'obsolete_since' => array(
+                'type' => 'int',
+                'not null' => true,
+                'default' => 0,
+                'description' => "Unix timestamp of when the item has disapear from listing.",
+            ),
         ),
 
         'primary key' => array('nid', 'feed_id'),
@@ -428,4 +435,21 @@ function so_feedsagent_update_7004() {
     db_query("UPDATE {feedsagent_contents} SET nid_parent=nid");
 
     return t("Field '@field' has been added", array('@field' => 'nid_parent'));
+}
+
+/**
+ * Add field 'obsolete_since' to {feedsagent_contents}
+ */
+function so_feedsagent_update_7005() {
+
+    $field = array(
+        'type' => 'int',
+        'not null' => true,
+        'default' => 0,
+        'description' => "Unix timestamp of when the item has disapear from listing.",
+    );
+
+    db_add_field('feedsagent_contents', 'obsolete_since', $field);
+
+    return t("Field '@field' has been added", array('@field' => 'obsolete_since'));
 }

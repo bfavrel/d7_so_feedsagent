@@ -860,7 +860,6 @@ function so_feedsagent_importer_batch_process_feed_deletion($feed_definition) {
     batch_set($batch_definition);
 
     $batch = &batch_get();
-    $batch['op'] = $op;
     $batch['title'] = $batch_title;
 
     // ! si destination est null, on entre dans une boucle infinie !
@@ -1149,6 +1148,7 @@ function so_feedsagent_importer_batch_node_update($nid, $item, $op, &$context) {
     )->fetchColumn();
 
     // Si c'est un node en cours de création il sera inscrit par la fonction de création de nodes.
+    // là, on ne s'occupe que de l'existant
     if($last_update !== null) {
 
         if(!empty($item['parent_id'])) {
@@ -1207,6 +1207,15 @@ function so_feedsagent_importer_batch_node_update($nid, $item, $op, &$context) {
 
     $node = node_load($nid);
     $title_backup = $node->title;
+
+    $nodes_types = node_type_get_names();
+
+    so_feedsagent_log_item_write(
+        'identification',
+        $item_infos, array(
+            'infos' => t("Title") . " : " . $node->title . " / " . t("Language") . " : " . $node->language . " / " . t("Type") . " : " . $nodes_types[$node->type],
+        )
+    );
 
     // l'item peut avoir changé de flux après sa création sur le site (fréquent avec les items des flux de type 'manifestations' du LEI)
     // Deux cas sont alors possibles : l'ancien type ne fait pas partie du pool, ou alors, ce type fait par chance, partie du pool, mais la configuration
@@ -1291,7 +1300,7 @@ function so_feedsagent_importer_batch_node_update($nid, $item, $op, &$context) {
         $node->title = $title_backup;
     }
 
-    if ($node->status == 0) {
+    if($node->status == 0) {
         if($feed_importer_settings['behaviors']['nodes']['reborn'] == 'publish') {
             $node->status = 1;
             $event_infos['data'] = t("Item was existing again in feed. It has been republished.");
@@ -1392,9 +1401,37 @@ function so_feedsagent_importer_node_update(&$node, $item, $fields, $configurati
  */
 function so_feedsagent_importer_register_content_item($sfa_content, $feed_id, $update_time = null) {
 
+    // SEO rehabilitation
+    $obsolete_since = db_query(
+        "SELECT obsolete_since FROM {feedsagent_contents} WHERE nid=? AND feed_id=?",
+        array(
+            $sfa_content['nid'],
+            $feed_id,
+        )
+    )->fetchColumn();
+
+    if($obsolete_since != 0) {
+
+        $node_infos = db_query("SELECT vid, type, language FROM {node} WHERE nid=?", array($sfa_content['nid']))->fetchObject();
+
+        if(metatag_entity_supports_metatags('node', $node_infos->type) == true) {
+            so_feedsagent_seo_indexing('activate', $sfa_content['nid'], $node_infos->vid, $node_infos->language);
+
+            $item_infos = array(
+                'id' => $sfa_content['item_id'],
+                'container' => $sfa_content['nid'],
+                'timestamp' => time(),
+            );
+
+            $event_infos['data'] = t("Item was existing again in feed. Scheduled unpublish/deletion has been canceled.");
+            $event_infos['reset'] = true;
+            so_feedsagent_log_item_write('state', $item_infos, $event_infos);
+        }
+    }
+
     db_query(
         "REPLACE INTO {feedsagent_contents}
-        SET nid=:nid, nid_parent=:nidparent, feed_id=:feedid, item_id=:itemid, type_id=:typeid, weight=:weight, last_update=:lastupdate", array(
+         SET nid=:nid, nid_parent=:nidparent, feed_id=:feedid, item_id=:itemid, type_id=:typeid, weight=:weight, last_update=:lastupdate, obsolete_since=0", array(
             ':nid' => $sfa_content['nid'],
             ':nidparent' => $sfa_content['parent_nid'],
             ':feedid' => $feed_id,
@@ -1827,6 +1864,169 @@ function so_feedsagent_log_item_build(&$element, $item_id, $nid) {
     }
 }
 
+function so_feedsagent_log_item_display($item_id, $nid = null) {
+
+    $logs = array();
+    $output = array(
+        'content' => array(),
+        'back' => isset($_GET['destination']) ? array('#markup' => "<div>" . l(t("Back"), $_GET['destination']) . "</div>") : null,
+    );
+
+    if($nid == null) {
+
+        $results = db_query(
+            "SELECT l.id, l.container_id, l.data, n.nid, n.title, n.type, n.language FROM {feedsagent_logs} AS l
+             LEFT JOIN node AS n ON n.nid=l.container_id
+             WHERE l.object_id=?
+             ORDER BY id ASC",
+            array($item_id)
+        );
+
+    } else {
+
+        $results = db_query(
+            "SELECT l.id, l.container_id, n.title, n.type, n.language FROM {feedsagent_logs} AS l
+             LEFT JOIN node AS n ON n.nid=l.container_id
+             WHERE l.object_id=? AND l.container_id=?
+             ORDER BY id ASC",
+            array($item_id, $nid)
+        );
+    }
+
+    while($row = $results->fetchObject()) {
+
+        if($row->nid == null) {
+            $data = unserialize($row->data);
+            $archived_infos = $data['identification'];
+
+        } else {
+            $archived_infos = null;
+        }
+
+        $logs[] = array(
+            'id' => $row->id,
+            'item_id' => $item_id,
+            'nid' => $row->container_id,
+            'node_title' => $row->title,
+            'node_type' => $row->type,
+            'node_language' => $row->language,
+            'archived_infos' => $archived_infos,
+        );
+    }
+
+    if(count($logs) == 0) {
+
+        $output['content'] =  array(
+            'no_result' => array(
+                '#attached' => array('css' => array(drupal_get_path('module', 'so_feedsagent') . '/css/so_feedsagent_admin.css')),
+                '#markup' => "<div class='overview_empty_msg'>- " . t("No log found") . " -</div>",
+            ),
+        );
+
+    } elseif(count($logs) == 1) {
+
+        $node = node_load($logs[0]['nid']);
+
+        if(!empty($node)) {
+            $output['content'] = so_feedsagent_importer_single_node_update($node);
+        } else {
+            drupal_set_title(t("Logs of item '@item' while was matching node '@nid'", array('@item' => $item_id, '@nid' => $logs[0]['nid'])));
+            so_feedsagent_log_item_build($output['content'], $item_id, $logs[0]['nid']);
+        }
+
+    } else {
+
+        drupal_set_title(t("Logs of item '@item'", array('@item' => $item_id)));
+
+        $nodes_types = node_type_get_names();
+
+        $rows = array();
+
+        foreach($logs as $log) {
+
+            $rows[] = array(
+                $log['nid'],
+                (
+                    !empty($log['node_title']) ?
+                    l($log['node_title'], drupal_get_path_alias('node/' . $log['nid'], $log['node_language']), array('attributes' => array('target' => '_blank'))) :
+                    "<em>" . t("non existent node") . "</em>"
+                ),
+                (
+                    !empty($log['node_type']) ?
+                    $nodes_types[$log['node_type']] :
+                    "-"
+                ),
+                (
+                    !empty($log['node_language']) ?
+                    $log['node_language'] :
+                    "-"
+                ),
+                (
+                    !empty($log['archived_infos']) ?
+                    $log['archived_infos'] :
+                    ""
+                ),
+                l(t("See logs"), 'admin/reports/feedsagent/logs/item/' . $item_id . '/' . $log['nid'], array('attributes' => array('target' => '_blank'))),
+            );
+        }
+
+        $output['content'] = array(
+            '#theme' => 'table',
+            '#header' => array(
+                "NID",
+                t("Title"),
+                t("Type"),
+                t("Language"),
+                t("Archived infos"),
+                t("Action"),
+            ),
+            '#rows' => $rows,
+        );
+    }
+
+    return $output;
+}
+
+function so_feedsagent_report_items() {
+
+    $output = array();
+
+    $output[] = drupal_get_form('so_feedsagent_report_items_log_search_form');
+
+    return $output;
+}
+
+function so_feedsagent_report_items_log_search_form($form, &$form_state) {
+
+    return array(
+        'item_log_search' => array(
+            '#type' => 'fieldset',
+            '#title' => t("Search item logs"),
+
+            'item_id' => array(
+                '#type' => 'textfield',
+                '#title' => t("Item ID"),
+            ),
+            'search' => array(
+                '#type' => 'submit',
+                '#value' => t("Search"),
+            ),
+        ),
+    );
+}
+
+function so_feedsagent_report_items_log_search_form_submit($form, &$form_state) {
+
+    $item_id = $form_state['values']['item_id'];
+
+    if(empty($item_id)) {
+        drupal_set_message(t("You must enter an item ID"), 'warning');
+        return;
+    }
+
+    drupal_goto('admin/reports/feedsagent/logs/item/' . trim($item_id), array('query' => drupal_get_destination()));
+}
+
 function _so_feedsagent_importer_error_handler($error_level, $message, $filename, $line, $context) {
 
     if (array_key_exists('error_handler_params', $context)) {
@@ -1904,7 +2104,7 @@ function so_feedsagent_log_item_read($item_id, $nid) {
 /**
  * Write log informations about result of various operations performed on items
  *
- * @param string $log_type : either 'success', 'fail', 'warning', 'info', 'state'
+ * @param string $log_type : either 'identification', 'success', 'fail', 'warning', 'info', 'state'
  * @param array $item_infos :
  *                      - 'id' : string : item's id.
  *                      - 'container' : string : item's container'id (currently, it can be only a nid in case of feeds' items)
@@ -1912,6 +2112,10 @@ function so_feedsagent_log_item_read($item_id, $nid) {
  *                                            if the stored one is up or out to date.
  *
  * @param array $event_infos : event infos (depend on type of log) :
+ *                      ++IDENTIFICATION++ : array :
+ *                          - 'infos' : a human readable string, for identifying log entry further. Especially if the log
+ *                                      subject disapear (as a node deletion for wich JOIN with node table won't be possible anymore)
+ *
  *                      ++SUCCESS++ : array :
  *                          - 'operation' : string : localized string describing the successful performed operation.
  *                          - 'start_timestamp' : int : the starting time of the successful operation. It's used to clean
@@ -1952,6 +2156,10 @@ function so_feedsagent_log_item_write($log_type, $item_infos, $event_infos) {
     $event_infos['operation'] .= !empty($user->name) ? " " . t("by @user", array('@user' => ucfirst($user->name))) : "";
 
     switch ($log_type) {
+
+        case 'identification':
+            $log['data']['identification'] = $event_infos['infos'];
+            break;
 
         case 'success':
             $log['state'] = 0;
@@ -2027,7 +2235,7 @@ function so_feedsagent_log_item_write($log_type, $item_infos, $event_infos) {
 
         case 'state':
 
-            if(array_key_exists('reset', $event_infos) && $event_infos['once'] == true) {
+            if(array_key_exists('reset', $event_infos) && $event_infos['reset'] == true) {
                 $log['data']['state_blacklist'] = array();
             }
 
@@ -2397,6 +2605,7 @@ function so_feedsagent_importer_batch_missing_items($nid, $item_id, $op, &$conte
 
             break;
 
+        case 'seo_unpublish':
         case 'unpublish':
 
             // un node peut être référencé dans plusieurs feeds.
@@ -2410,17 +2619,65 @@ function so_feedsagent_importer_batch_missing_items($nid, $item_id, $op, &$conte
             } else {
                 $status = db_query("SELECT status FROM {node} WHERE nid=?", array($nid))->fetchColumn();
 
+                // si le node n'a pas déjà été dépublié. (économie de logs)
                 if ($status == 1) {
-                    $event_infos_action = t("node was unpublished");
 
-                    // il faut aussi modifier le status de la revision
+                    $node_infos = db_query("SELECT vid, type FROM {node} WHERE nid=?", array($nid))->fetchObject();
+
+                    // phase SEO
+                    if($configuration['feed_definition']->params['importer']['behaviors']['nodes']['obsolete'] == 'seo_unpublish'
+                            && metatag_entity_supports_metatags('node', $node_infos->type)) {
+
+                        $obsolete_since = db_query(
+                            "SELECT obsolete_since FROM {feedsagent_contents} WHERE nid=? AND feed_id=?",
+                            array(
+                                $nid,
+                                $configuration['feed_definition']->id,
+                            )
+                        )->fetchColumn();
+
+                        $now = time();
+
+                        // le node n'est pas encore marqué comme obsolète
+                        if($obsolete_since == 0) {
+
+                            db_query(
+                                "UPDATE {feedsagent_contents} SET obsolete_since=? WHERE nid=? AND feed_id=?",
+                                array(
+                                    $now,
+                                    $nid,
+                                    $configuration['feed_definition']->id,
+                                )
+                            );
+
+                            $language = $configuration['feed_definition']->language;
+
+                            so_feedsagent_seo_indexing('desactivate', $nid, $node_infos->vid, $language);
+
+                            $event_infos_action = t("node unpublish was scheduled");
+                            $context['results']['nb_seo_unpublished']++;
+
+                            break;
+
+                        // le node est déjà marqué comme étant obsolète, mais depuis moins de 30 jours
+                        } elseif($now - $obsolete_since < 2592000 ) { // 3600 * 24 * 30
+                            break;
+                        }
+                    }
+
+                    // statut du node mais également de sa révision en cours
                     db_query("UPDATE {node} AS n LEFT JOIN {node_revision} as r ON r.nid=n.nid SET n.status=0, r.status=0 WHERE n.nid=?", array($nid));
+
+                    // à noter que l'on conserve quand-même le node inscrit dans les contenus SFA, en prévision de sa réapparition possible.
+
+                    $event_infos_action = t("node was unpublished");
                     $context['results']['nb_unpublished']++;
                 }
             }
 
             break;
 
+        case 'seo_delete':
         case 'delete':
             // un node peut être référencé dans plusieurs feeds.
             // si c'est le cas, on ne le supprime pas : on le déréférence simplement du feed en cours
@@ -2431,6 +2688,49 @@ function so_feedsagent_importer_batch_missing_items($nid, $item_id, $op, &$conte
                 $context['results']['nb_removed']++;
                 $event_infos_action = t("since node was existing in several feed, no action was performed");
             } else {
+
+                $node_infos = db_query("SELECT vid, type FROM {node} WHERE nid=?", array($nid))->fetchObject();
+
+                // phase SEO
+                if($configuration['feed_definition']->params['importer']['behaviors']['nodes']['obsolete'] == 'seo_delete'
+                        && metatag_entity_supports_metatags('node', $node_infos->type)) {
+
+                    $obsolete_since = db_query(
+                        "SELECT obsolete_since FROM {feedsagent_contents} WHERE nid=? AND feed_id=?",
+                        array(
+                            $nid,
+                            $configuration['feed_definition']->id,
+                        )
+                    )->fetchColumn();
+
+                    $now = time();
+
+                    // le node n'est pas encore marqué comme obsolète
+                    if($obsolete_since == 0) {
+
+                        db_query(
+                            "UPDATE {feedsagent_contents} SET obsolete_since=? WHERE nid=? AND feed_id=?",
+                            array(
+                                $now,
+                                $nid,
+                                $configuration['feed_definition']->id,
+                            )
+                        );
+
+                        $language = $configuration['feed_definition']->language;
+
+                        so_feedsagent_seo_indexing('desactivate', $nid, $node_infos->vid, $language);
+
+                        $event_infos_action = t("node deletion was scheduled");
+                        $context['results']['nb_seo_deleted']++;
+
+                        break;
+
+                    // le node est déjà marqué comme étant obsolète, mais depuis moins de 30 jours
+                    } elseif($now - $obsolete_since < 2592000 ) { // 3600 * 24 * 30
+                        break;
+                    }
+                }
 
                 global $user;
                 $uid_backup = $user->uid;
@@ -2450,6 +2750,58 @@ function so_feedsagent_importer_batch_missing_items($nid, $item_id, $op, &$conte
         $event_infos['data'] = t("Item was no longer exist in feed.") . " ". t("Action taken") . " : " . $event_infos_action;
         so_feedsagent_log_item_write('state', $item_infos, $event_infos);
     }
+}
+
+/*
+ * Update node's meta ROBOTS.
+ * Be careful ! There is no verification on metatag support of node type !
+ *
+ * @params $activate : boolean : set on 'true' (default) activate robots indexation.
+ *                               Set on 'false', prevents robots indexation
+ */
+function so_feedsagent_seo_indexing($op, $nid, $vid, $language) {
+
+    $metatags_array = metatag_metatags_load_multiple('node', array($nid));
+
+    if(empty($metatags_array) || !array_key_exists($nid, $metatags_array)) {
+
+        $metatags_array[$nid] = array(
+            $nid => array(
+                $language => array(),
+            ),
+        );
+    }
+
+    $metatags = reset($metatags_array[$nid]);
+
+    if($op == 'desactivate') {
+        $robots = array(
+            'index' => 0,                       // Allow search engines to index this page
+            'noindex' => 'noindex',             // Prevents search engines from indexing this page
+            'follow' => 'follow',               // Allow search engines to follow links on this page
+            'nofollow' => 0,                    // Prevents search engines from following links on this page
+            'noydir' => 'noydir',               // Prevents Yahoo! from listing this page in the Yahoo! Directory
+            'noimageindex' => 'noimageindex',   // Prevent search engines from indexing images on this page
+        );
+    } else {
+        $robots = array(
+            'index' => 'index',                 // Allow search engines to index this page
+            'noindex' => 0,                     // Prevents search engines from indexing this page
+            'follow' => 'follow',               // Allow search engines to follow links on this page
+            'nofollow' => 0,                    // Prevents search engines from following links on this page
+            'noydir' => 0,                      // Prevents Yahoo! from listing this page in the Yahoo! Directory
+            'noimageindex' => 0,                // Prevent search engines from indexing images on this page
+        );
+    }
+
+    if(!array_key_exists('robots', $metatags[$language])) {
+        $metatags[$language]['robots'] = array('value' => array());
+    }
+
+    $metatags[$language]['robots']['value'] = array_merge($metatags[$language]['robots']['value'], $robots);
+
+    metatag_metatags_save('node', $nid, $vid, $metatags, $language);
+    metatag_metatags_cache_clear('node', array($nid));
 }
 
 function so_feedsagent_importer_batch_finished($success, $results, $operations) {
@@ -2512,8 +2864,16 @@ function so_feedsagent_importer_batch_finished($success, $results, $operations) 
         $message_queue[] = format_plural($results['nb_unpublished'], "1 obsolete node was unpublished", "@count obsolete nodes were unpublished");
     }
 
+    if (!empty($results['nb_seo_unpublished'])) {
+        $message_queue[] = format_plural($results['nb_seo_unpublished'], "1 obsolete node unpublication was scheduled", "@count obsolete nodes unpublications were scheduled");
+    }
+
     if (!empty($results['nb_deleted'])) {
         $message_queue[] = format_plural($results['nb_deleted'], "1 obsolete node was deleted", "@count obsolete nodes were deleted");
+    }
+
+    if (!empty($results['nb_seo_deleted'])) {
+        $message_queue[] = format_plural($results['nb_seo_deleted'], "1 obsolete node deletion was scheduled", "@count obsolete nodes deletions were scheduled");
     }
 
     if ($is_cron != true) {

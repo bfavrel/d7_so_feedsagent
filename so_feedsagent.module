@@ -181,6 +181,24 @@ function so_feedsagent_menu() {
         'title' => "Summary",
         'type' => MENU_DEFAULT_LOCAL_TASK,
         'access arguments' => array('administer feedsagent'),
+        'weight' => 0,
+    );
+    
+    $items['admin/reports/feedsagent/items'] = array(
+        'title' => "Items",
+        'page callback' => 'so_feedsagent_report_items',
+        'type' => MENU_LOCAL_TASK,
+        'access arguments' => array('administer feedsagent'),
+        'file' => 'so_feedsagent.importer.inc',
+        'weight' => 1,
+    );
+    
+    $items['admin/reports/feedsagent/logs/item/%'] = array( // item_id [/ nid]
+        'page callback' => 'so_feedsagent_log_item_display',
+        'page arguments' => array(5),
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('administer feedsagent'),
+        'file' => 'so_feedsagent.importer.inc',
     );
 
     $items['admin/reports/feedsagent/batch/restart/%/%'] = array( // batch_id / is_active
@@ -198,7 +216,7 @@ function so_feedsagent_menu() {
         'access arguments' => array('administer feedsagent'),
         'file' => 'so_feedsagent.importer.inc',
     );
-
+    
     // ----- NODE IMPORTER TAB
 
     $items['node/%node/importer'] = array( // param3 = 'launch' : lance l'import
@@ -567,7 +585,7 @@ function so_feedsagent_get_behaviors_configuration_elements($default_value = arr
     // TODO : étudier la possibilité d'un ensemble de hooks. Des modules comme 'alertes' souhaiteraient peut-être
     // proposer des actions, telles "qu'envoyer un mail lorsqu'un node apparaît" afin que le node soit validé manuellement...
 
-    return array(
+    $behaviors = array(
         'content_types' => array(
             '#type' => 'fieldset',
             '#title' => t("Content types"),
@@ -598,7 +616,9 @@ function so_feedsagent_get_behaviors_configuration_elements($default_value = arr
                 '#options' => array(
                     'none' => t("None"),
                     'unpublish' => t("Unpublish (only if it exists in one feed)"),
+                    'seo_unpublish' => t("SEO unindex and unpublish after 30 days (only if it exists in one feed)"),
                     'delete' => t("Delete (only if it exists in one feed)"),
+                    'seo_delete' => t("SEO unindex and delete after 30 days (only if it exists in one feed)"),
                     'relegate' => t("Relegate it to the end of the feed's contents"),
                 ),
                 '#default_value' => $default_value['nodes']['obsolete'],
@@ -621,6 +641,8 @@ function so_feedsagent_get_behaviors_configuration_elements($default_value = arr
             ),
         ),
     );
+
+    return $behaviors;
 }
 
 /**
@@ -1458,10 +1480,12 @@ function so_feedsagent_node_type_delete($infos) {
  * Cleans the feedsagent_nodes_overrides table.
  */
 function so_feedsagent_node_delete($node) {
+    
+    // réinitialisation des couplages
+    db_query("UPDATE {feedsagent_contents} SET nid_parent=nid WHERE nid_parent=?", array($node->nid));
+    
     db_query("DELETE FROM {feedsagent_nodes_overrides} WHERE nid=?", array($node->nid));
     db_query("DELETE FROM {feedsagent_contents} WHERE nid=?", array($node->nid));
-    
-    // TODO : si un parent est supprimé, reparamétrer le nid_parent des enfants.
 }
 
 /**
