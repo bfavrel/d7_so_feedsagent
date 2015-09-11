@@ -10,5 +10,6 @@ dependencies[] = field_group
 dependencies[] = date
 dependencies[] = date_popup
 dependencies[] = image
+dependencies[] = metatag
 
 files[] = connectors/_classes/SoFeedsAgentConnectorAbstract.class.php
