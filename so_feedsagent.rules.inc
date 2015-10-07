@@ -18,5 +18,6 @@ function so_feedsagent_rules_condition_info() {
 
 function so_feedsagent_is_sfa_node($node) {
 
-    return !empty(db_query("SELECT nid FROM {feedsagent_contents} WHERE nid=?", array($node->nid))->fetchColumn());
+    $sfa_node = db_query("SELECT nid FROM {feedsagent_contents} WHERE nid=?", array($node->nid))->fetchColumn();
+    return !empty($sfa_node);
 }
