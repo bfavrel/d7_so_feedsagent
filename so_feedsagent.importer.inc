@@ -2801,7 +2801,6 @@ function so_feedsagent_seo_indexing($op, $nid, $vid, $language) {
     $metatags[$language]['robots']['value'] = array_merge($metatags[$language]['robots']['value'], $robots);
 
     metatag_metatags_save('node', $nid, $vid, $metatags, $language);
-    metatag_metatags_cache_clear('node', array($nid));
 }
 
 function so_feedsagent_importer_batch_finished($success, $results, $operations) {
