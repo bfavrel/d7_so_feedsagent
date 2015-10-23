@@ -1,0 +1,72 @@
+<?php
+
+function so_feedsagent_connector_tourinsoft_schema() {
+    
+    $schema['tourinsoft_allowed_values_language'] = array(
+        'description' => "Store allowed values language belonginig",
+        
+        'fields' => array(
+            'field' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "Field system name"
+            ),
+            
+            'value' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "Allowed value key",
+            ),
+            
+            'language' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The langcode",
+            ),
+        ),
+        'primary key' => array('field', 'value', 'language'),
+    );
+    
+    return $schema;
+}
+
+/**
+ * Adding table 'tourinsoft_allowed_values_language'.
+ */
+function so_feedsagent_connector_tourinsoft_update_7001() {
+    
+    $table = array(
+        'description' => "Store allowed values language belonginig",
+        
+        'fields' => array(
+            'field' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "Field system name"
+            ),
+            
+            'value' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "Allowed value key",
+            ),
+            
+            'language' => array(
+                'type' => 'varchar',
+				'length' => '255',
+				'not null' => true,
+				'description' => "The langcode",
+            ),
+        ),
+        'primary key' => array('field', 'value', 'language'),
+    );
+    
+    db_create_table('tourinsoft_allowed_values_language', $table);
+
+    return t("The table 'tourinsoft_allowed_values_language' has been created");
+}

@@ -1,5 +1,51 @@
 <?php
 
+function so_feedsagent_connector_tourinsoft_field_widget_form_alter(&$element, &$form_state, $context) {
+
+    if(!array_key_exists('#options', $element)) {return;}
+
+    $tree = &drupal_static(__FUNCTION__);
+
+    if(empty($tree)) {
+        module_load_include('inc', 'so_feedsagent', 'so_feedsagent.generator');
+        $tree = so_feedsagent_build_nodes_types_tree($context['instance']['bundle']);
+    }
+
+    if(array_key_exists($element['#field_name'], $tree['fields'])) {
+
+        $foreign_results = db_query("SELECT value FROM {tourinsoft_allowed_values_language} WHERE field=? AND language!=?", array(
+            $element['#field_name'],
+            $context['langcode'],
+        ));
+
+        $foreigns = array();
+
+        while($value = $foreign_results->fetchColumn()) {
+            $foreigns[$value] = null;
+        }
+
+        $discards = array();
+
+        if(!empty($foreigns)) {
+            $local_results = db_query("SELECT value FROM {tourinsoft_allowed_values_language} WHERE field=? AND language=?", array(
+                $element['#field_name'],
+                $context['langcode'],
+            ));
+
+            $locals = array();
+
+            while($value = $local_results->fetchColumn()) {
+                $locals[$value] = null;
+            }
+
+            $discards = array_diff_key($foreigns, $locals);
+
+        }
+
+        $element['#options'] = array_diff_key($element['#options'], $discards);
+    }
+}
+
 /*
  * Implementation of hook_so_feedsagent_connectors()
  */

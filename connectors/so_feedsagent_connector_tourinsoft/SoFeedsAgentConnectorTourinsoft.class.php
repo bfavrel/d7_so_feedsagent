@@ -638,6 +638,14 @@ class SoFeedsAgentConnectorTourinsoft extends SoFeedsAgentConnectorAbstract
             $field_infos['settings']['allowed_values'] += $infos;
             asort($field_infos['settings']['allowed_values']);
             field_update_field($field_infos);
+
+            foreach($infos as $value_hash => $label) {
+                db_query("REPLACE INTO {tourinsoft_allowed_values_language} SET field=?, value=?, language=?", array(
+                    $field,
+                    $value_hash,
+                    $language,
+                ));
+            }
         }
 
         $title = !empty($title_string) ? $title_string : t("No title") . " (fiche : " . $data['ID'] . ")"; // LOG :
