@@ -1380,7 +1380,7 @@ function so_feedsagent_importer_node_update(&$node, $item, $fields, $configurati
 
         $format_callback = $feedsagent_types[$field['type']]['format_callback'];
 
-        $field_language = $field['translatable'] == 1 ? $node->language : 'und';
+        $field_language = $field['translatable'] == 1 ? $node->language : LANGUAGE_NONE;
 
         $node->{$field['field']}[$field_language] = array_merge($node->{$field['field']}[$field_language], $format_callback(
             $field,
@@ -2526,20 +2526,30 @@ function _so_feedsagent_file_format_callback($field, $previous_values, $widgets_
 
         $value = is_array($raw_value) ? $raw_value['file'] : $raw_value;
 
-        // DEV : possibilité de passer chaque value en tant que array, pour mapper les descriptions de photos, etc.
-
         $dirname = pathinfo($value, PATHINFO_DIRNAME);
         $drupal_parsed = drupal_parse_url($value);
         $filename = pathinfo($drupal_parsed['path'], PATHINFO_BASENAME);
         $params = parse_url($value, PHP_URL_QUERY);
         $params = (!empty($params) ? '?' : '') . $params;
 
+        $url = $dirname . '/' . rawurlencode($filename) . $params;
+
+        if(strpos($dirname, 'http://') === false
+            && strpos($dirname, 'https://') === false
+            && strpos($dirname, 'public://') === false) {
+
+            $url = 'http://' . $url;
+        }
+
         $local_filename = preg_replace('#^field#', $nid, $field['field']) . '_' . $filename;
 
-        $url = 'http://' . $dirname . '/' . rawurlencode($filename) . $params;
-        $url = str_replace('http://http://', 'http://', $url);
-
-        $file = system_retrieve_file($url, $path . '/' . $local_filename, true, FILE_EXISTS_REPLACE);
+        if(strpos($dirname, 'public://') === 0) {
+            $handle = fopen(drupal_realpath($url), 'r');
+            $file_content = fread($handle, filesize(drupal_realpath($url)));
+            $file = file_save_data($file_content, $path . '/' . $local_filename, FILE_EXISTS_REPLACE);
+        } else {
+            $file = system_retrieve_file($url, $path . '/' . $local_filename, true, FILE_EXISTS_REPLACE);
+        }
 
         if ($file != false) {
             // l'ajout/suppression des usages est automatiquement effectué par Fields
