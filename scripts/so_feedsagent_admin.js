@@ -67,8 +67,12 @@
                 // non transmises si non-checked
 
                 //-- select
-                $(this).find('select option:selected[value=""]').parent().remove();
+                $(this).find('select option:selected[value=""]').parent().not('.no-cleaning').remove();
                 
+            });
+            
+            $('form.feedsagent_wizzard.form_autoclean select').change(function() {
+                $(this).addClass('no-cleaning');
             });
         };
 

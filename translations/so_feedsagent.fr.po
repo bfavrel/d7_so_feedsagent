@@ -519,8 +519,8 @@ msgid "@op of '@feed' feed (@id)"
 msgstr "@op du flux '@feed' (@id)"
 
 #: so_feedsagent.importer.inc:596
-msgid "Connector didn't return any listing XML data"
-msgstr "Le connecteur n'a retourné aucune donnée XML de listing"
+msgid "Connector didn't return any listing data"
+msgstr "Le connecteur n'a retourné aucune donnée de listing"
 
 #: so_feedsagent.importer.inc:649
 msgid ""

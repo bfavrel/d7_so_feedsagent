@@ -2,6 +2,11 @@
 
 class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 {
+    const PARENT_NODE = 'parent_node';
+    const CHILD_NODE = 'child_node';
+
+    private $_unzip_absolute_path = '';
+
     public static function getFeatures() {
 
         return array(
@@ -9,53 +14,35 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
                 'generator',
                 'importer',
             ),
-            'dynamic_allowed_values_only' => true, // les valeurs ne seront pas assignées à la création du champ
 
             'use_multiple_fields' => true,// TODO : obligatoire - supprimer tout ce qui se rapport à ce paramètre (code, CSS, etc.)
             'use_fields_compatibility' => true, // TODO : obligatoire - supprimer tout ce qui se rapport à ce paramètre (code, CSS, etc.)
         );
     }
 
-    // le tableau sera indexé par NO_ASP
-    protected function _xml2array(simpleXmlElement $xml)
-    {
-        $arr = array();
+    function _get_types_offres($index = null) {
+        $types = array(
+            1 => "vente appart",
+            2 => "vente maison",
+            3 => "vente terrain",
+            4 => "vente immeuble",
+            5 => "vente local",
+            6 => "vente fdc",
+            7 => "vente parking",
+            11 => "location appart",
+            12 => "location mais",
+            13 => "location local",
+            14 => "location parking",
+            21 => "programme",
+        );
 
-        foreach ($xml->children() as $r) {
-
-            if(count($r->children()) == 0) {
-                $arr[$r->getName()] = strval($r);
-            } else {
-                $tmp = $this->_xml2array($r);
-                $arr[$r->getName()][$tmp['NO_ASP']] = $tmp;
-            }
-        }
-
-        return $arr;
-    }
-
-    protected function _findXMLFile($directory) {
-        $file_array = glob($directory . '/*.XML');
-
-        if(empty($file_array)) {
-            $file_array = glob($directory . '/*.xml');
-        }
-
-        return !empty($file_array) ? $file_array[0] : false;
+        return $index === null ? $types : $types[$index];
     }
 
     public function connectorConfigurationForm(array &$form, array &$form_state, $touch_form = false) {
 
         if($touch_form == true) {
             return true;
-        }
-
-        $results = db_query("SELECT DISTINCT field_name FROM {field_config} WHERE type='image' ORDER BY field_name ASC");
-
-        $field_options = array();
-
-        while($field = $results->fetchColumn()) {
-            $field_options[$field] = $field;
         }
 
         $form = array(
@@ -67,15 +54,6 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
                 '#title' => t("Archives upload directory"),
                 '#field_prefix' => "public://",
                 '#default_value' => array_key_exists('upload_directory', $this->_definition) ? $this->_definition['upload_directory'] : "",
-                '#required' => true,
-            ),
-
-            'image_field' => array(
-                '#type' => 'select',
-                '#title' => t("Field to use for images"),
-                '#description' => t("Since there is any XML field for images, FeedsAgent Wizard can't make the mapping itself."),
-                '#options' => $field_options,
-                '#default_value' => array_key_exists('image_field', $this->_definition) ? $this->_definition['image_field'] : "",
                 '#required' => true,
             ),
 
@@ -102,14 +80,14 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
             '#title' => t("Archive name"),
             '#description' => t("File name without extension"),
             '#field_prefix' => "public://" . $this->_definition['upload_directory'] . "/",
-            '#field_suffix' => ".zip",
+            '#field_suffix' => ".ZIP",
             '#default_value' => $configuration['filename'],
         );
 
         $form['type_offre'] = array(
             '#type' => 'select',
             '#title' => t("Offers type"),
-            '#options' => so_feedsagent_connector_pericles_get_types_offres(),
+            '#options' => $this->_get_types_offres(),
             '#default_value' => $configuration['type_offre'],
         );
     }
@@ -120,9 +98,9 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
         $output = "";
 
-        $output .= "<strong>" . t("Offers type") . " : </strong>" . ucfirst(so_feedsagent_connector_pericles_get_types_offres($configuration['type_offre'])) . "<br />";
+        $output .= "<strong>" . t("Offers type") . " : </strong>" . ucfirst($this->_get_types_offres($configuration['type_offre'])) . "<br />";
 
-        $file = 'public://' . $this->_definition['upload_directory'] . '/' . $configuration['filename'] . '.zip';
+        $file = 'public://' . $this->_definition['upload_directory'] . '/' . $configuration['filename'] . '.ZIP';
 
         if(is_file($file)) {
 
@@ -268,17 +246,20 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
     public function generatorPopulateFieldsDefinitionsList(array &$wizzard_params) {
 
-        $connector_id = $this->_definition['id'];
-        $upload_directory = drupal_realpath('public://' . $this->_definition['upload_directory']);
         $filename = $wizzard_params['params']['connector']['file'];
         $item_index = $wizzard_params['params']['connector']['item_index'];
 
-        $files_directory = so_feedsagent_connector_pericles_inflate_archive($filename, $upload_directory, $connector_id);
+        $all_data = $this->_get_xml_data($filename, false);
 
-        $xml = simplexml_load_file($this->_findXMLFile($files_directory), null, LIBXML_NOCDATA);
+        $all_data_flat = array();
 
-        $all_data = $this->_xml2array($xml);
-        $data = array_slice($all_data['BIEN'], $item_index, 1);
+        foreach($all_data['BIEN'] as $no_asp => $children) {
+            foreach($children as $index => $child) {
+                $all_data_flat[] = $child;
+            }
+        }
+
+        $data = array_slice($all_data_flat, $item_index, 1);
         $data = $data[0];
 
         $fields_list = array(
@@ -315,10 +296,46 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
                 'values' => array($data['DATE_MODIF']),
                 'locked' => true,
             ),
+            'NODE_HIERARCHY' => array(
+                'label' => t("Node hierarchy"),
+                'type' => 'select',
+                'group' => $this->_definition['id'],
+                'values' => array(
+                    self::PARENT_NODE => t("Parent node"),
+                    self::CHILD_NODE => t("Child node"),
+                ),
+                'multiple' => false,
+                'locked' => true,
+            ),
+
+            'GEOLOCATION' => array(
+                'label' => t("Geolocation"),
+                'type' => 'group',
+                'prevent_sorting' => true,
+            ),
+
+            'LONGITUDE' => array(
+                'label' => t("Longitude"),
+                'type' => 'textfield',
+                'group' => 'GEOLOCATION',
+            ),
+
+            'LATITUDE' => array(
+                'label' => t("Latitude"),
+                'type' => 'textfield',
+                'group' => 'GEOLOCATION',
+            ),
+
+            'IMAGES' => array(
+                'label' => t("Images"),
+                'type' => 'image',
+                'multiple' => true,
+                'prevent_sorting' => true,
+            ),
         );
 
         $wizzard_params['primary_type'] = $data['TYPE_OFFRE'] . '@' . $this->_definition['id'];
-        $wizzard_params['virtual_name'] = ucfirst(so_feedsagent_connector_pericles_get_types_offres($data['TYPE_OFFRE']));
+        $wizzard_params['virtual_name'] = ucfirst($this->_get_types_offres($data['TYPE_OFFRE']));
 
         unset($data['NO_ASP']);
         unset($data['TYPE_OFFRE']);
@@ -362,33 +379,42 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
     public function importerGetFeedListing(array $configuration) {
 
-        $connector_id = $this->_definition['id'];
-        $upload_directory = drupal_realpath('public://' . $this->_definition['upload_directory']);
         $filename = $configuration['filename'];
-
-        $files_directory = so_feedsagent_connector_pericles_inflate_archive($filename, $upload_directory, $connector_id);
-
-        $xml = simplexml_load_file($this->_findXMLFile($files_directory), null, LIBXML_NOCDATA);
-        $all_data = $this->_xml2array($xml);
+        $all_data = $this->_get_xml_data($filename, true);
         $data = $all_data['BIEN'];
 
         $listing = array();
         $weight = 0;
 
-        foreach($data as $no_asp => $fiche) {
+        foreach($data as $no_asp => $children) {
 
-            if($fiche['TYPE_OFFRE'] != $configuration['type_offre']) {continue;}
+            $children_data = reset($children);
 
-            $datemaj = DateTime::createFromFormat('d/m/Y', $fiche['DATE_MODIF']);
+            if($children_data['TYPE_OFFRE'] != $configuration['type_offre']) {continue;}
 
+            $datemaj = DateTime::createFromFormat('d/m/Y', $children_data['DATE_MODIF']);
+
+            // fiche mère
             $listing[$no_asp] = array(
                 'id' => $no_asp,
                 'parent_id' => null,
-                'primary_type' => $fiche['TYPE_OFFRE'] . '@' . $this->_definition['id'],
-                'primary_type_name' => ucfirst(so_feedsagent_connector_pericles_get_types_offres($fiche['TYPE_OFFRE'])),
+                'primary_type' => $children_data['TYPE_OFFRE'] . '@' . $this->_definition['id'],
+                'primary_type_name' => ucfirst($this->_get_types_offres($children_data['TYPE_OFFRE'])),
                 'date' => $datemaj->format('U'),
                 'weight' => $weight++,
             );
+
+            foreach($children as $no_dossier => $child) {
+
+                $listing[$no_asp . '_' . $no_dossier] = array(
+                    'id' => $no_asp . '_' . $no_dossier,
+                    'parent_id' => $no_asp,
+                    'primary_type' => $children_data['TYPE_OFFRE'] . '@' . $this->_definition['id'],
+                    'primary_type_name' => ucfirst($this->_get_types_offres($children_data['TYPE_OFFRE'])),
+                    'date' => $datemaj->format('U'),
+                    'weight' => $weight++,
+                );
+            }
         }
 
         return $listing;
@@ -396,16 +422,30 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
     public function importerGetFeedValues($node, $item_id, array &$title, $language, array $configuration, array &$fields, stdClass $feed_definition) {
 
-        $connector_id = $this->_definition['id'];
-        $upload_directory = drupal_realpath('public://' . $this->_definition['upload_directory']);
         $filename = $feed_definition->params['connector']['filename'];
+        $all_data = $this->_get_xml_data($filename, true);
 
-        $files_directory = so_feedsagent_connector_pericles_inflate_archive($filename, $upload_directory, $connector_id);
+        $parsed_item_id = explode('_', $item_id);
+        $no_asp = $parsed_item_id[0];
 
-        $xml = simplexml_load_file($this->_findXMLFile($files_directory), null, LIBXML_NOCDATA);
-        $all_data = $this->_xml2array($xml);
+        $title_suffix = "";
 
-        $data = $all_data['BIEN'][$item_id];
+        // child node
+        if(count($parsed_item_id) == 2) {
+            $no_dossier = $parsed_item_id[1];
+            $data = $all_data['BIEN'][$no_asp][$no_dossier];
+            $title_suffix = " (" . $no_dossier . ")";
+            $node_hierarchy = self::CHILD_NODE;
+            $fields['NODE_HIERARCHY']['values'] = array($node_hierarchy);
+
+        // parent node
+        } else {
+            $data = reset($all_data['BIEN'][$no_asp]);
+            $node_hierarchy = self::PARENT_NODE;
+            $fields['NODE_HIERARCHY']['values'] = array($node_hierarchy);
+        }
+
+        unset($data['NODE_HIERARCHY']);
 
         $fields_types = so_feedsagent_get_available_fields_types();
 
@@ -440,9 +480,11 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
                 } else {
 
                     if($fields[$field]['type'] == 'date') {
+
                         //Le format Périclès semble être : d/m/Y
                         $date = DateTime::createFromFormat('d/m/Y', $value);
                         $value = $date->format('Y-m-d 00:00:00');
+
                     }
 
                     $fields[$field]['values'] = array($value);
@@ -451,79 +493,245 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
         }
 
         foreach($allowed_values as $field => $infos) {
+
+            //ces valeurs-là sont et doivent rester des constantes.
+            if($field == $fields['NODE_HIERARCHY']['field']) {
+                continue;
+            }
+
             $field_infos = field_info_field($field);
             $field_infos['settings']['allowed_values'] += $infos;
             asort($field_infos['settings']['allowed_values']);
             field_update_field($field_infos);
         }
 
-        $images_file_pattern = $files_directory . '/' . $data['CODE_SOCIETE'] . '-' . $data['CODE_SITE'] . '-' . $data['NO_ASP'] . '-*.jpg';
-        $images_paths = array();
+        //--- IMAGES
+        if($node_hierarchy == self::PARENT_NODE && array_key_exists('IMAGES', $fields)) {
 
-        $target_filename_prefix = preg_replace('#^field#', $node->nid, $this->_definition['image_field']) . '_';
+            $images_file_pattern = $this->_unzip_absolute_path . '/' . $data['CODE_SOCIETE'] . '-' . $data['CODE_SITE'] . '-' . $data['NO_ASP'] . '-*.jpg';
+            $images_paths = array();
+            $drupal_field = $fields['IMAGES']['field'];
 
-        foreach(glob($images_file_pattern) as $image_path) {
-            $source_path = str_replace(drupal_realpath('public://') . '/', 'public://', $image_path);
+            $target_filename_prefix = preg_replace('#^field#', $node->nid, $drupal_field) . '_';
 
-            $target_filename = $target_filename_prefix . pathinfo($source_path, PATHINFO_FILENAME) . '.' . pathinfo($source_path, PATHINFO_EXTENSION);
-            $images_paths[$target_filename] = $source_path;
-        }
+            foreach(glob($images_file_pattern) as $image_path) {
+                $source_path = str_replace(drupal_realpath('public://') . '/', 'public://', $image_path);
 
-        if(!empty($images_paths)) {
-
-            $original_node = node_load($node->nid);
-
-            //si le champ d'origine est vide, ou le mode des images est défini sur 'replace'
-            if(empty($original_node->{$this->_definition['image_field']})
-                || $this->_definition['image_mode'] == 'replace') {
-
-                if(!empty($original_node->{$this->_definition['image_field']})) {
-                    //on supprime le cache des images anciennes images car les nouvelles auront très probablement le même nom
-                    foreach($original_node->{$this->_definition['image_field']}[LANGUAGE_NONE] as $field_value) {
-
-                        image_path_flush($field_value['uri']);
-                    }
-                }
-
-                //on initialise le champ (SFA ne le fera pas : il ne connait pas le champ)
-                $node->{$this->_definition['image_field']}[LANGUAGE_NONE] = array();
-
-            //le champ d'origine n'est pas vide, ou le mode des images est défini sur 'update'
-            } else {
-                //on transfert les anciennes valeurs du node d'origine vers le node en cours d'écriture
-                $node->{$this->_definition['image_field']} = $original_node->{$this->_definition['image_field']};
-
-                //et on supprime les entrées des images existantes (sinon : doublons)
-                foreach($node->{$this->_definition['image_field']}[LANGUAGE_NONE] as $index => $field_value) {
-
-                    if(array_key_exists($field_value['filename'], $images_paths)) {
-                        //on supprime le cache de l'ancienne image
-                        image_path_flush($field_value['uri']);
-                        unset($node->{$this->_definition['image_field']}[LANGUAGE_NONE][$index]);
-                    }
-                }
+                $target_filename = $target_filename_prefix . pathinfo($source_path, PATHINFO_FILENAME) . '.' . pathinfo($source_path, PATHINFO_EXTENSION);
+                $images_paths[$target_filename] = $source_path;
             }
 
-            $fields['images'] = array(
-                'field' => $this->_definition['image_field'],
-                'type' => 'image',
-                'cardinality' => -1,
-                'translatable' => 0,
-                'values' => array(),
+            if(!empty($images_paths)) {
+
+                $original_node = node_load($node->nid);
+
+                //si le champ d'origine est vide, ou le mode des images est défini sur 'replace'
+                if(empty($original_node->{$drupal_field})
+                    || $this->_definition['image_mode'] == 'replace') {
+
+                    if(!empty($original_node->{$drupal_field})) {
+
+                        //on supprime le cache des images anciennes images car les nouvelles auront très probablement le même nom
+                        foreach($original_node->{$drupal_field}[LANGUAGE_NONE] as $field_value) {
+                            image_path_flush($field_value['uri']);
+                        }
+                    }
+
+                    //on initialise le champ (SFA ne le fera pas : il ne connait pas le champ)
+                    $node->{$drupal_field}[LANGUAGE_NONE] = array();
+
+                //le champ d'origine n'est pas vide, ou le mode des images est défini sur 'update'
+                } else {
+                    //on transfert les anciennes valeurs du node d'origine vers le node en cours d'écriture
+                    $node->{$drupal_field} = $original_node->{$drupal_field};
+
+                    //et on supprime les entrées des images existantes (sinon : doublons)
+                    foreach($node->{$drupal_field}[LANGUAGE_NONE] as $index => $field_value) {
+
+                        if(array_key_exists($field_value['filename'], $images_paths)) {
+                            //on supprime le cache de l'ancienne image
+                            image_path_flush($field_value['uri']);
+                            unset($node->{$drupal_field}[LANGUAGE_NONE][$index]);
+                        }
+                    }
+                }
+
+                foreach($images_paths as $image_path) {
+                    $fields['IMAGES']['values'][] = $image_path;
+                }
+
+            } else {
+                //les images existantes ne doivent pas être écrasées
+                unset($node->{$drupal_field});
+            }
+        }
+
+        //--- Geolocation
+        if($node_hierarchy == self::PARENT_NODE
+            && array_key_exists('LONGITUDE', $fields)
+            && array_key_exists('LATITUDE', $fields)) {
+
+            $coordinates = $this->_geocode(
+                $data['VILLE_OFFRE'],
+                'fr',
+                $data['CP_OFFRE'],
+                $data['ADRESSE1_OFFRE'],
+                $data['ADRESSE2_OFFRE']
             );
 
-            foreach($images_paths as $image_path) {
-
-                $fields['images']['values'][] = $image_path;
+            if($coordinates != false) {
+                $fields['LONGITUDE']['values'] = array($coordinates['lng']);
+                $fields['LATITUDE']['values'] = array($coordinates['lat']);
             }
-        } else {
-            //les images existantes ne doivent pas être écrasées
-            unset($node->{$this->_definition['image_field']});
         }
 
-        $title = $title_string;
+        $title = $title_string . $title_suffix;
 
         return;
+    }
+
+    /**
+    * Get address coordinates from Google
+    *
+    * @param string $city
+    * @param string $country
+    * @param string $cp
+    * @param string $address1
+    * @param string $address2
+    * @return mixed : array of lat/lng or false
+    */
+    function _geocode($city = "", $country = "", $cp = "", $address1 = "", $address2 = "") {
+
+        $place = array();
+
+        if(!empty($address1) || !empty($address2)) {
+            $place[] = $address1 . (!empty($address2) ? " " . $address2 : "");
+        }
+
+        if(!empty($cp)) {
+            $place[] = $cp;
+        }
+
+        if(!empty($city)) {
+            $place[] = $city;
+        }
+
+        if(!empty($country)) {
+            $place[] = $country;
+        }
+
+        $place = urlencode(implode(',', $place));
+
+        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=" . $place;
+        $response = file_get_contents($url);
+
+        if(!empty($response)) {
+
+            $response = json_decode($response, true);
+
+            if(!array_key_exists('status', $response) || $response['status'] != "OK") {
+                return false;
+            }
+
+            if(empty($response['results'])) {
+                return false;
+            }
+
+            return $response['results'][0]['geometry']['location'];
+        }
+
+        return false;
+    }
+
+    function _get_xml_data($filename, $filter = true) {
+
+        $connector_id = $this->_definition['id'];
+        $upload_directory = drupal_realpath('public://' . $this->_definition['upload_directory']);
+        $unzip_directory = $this->_inflate_archive($filename, $upload_directory, $connector_id);
+        $this->_unzip_absolute_path = $upload_directory . '/' . $unzip_directory;
+
+        $cid = 'sfa_pericles:' . $unzip_directory . ':' . ($filter == true ? 'filtered' : 'unfiltered');
+
+        $cached = cache_get($cid);
+
+        if(empty($cached)) {
+             $xml = simplexml_load_file($this->_findXMLFile($upload_directory . '/' . $unzip_directory), null, LIBXML_NOCDATA);
+             $data = $this->_xml2array($xml, $filter);
+             cache_set($cid, $data);
+
+             return $data;
+        } else {
+             return $cached->data;
+        }
+    }
+
+    /**
+     * Unzip function
+     *
+     * @param string $filename : without extension
+     * @param string $upload_directory : with scheme
+     * @param string $connector_id
+     *
+     * @return string : the absolute path to the files.
+     */
+    function _inflate_archive($filename, $upload_directory, $connector_id) {
+
+        $file_time = filemtime($upload_directory . '/' . $filename . '.ZIP');
+        $file_date = DateTime::createFromFormat('U', $file_time)->setTimezone(new DateTimeZone('Europe/Paris'))->format('Ymd');
+        $unzip_directory = $file_date . '_' . $connector_id;
+        $target_directory = $upload_directory . '/' . $unzip_directory;
+
+        if(!is_dir($target_directory)) {
+            $archive = new ZipArchive();
+            $archive->open($upload_directory .'/' . $filename . '.ZIP');
+            $archive->extractTo($target_directory);
+            $archive->close();
+        }
+
+        return $unzip_directory;
+    }
+
+    protected function _findXMLFile($directory) {
+        $file_array = glob($directory . '/*.XML');
+
+        if(empty($file_array)) {
+            $file_array = glob($directory . '/*.xml');
+        }
+
+        return !empty($file_array) ? $file_array[0] : false;
+    }
+
+   /**
+     * le tableau sera indexé par NO_ASP
+     *
+     * @param simpleXmlElement $xml
+     * @param boolean $filter : doit-on filtrer les lots sans n° de dossier ? (défaut : true)
+     * @return array
+     */
+    protected function _xml2array(simpleXmlElement $xml, $filter = true)
+    {
+        $arr = array();
+
+        foreach ($xml->children() as $r) {
+
+            if(count($r->children()) == 0) {
+                $arr[$r->getName()] = strval($r);
+            } else {
+                $tmp = $this->_xml2array($r, $filter);
+
+                if($filter == true) {
+                    if(empty($tmp['NO_DOSSIER'])) {
+                        continue;
+                    }
+
+                    $arr[$r->getName()][$tmp['NO_ASP']][$tmp['NO_DOSSIER']] = $tmp;
+                } else {
+                    $arr[$r->getName()][$tmp['NO_ASP']][] = $tmp;
+                }
+            }
+        }
+
+        return $arr;
     }
 }
 

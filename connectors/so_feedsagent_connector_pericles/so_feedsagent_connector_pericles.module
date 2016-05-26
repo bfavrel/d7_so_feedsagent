@@ -15,50 +15,6 @@ function so_feedsagent_connector_pericles_so_feedsagent_connectors() {
     );
 }
 
-function so_feedsagent_connector_pericles_get_types_offres($index = null) {
-    $types = array(
-        1 => "vente appart",
-        2 => "vente maison",
-        3 => "vente terrain",
-        4 => "vente immeuble",
-        5 => "vente local",
-        6 => "vente fdc",
-        7 => "vente parking",
-        11 => "location appart",
-        12 => "location mais",
-        13 => "location local",
-        14 => "location parking",
-        21 => "programme",
-    );
-
-    return $index === null ? $types : $types[$index];
-}
-
-/**
- * Unzip function
- *
- * @param string $filename : without extension
- * @param string $upload_directory : with scheme
- * @param string $connector_id
- *
- * @return string : the absolute path to the files.
- */
-function so_feedsagent_connector_pericles_inflate_archive($filename, $upload_directory, $connector_id) {
-
-    $file_time = filemtime($upload_directory . '/' . $filename . '.zip');
-    $file_date = DateTime::createFromFormat('U', $file_time)->setTimezone(new DateTimeZone('Europe/Paris'))->format('Ymd');
-    $target_directory = $upload_directory . '/' . $file_date . '_' . $connector_id;
-
-    if(!is_dir($target_directory)) {
-        $archive = new ZipArchive();
-        $archive->open($upload_directory .'/' . $filename . '.zip');
-        $archive->extractTo($target_directory);
-        $archive->close();
-    }
-
-    return $target_directory;
-}
-
 /*
  * Implementation of hook_sfa_generator_form_map()
  */

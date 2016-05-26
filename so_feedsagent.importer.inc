@@ -593,7 +593,7 @@ function so_feedsagent_importer_batch_process_feed($feed_id, $op = 'update') {
 
     if(empty($items_definitions) || !is_array($items_definitions)) {
 
-        $message = empty($items_definitions) ? t("Connector didn't return any listing XML data") : $items_definitions;
+        $message = empty($items_definitions) ? t("Connector didn't return any listing data") : $items_definitions;
         watchdog('Importer', $batch_title . " : " . $message, array(), WATCHDOG_ERROR);
 
         if ($op == 'cron' || $op == 'cron_import') {

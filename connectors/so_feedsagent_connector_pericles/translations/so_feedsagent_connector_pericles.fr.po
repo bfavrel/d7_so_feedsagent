@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-02-26 11:33+0100\n"
-"PO-Revision-Date: 2016-02-26 11:43+0100\n"
+"POT-Creation-Date: 2016-05-26 14:12+0200\n"
+"PO-Revision-Date: 2016-05-26 14:12+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -20,27 +20,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: SoFeedsAgentConnectorPericles.class.php:67
+#: SoFeedsAgentConnectorPericles.class.php:54
 msgid "Archives upload directory"
 msgstr "Répertoire d'upload des archives"
 
-#: SoFeedsAgentConnectorPericles.class.php:75
-msgid "Field to use for images"
-msgstr "Champ à utiliser pour les images"
-
-#: SoFeedsAgentConnectorPericles.class.php:76
-msgid ""
-"Since there is any XML field for images, FeedsAgent Wizard can't make the "
-"mapping itself."
-msgstr ""
-"Dans la mesure où il n'y a pas de champ CML pour les images, le Wizard "
-"FeedsAgent ne peux pas effectuer le mapping lui-même."
-
-#: SoFeedsAgentConnectorPericles.class.php:84
+#: SoFeedsAgentConnectorPericles.class.php:62
 msgid "Images update mode"
 msgstr "Mode de mise à jour des images"
 
-#: SoFeedsAgentConnectorPericles.class.php:86
+#: SoFeedsAgentConnectorPericles.class.php:64
 msgid ""
 "Update mode : images with new name in archive will be added to node's "
 "existing ones, and those with existing name will replace old ones."
@@ -49,50 +37,50 @@ msgstr ""
 "aux images existantes du node, et celles avec un nom existant remplaceront "
 "les anciennes."
 
-#: SoFeedsAgentConnectorPericles.class.php:87
+#: SoFeedsAgentConnectorPericles.class.php:65
 msgid ""
 "Replace mode : images in archive will replace whole node's existing images."
 msgstr ""
 "Mode 'Replace' : les images de l'archive remplacent la totalité des images "
 "du node."
 
-#: SoFeedsAgentConnectorPericles.class.php:102
+#: SoFeedsAgentConnectorPericles.class.php:80
 msgid "Archive name"
 msgstr "Nom de l'archive"
 
-#: SoFeedsAgentConnectorPericles.class.php:103
+#: SoFeedsAgentConnectorPericles.class.php:81
 msgid "File name without extension"
 msgstr "Nom de fichier sans extension"
 
-#: SoFeedsAgentConnectorPericles.class.php:111
+#: SoFeedsAgentConnectorPericles.class.php:89;101
 msgid "Offers type"
 msgstr "Type d'offres"
 
-#: SoFeedsAgentConnectorPericles.class.php:127;135
+#: SoFeedsAgentConnectorPericles.class.php:107;115
 msgid "File"
 msgstr "Fichier"
 
-#: SoFeedsAgentConnectorPericles.class.php:131;136
+#: SoFeedsAgentConnectorPericles.class.php:111;116
 msgid "State"
 msgstr "Etat"
 
-#: SoFeedsAgentConnectorPericles.class.php:131
+#: SoFeedsAgentConnectorPericles.class.php:111
 msgid "Updated on @datetime"
 msgstr "Mise à jour : @datetime"
 
-#: SoFeedsAgentConnectorPericles.class.php:136
+#: SoFeedsAgentConnectorPericles.class.php:116
 msgid "File doesn't exist yet"
 msgstr "Le fichier n'existe pas encore"
 
-#: SoFeedsAgentConnectorPericles.class.php:182
+#: SoFeedsAgentConnectorPericles.class.php:162
 msgid "Archive to use"
 msgstr "Archive à utiliser"
 
-#: SoFeedsAgentConnectorPericles.class.php:188
+#: SoFeedsAgentConnectorPericles.class.php:168
 msgid "Number of items to skip"
 msgstr "Index de la fiche à utiliser"
 
-#: SoFeedsAgentConnectorPericles.class.php:227
+#: SoFeedsAgentConnectorPericles.class.php:207
 msgid ""
 "A Périclès virtual type named '@name' and matching the primary type "
 "'@primary' already exists.<br />It's mapped on '@type' Drupal's content type."
@@ -100,7 +88,7 @@ msgstr ""
 "Un type virtuel Périclès nommé '@name' et correspondant à type primaire "
 "'@primary' existe déjà.<br />Il est mappé sur le type Drupal : '@type'."
 
-#: SoFeedsAgentConnectorPericles.class.php:247
+#: SoFeedsAgentConnectorPericles.class.php:227
 msgid ""
 "A Périclès virtual type named '@name' and matching the primary type "
 "'@primary' already exists.<br />Since it's not mapped on any Drupal's "
@@ -110,67 +98,95 @@ msgstr ""
 "'@primary' existe déjà.<br />Dans la mesure où il n'est mappé sur aucun type "
 "Drupal, il peut être redéfini."
 
-#: SoFeedsAgentConnectorPericles.class.php:289
+#: SoFeedsAgentConnectorPericles.class.php:272
 msgid "ASP num."
 msgstr "N° ASP"
 
-#: SoFeedsAgentConnectorPericles.class.php:296
+#: SoFeedsAgentConnectorPericles.class.php:279
 msgid "Offer type"
 msgstr "Type d'offre"
 
-#: SoFeedsAgentConnectorPericles.class.php:303
+#: SoFeedsAgentConnectorPericles.class.php:286
 msgid "Offer date"
 msgstr "Date de l'offre"
 
-#: SoFeedsAgentConnectorPericles.class.php:310
+#: SoFeedsAgentConnectorPericles.class.php:293
 msgid "Date edit."
 msgstr "Date de modif."
 
-#: so_feedsagent_connector_pericles.module:69
+#: SoFeedsAgentConnectorPericles.class.php:300
+msgid "Node hierarchy"
+msgstr "Hiérarchie du node"
+
+#: SoFeedsAgentConnectorPericles.class.php:304
+msgid "Parent node"
+msgstr "Node parent"
+
+#: SoFeedsAgentConnectorPericles.class.php:305
+msgid "Child node"
+msgstr "Node enfant"
+
+#: SoFeedsAgentConnectorPericles.class.php:312
+msgid "Geolocation"
+msgstr "Géolocalisation"
+
+#: SoFeedsAgentConnectorPericles.class.php:318
+msgid "Longitude"
+msgstr ""
+
+#: SoFeedsAgentConnectorPericles.class.php:324
+msgid "Latitude"
+msgstr ""
+
+#: SoFeedsAgentConnectorPericles.class.php:330
+msgid "Images"
+msgstr ""
+
+#: so_feedsagent_connector_pericles.module:25
 msgid "Define and map a Périclès virtual type"
 msgstr "Définir et mapper un type virtuel Périclès"
 
-#: so_feedsagent_connector_pericles.module:72;167
+#: so_feedsagent_connector_pericles.module:28;123
 msgid "Périclès connector"
 msgstr "Connecteur Périclès"
 
-#: so_feedsagent_connector_pericles.module:82
+#: so_feedsagent_connector_pericles.module:38
 msgid "Use"
 msgstr "Utiliser"
 
-#: so_feedsagent_connector_pericles.module:90;203
+#: so_feedsagent_connector_pericles.module:46;159
 msgid "Mapping parameters"
 msgstr "Paramètres de mappage"
 
-#: so_feedsagent_connector_pericles.module:101
+#: so_feedsagent_connector_pericles.module:57
 msgid "Map from orphan virtual type"
 msgstr "Mapper à partir d'un type virtuel orphelin"
 
-#: so_feedsagent_connector_pericles.module:102
+#: so_feedsagent_connector_pericles.module:58
 msgid "no"
 msgstr "non"
 
-#: so_feedsagent_connector_pericles.module:109;212
+#: so_feedsagent_connector_pericles.module:65;168
 msgid "Drupal type mapping target"
 msgstr "Type Drupal cible"
 
-#: so_feedsagent_connector_pericles.module:110;213
+#: so_feedsagent_connector_pericles.module:66;169
 msgid "create a new one"
 msgstr "en créer un nouveau"
 
-#: so_feedsagent_connector_pericles.module:119;222
+#: so_feedsagent_connector_pericles.module:75;178
 msgid "Périclès data"
 msgstr "Données Périclès"
 
-#: so_feedsagent_connector_pericles.module:126;229
+#: so_feedsagent_connector_pericles.module:82;185
 msgid "Fields to unionize"
 msgstr "Champs à syndiquer"
 
-#: so_feedsagent_connector_pericles.module:133;236
+#: so_feedsagent_connector_pericles.module:89;192
 msgid "Fields definitions and mappings"
 msgstr "Définition des champs et mappages"
 
-#: so_feedsagent_connector_pericles.module:134;237
+#: so_feedsagent_connector_pericles.module:90;193
 msgid ""
 "'Title' parameter : if one or more values have been set in feed/connector, "
 "they can be overridden partially or totally, with correct index assignement."
@@ -179,23 +195,23 @@ msgstr ""
 "flux/connecteur, celles-ci peuvent être supplantées en tout ou partie, avec "
 "un assignement correct des indexes."
 
-#: so_feedsagent_connector_pericles.module:140;243
+#: so_feedsagent_connector_pericles.module:96;199
 msgid "Media params"
 msgstr "Paramètre des médias"
 
-#: so_feedsagent_connector_pericles.module:147;250
+#: so_feedsagent_connector_pericles.module:103;206
 msgid "Drupal new node type params"
 msgstr "Paramètres du nouveau type Drupal"
 
-#: so_feedsagent_connector_pericles.module:164
+#: so_feedsagent_connector_pericles.module:120
 msgid "Edit a Périclès virtual type"
 msgstr "Editer un type virtuel Périclès"
 
-#: so_feedsagent_connector_pericles.module:177
+#: so_feedsagent_connector_pericles.module:133
 msgid "Edit virtual types which use"
 msgstr "Editer les types virtuels qui utilisent"
 
-#: so_feedsagent_connector_pericles.module:185
+#: so_feedsagent_connector_pericles.module:141
 msgid "Virtual type"
 msgstr "Type virtuel"
 
