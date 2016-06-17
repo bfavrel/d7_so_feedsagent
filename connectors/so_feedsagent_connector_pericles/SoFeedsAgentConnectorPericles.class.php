@@ -346,7 +346,7 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
             $fields_list[$field] = array(
                 'label' => $field,
                 'type' => 'undefined',
-                'values' => !empty($value) ? array($value) : array(),
+                'values' => !empty($value) ? array(substr(md5($value), 0, 8) => $value) : array(),
             );
         }
 
