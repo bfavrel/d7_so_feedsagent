@@ -1382,13 +1382,18 @@ function so_feedsagent_importer_node_update(&$node, $item, $fields, $configurati
 
         $field_language = $field['translatable'] == 1 ? $node->language : LANGUAGE_NONE;
 
-        $node->{$field['field']}[$field_language] = array_merge($node->{$field['field']}[$field_language], $format_callback(
-            $field,
-            $node->{$field['field']}[$node->language],
-            $configuration['common']['widgets_options'],
-            $node->nid,
-            $item['id']
-        ));
+        // on n'effectue pas le traitement si le champ n'existe pas/plus dans l'objet $node. En effet,
+        // le connecteur peut, pour une raison ou une autre supprimer le champ du node, afin d'en préserver
+        // les anciennes valeurs
+        if(property_exists($node, $field['field'])) {
+            $node->{$field['field']}[$field_language] = array_merge($node->{$field['field']}[$field_language], $format_callback(
+                $field,
+                $node->{$field['field']}[$node->language],
+                $configuration['common']['widgets_options'],
+                $node->nid,
+                $item['id']
+            ));
+        }
     }
 }
 
