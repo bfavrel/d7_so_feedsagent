@@ -523,22 +523,19 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
             if(!empty($images_paths)) {
 
-                $original_node = node_load($node->nid);
+                $original_node = node_load($node->nid, null, true);//sans le reset, les champs syndiqués sont vides. POURQUOI ?
 
                 //si le champ d'origine est vide, ou le mode des images est défini sur 'replace'
                 if(empty($original_node->{$drupal_field})
                     || $this->_definition['image_mode'] == 'replace') {
 
+                    // cas du 'replace'
                     if(!empty($original_node->{$drupal_field})) {
-
                         //on supprime le cache des images anciennes images car les nouvelles auront très probablement le même nom
-                        foreach($original_node->{$drupal_field}[LANGUAGE_NONE] as $field_value) {
+                        foreach($original_node->{$drupal_field}[$node->language] as $field_value) {
                             image_path_flush($field_value['uri']);
                         }
                     }
-
-                    //on initialise le champ (SFA ne le fera pas : il ne connait pas le champ)
-                    $node->{$drupal_field}[LANGUAGE_NONE] = array();
 
                 //le champ d'origine n'est pas vide, ou le mode des images est défini sur 'update'
                 } else {
@@ -546,12 +543,11 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
                     $node->{$drupal_field} = $original_node->{$drupal_field};
 
                     //et on supprime les entrées des images existantes (sinon : doublons)
-                    foreach($node->{$drupal_field}[LANGUAGE_NONE] as $index => $field_value) {
-
+                    foreach($node->{$drupal_field}[$node->language] as $index => $field_value) {
                         if(array_key_exists($field_value['filename'], $images_paths)) {
                             //on supprime le cache de l'ancienne image
                             image_path_flush($field_value['uri']);
-                            unset($node->{$drupal_field}[LANGUAGE_NONE][$index]);
+                            unset($node->{$drupal_field}[$node->language][$index]);
                         }
                     }
                 }
