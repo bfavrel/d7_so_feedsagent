@@ -249,7 +249,7 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
         $filename = $wizzard_params['params']['connector']['file'];
         $item_index = $wizzard_params['params']['connector']['item_index'];
 
-        $all_data = $this->_get_xml_data($filename, false);
+        $all_data = $this->_get_xml_data($filename, false, true);
 
         $all_data_flat = array();
 
@@ -380,7 +380,7 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
     public function importerGetFeedListing(array $configuration) {
 
         $filename = $configuration['filename'];
-        $all_data = $this->_get_xml_data($filename, true);
+        $all_data = $this->_get_xml_data($filename, true, true);
         $data = $all_data['BIEN'];
 
         $listing = array();
@@ -639,7 +639,7 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
         return false;
     }
 
-    function _get_xml_data($filename, $filter = true) {
+    function _get_xml_data($filename, $filter = true, $reset_cache = false) {
 
         $connector_id = $this->_definition['id'];
         $upload_directory = drupal_realpath('public://' . $this->_definition['upload_directory']);
@@ -650,12 +650,14 @@ class SoFeedsAgentConnectorPericles extends SoFeedsAgentConnectorAbstract
 
         $cached = cache_get($cid);
 
-        if(empty($cached)) {
+        if(empty($cached) || $reset_cache == true) {
+
              $xml = simplexml_load_file($this->_findXMLFile($upload_directory . '/' . $unzip_directory), null, LIBXML_NOCDATA);
              $data = $this->_xml2array($xml, $filter);
              cache_set($cid, $data);
 
              return $data;
+             
         } else {
              return $cached->data;
         }
