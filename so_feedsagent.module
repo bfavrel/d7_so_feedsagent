@@ -183,7 +183,7 @@ function so_feedsagent_menu() {
         'access arguments' => array('administer feedsagent'),
         'weight' => 0,
     );
-    
+
     $items['admin/reports/feedsagent/items'] = array(
         'title' => "Items",
         'page callback' => 'so_feedsagent_report_items',
@@ -192,7 +192,7 @@ function so_feedsagent_menu() {
         'file' => 'so_feedsagent.importer.inc',
         'weight' => 1,
     );
-    
+
     $items['admin/reports/feedsagent/logs/item/%'] = array( // item_id [/ nid]
         'page callback' => 'so_feedsagent_log_item_display',
         'page arguments' => array(5),
@@ -216,7 +216,7 @@ function so_feedsagent_menu() {
         'access arguments' => array('administer feedsagent'),
         'file' => 'so_feedsagent.importer.inc',
     );
-    
+
     // ----- NODE IMPORTER TAB
 
     $items['node/%node/importer'] = array( // param3 = 'launch' : lance l'import
@@ -1480,10 +1480,10 @@ function so_feedsagent_node_type_delete($infos) {
  * Cleans the feedsagent_nodes_overrides table.
  */
 function so_feedsagent_node_delete($node) {
-    
+
     // réinitialisation des couplages
     db_query("UPDATE {feedsagent_contents} SET nid_parent=nid WHERE nid_parent=?", array($node->nid));
-    
+
     db_query("DELETE FROM {feedsagent_nodes_overrides} WHERE nid=?", array($node->nid));
     db_query("DELETE FROM {feedsagent_contents} WHERE nid=?", array($node->nid));
 }
@@ -1591,6 +1591,9 @@ function so_feedsagent_so_listings_query(&$query, &$data, $sources = null) {//$s
 
     $query['fields'][] = "feedsagent_contents.nid_parent AS sfa_nid_processed";
     $query['join'][] = "LEFT JOIN {feedsagent_contents} AS feedsagent_contents ON feedsagent_contents.nid=n.nid";
+    // Normalement, tous les items ont un parent (qui peut être lui même). Lorsque la requête implique des nodes
+    // non gérés par SFA le nid est null et provoque une erreur au node_load()
+    $query['where'][] = "feedsagent_contents.nid_parent IS NOT NULL";
 }
 
 /*
