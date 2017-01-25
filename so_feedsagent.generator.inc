@@ -1256,7 +1256,7 @@ function so_feedsagent_generator_feed_fields_step(&$step_elements, &$form_state,
         $labels[$field_name] = array_key_exists('label', $definition) && !empty($definition['label']) ? array('#markup' => $definition['label']) : array('#markup' => $field_name);
         $type_families[$field_name] = array_key_exists('type', $definition) ? array('#markup' => $available_fields_types[$definition['type']]['family']) : array('#markup' => t("undefined"));
 
-        if(array_key_exists('values', $definition) && !empty($definition['values'])) {
+        if(array_key_exists('values', $definition) && count(array_filter($definition['values'], strlen)) > 0) {
             $values_tooltip = $values_tootltip_pattern;
             $values_tooltip['title'] = implode(PHP_EOL, $definition['values']);
             $type_families[$field_name]['#suffix'] = " " . theme('image', $values_tooltip);
