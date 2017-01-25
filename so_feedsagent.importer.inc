@@ -1004,8 +1004,8 @@ function so_feedsagent_importer_batch_node_create($item, $tnids = array(), $op, 
         so_feedsagent_log_item_write('fail', $item_infos, $event_infos);
 
         // DEV : provisoire, en attendant la mise en place des récaps de logs
-        watchdog('Importer', "Error hapend during update : <br />@data", array(
-            '@data' => $event_infos['data'] . "<br />Item : " . $item['id']
+        watchdog('Importer', "Error hapend during update : <br />!data", array(
+            '!data' => $event_infos['data'] . "<br />Item : " . $item['id']
         ), WATCHDOG_ERROR);
     }
 
@@ -1013,7 +1013,7 @@ function so_feedsagent_importer_batch_node_create($item, $tnids = array(), $op, 
 
     if (!empty($node)) { // si l'update echoue, elle vide l'objet $node
 
-        // on traite les éventuelles erreur PDO qui sont suceptibles de survenir à la sauvegardes (ex : checkbox on/off avec des valeurs non-booléennes)
+        // on traite les éventuelles erreurs PDO qui sont suceptibles de survenir à la sauvegardes (ex : checkbox on/off avec des valeurs non-booléennes)
         try {
             node_save($node);
         } catch (Exception $exc) {
@@ -1284,7 +1284,7 @@ function so_feedsagent_importer_batch_node_update($nid, $item, $op, &$context) {
         so_feedsagent_log_item_write('fail', $item_infos, $event_infos);
 
         // DEV : provisoire, en attendant la mise en place des récaps de logs
-        watchdog('Importer', "Error hapend during update : <br />@data", array('@data' =>
+        watchdog('Importer', "Error hapend during update : <br />!data", array('!data' =>
             $event_infos['data'] . "<br />Item : " . $item['id'] . "<br />Nid : " . $nid,
         ), WATCHDOG_ERROR);
 
@@ -2047,7 +2047,7 @@ function _so_feedsagent_importer_error_handler($error_level, $message, $filename
         so_feedsagent_log_item_write('warning', $item_infos, $event_infos);
 
         // DEV : provisoire, en attendant la mise en place des récaps de logs
-        watchdog('Importer', $message . "<br />Context : <br /><pre>@context</pre>", array('@context' => print_r($context['error_handler_params'], true)), WATCHDOG_ERROR);
+        watchdog('Importer', $message . "<br />Context : <br /><pre>!context</pre>", array('!context' => print_r($context['error_handler_params'], true)), WATCHDOG_ERROR);
 
     } else {
         _drupal_error_handler($error_level, $message, $filename, $line, $context);
