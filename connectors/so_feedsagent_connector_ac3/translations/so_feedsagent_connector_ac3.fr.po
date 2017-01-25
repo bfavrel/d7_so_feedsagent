@@ -1,0 +1,253 @@
+# $Id$
+#
+# French translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  SoFeedsAgentConnectorAC3.class.php: n/a
+#  so_feedsagent_connector_ac3.module: n/a
+#  so_feedsagent_connector_ac3.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2017-01-19 09:05+0100\n"
+"PO-Revision-Date: 2017-01-19 09:35+0100\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: French <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"Language: fr\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: SoFeedsAgentConnectorAC3.class.php:30
+msgid "Archives upload directory"
+msgstr "Répertoire d'upload des archives"
+
+#: SoFeedsAgentConnectorAC3.class.php:31
+msgid "Without trailing slash"
+msgstr "Sans le slash de fin"
+
+#: SoFeedsAgentConnectorAC3.class.php:47
+msgid "Archive name"
+msgstr "Nom de l'archive"
+
+#: SoFeedsAgentConnectorAC3.class.php:48
+msgid "File name without extension"
+msgstr "Nom de fichier sans extension"
+
+#: SoFeedsAgentConnectorAC3.class.php:63;71
+msgid "File"
+msgstr "Fichier"
+
+#: SoFeedsAgentConnectorAC3.class.php:67;72
+msgid "State"
+msgstr "Etat"
+
+#: SoFeedsAgentConnectorAC3.class.php:67
+msgid "Updated on @datetime"
+msgstr "Mise à jour : @datetime"
+
+#: SoFeedsAgentConnectorAC3.class.php:72
+msgid "File doesn't exist yet"
+msgstr "Le fichier n'existe pas encore"
+
+#: SoFeedsAgentConnectorAC3.class.php:116
+msgid "Depending on operation type (sale or rent), fields can vary. In order to be sure to create all needed fields, generator should be launched twice. Once for each case (sale and rent)"
+msgstr ""
+"Selon le type d'opération (vente ou location), les champs peuvent varier. Afin de s'assurer de pouvoir créer tous les champs nécessaires, le generator devrait être lancé deux fois. Une "
+"fois pour chaque cas (vente et location)."
+
+#: SoFeedsAgentConnectorAC3.class.php:121
+msgid "Archive to use"
+msgstr "Archive à utiliser"
+
+#: SoFeedsAgentConnectorAC3.class.php:127
+msgid "Number of items to skip"
+msgstr "Index de la fiche à utiliser"
+
+#: SoFeedsAgentConnectorAC3.class.php:166
+msgid "An aC3 virtual type named '@name' and matching the primary type '@primary' already exists.<br />It's mapped on '@type' Drupal's content type."
+msgstr ""
+
+#: SoFeedsAgentConnectorAC3.class.php:186
+msgid "An aC3 virtual type named '@name' and matching the primary type '@primary' already exists.<br />Since it's not mapped on any Drupal's content type, it can be redefined."
+msgstr ""
+
+#: SoFeedsAgentConnectorAC3.class.php:213
+msgid "File '@file' doesn't exists"
+msgstr ""
+
+#: SoFeedsAgentConnectorAC3.class.php:236
+msgid "aC3 reference"
+msgstr "Référence aC3"
+
+#: SoFeedsAgentConnectorAC3.class.php:243
+msgid "Operation type"
+msgstr "Type d'opération"
+
+#: SoFeedsAgentConnectorAC3.class.php:251
+msgid "Type of good"
+msgstr "Type de bien"
+
+#: SoFeedsAgentConnectorAC3.class.php:259
+msgid "Offer date"
+msgstr "Date de l'offre"
+
+#: SoFeedsAgentConnectorAC3.class.php:266
+msgid "Update date"
+msgstr "Date de mise à jour"
+
+#: SoFeedsAgentConnectorAC3.class.php:283
+msgid "Comments"
+msgstr "Commentaires"
+
+#: SoFeedsAgentConnectorAC3.class.php:293
+msgid "Images"
+msgstr ""
+
+#: SoFeedsAgentConnectorAC3.class.php:389
+msgid "Sale"
+msgstr "Vente"
+
+#: SoFeedsAgentConnectorAC3.class.php:390
+msgid "Rent"
+msgstr "Location"
+
+#: SoFeedsAgentConnectorAC3.class.php:413
+msgid "Apartment"
+msgstr "Appartement"
+
+#: SoFeedsAgentConnectorAC3.class.php:414
+msgid "House"
+msgstr "Maison"
+
+#: SoFeedsAgentConnectorAC3.class.php:415
+msgid "Agricultural and wine sector"
+msgstr "Domaine agricole et viticole"
+
+#: SoFeedsAgentConnectorAC3.class.php:416
+msgid "Parking/Box"
+msgstr "Parking/Box"
+
+#: SoFeedsAgentConnectorAC3.class.php:417
+msgid "New program"
+msgstr "Programme neuf"
+
+#: SoFeedsAgentConnectorAC3.class.php:418
+msgid "Land"
+msgstr "Terrain"
+
+#: SoFeedsAgentConnectorAC3.class.php:419
+msgid "Luxury property"
+msgstr "Demeure de prestige"
+
+#: SoFeedsAgentConnectorAC3.class.php:420
+msgid "Leasehold and sale of lease"
+msgstr "Fond de commerce et cession de bail"
+
+#: SoFeedsAgentConnectorAC3.class.php:421
+msgid "Forest area"
+msgstr "Domaine forestier"
+
+#: SoFeedsAgentConnectorAC3.class.php:422
+msgid "Building"
+msgstr "Immeuble"
+
+#: SoFeedsAgentConnectorAC3.class.php:423
+msgid "Others"
+msgstr "Autres"
+
+#: SoFeedsAgentConnectorAC3.class.php:424
+msgid "Office / Business premises, warehouse, industrial premises and walls"
+msgstr "Bureau / Local professionnel, entrepôt, local industriel et murs"
+
+#: SoFeedsAgentConnectorAC3.class.php:425
+msgid "Cellar"
+msgstr "Cave"
+
+#: so_feedsagent_connector_ac3.module:9
+msgid "Immo-Facile XML aC3"
+msgstr ""
+
+#: so_feedsagent_connector_ac3.module:23
+msgid "Define and map an aC3 virtual type"
+msgstr "Définir et mapper un type virtuel aC3"
+
+#: so_feedsagent_connector_ac3.module:26;121
+msgid "aC3 connector"
+msgstr ""
+
+#: so_feedsagent_connector_ac3.module:36
+msgid "Use"
+msgstr "Utiliser"
+
+#: so_feedsagent_connector_ac3.module:44;157
+msgid "Mapping parameters"
+msgstr "Paramètres de mappage"
+
+#: so_feedsagent_connector_ac3.module:55
+msgid "Map from orphan virtual type"
+msgstr "Mapper à partir d'un type virtuel orphelin"
+
+#: so_feedsagent_connector_ac3.module:56
+msgid "no"
+msgstr "non"
+
+#: so_feedsagent_connector_ac3.module:63;166
+msgid "Drupal type mapping target"
+msgstr "Type Drupal cible"
+
+#: so_feedsagent_connector_ac3.module:64;167
+msgid "create a new one"
+msgstr "en créer un nouveau"
+
+#: so_feedsagent_connector_ac3.module:73;176
+msgid "aC3 data"
+msgstr ""
+
+#: so_feedsagent_connector_ac3.module:80;183
+msgid "Fields to unionize"
+msgstr "Champs à syndiquer"
+
+#: so_feedsagent_connector_ac3.module:87;190
+msgid "Fields definitions and mappings"
+msgstr "Définition des champs et mappages"
+
+#: so_feedsagent_connector_ac3.module:88;191
+msgid "'Title' parameter : if one or more values have been set in feed/connector, they can be overridden partially or totally, with correct index assignement."
+msgstr ""
+"Paramètre 'Titre' : si une ou plusieurs valeurs ont été définies dans le flux/connecteur, celles-ci peuvent être supplantées en tout ou partie, avec un assignement correct des indexes."
+
+#: so_feedsagent_connector_ac3.module:94;197
+msgid "Media params"
+msgstr "Paramètre des médias"
+
+#: so_feedsagent_connector_ac3.module:101;204
+msgid "Drupal new node type params"
+msgstr "Paramètres du nouveau type Drupal"
+
+#: so_feedsagent_connector_ac3.module:118
+msgid "Edit an aC3 virtual type"
+msgstr "Editer un type virtuel aC3"
+
+#: so_feedsagent_connector_ac3.module:131
+msgid "Edit virtual types which use"
+msgstr "Editer les types virtuels qui utilisent"
+
+#: so_feedsagent_connector_ac3.module:139
+msgid "Virtual type"
+msgstr "Type virtuel"
+
+#: so_feedsagent_connector_ac3.info:0
+msgid "FeedsAgent connector : Immo-Facile XML aC3"
+msgstr ""
+
+#: so_feedsagent_connector_ac3.info:0
+msgid "Interface between FeedsAgent and aC3 data. Implements the content type generator and content importer functionalities."
+msgstr ""
+
+#: so_feedsagent_connector_ac3.info:0
+msgid "Saison d'Or"
+msgstr "Saison d'Or"
