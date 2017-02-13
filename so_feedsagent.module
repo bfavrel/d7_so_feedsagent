@@ -1594,7 +1594,7 @@ function so_feedsagent_prestataires_node_data($nid, $uid) {
  */
 function so_feedsagent_sources_callback(&$query, $args, $options) {// TODO : $options est toujours vide. Pourquoi ? Est-il seulement utilisé ?
     $query['join'][] = "LEFT JOIN {feedsagent_contents} AS feedsagent_contents ON feedsagent_contents.nid=n.nid";
-    $query['where'][] = "feedsagent_contents.feed_id=?";
+    $query['where'][] = "(feedsagent_contents.feed_id=? AND feedsagent_contents.obsolete_since=0)";
     $query['args'][] = $args[0];
 }
 
