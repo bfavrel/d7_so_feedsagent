@@ -420,9 +420,35 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
         unset($data['COMMENTAIRES']);
 
         //----- IMAGES
+
         if(array_key_exists('IMAGES', $data) && !empty($data['IMAGES'])) {
             $fields['IMAGES']['values'] = $data['IMAGES'][0]['IMG'];
             unset($data['IMAGES']);
+        }
+
+        //----- ADRESSE : conditional : only if VISIBLE == 'true'
+        if(array_key_exists('ADRESSE', $data)) {
+
+            if($data['VISIBLE'][0] != 'true') {
+                unset($data['ADRESSE']);
+            }
+        }
+
+        //----- GEOCODING : conditional : only if LONGITUDE and LATITUDE have been unionized but are empty
+        if(array_key_exists('LONGITUDE', $fields) && array_key_exists('LATITUDE', $fields)
+            && !array_key_exists('LONGITUDE', $data['LOCALISATION'][0]) && !array_key_exists('LATITUDE', $data['LOCALISATION'][0])) { // filtered by _xml2array()
+
+            $coordinates = $this->_geocode(
+                $data['LOCALISATION'][0]['VILLE'],
+                $data['LOCALISATION'][0]['PAYS'],
+                $data['LOCALISATION'][0]['CODE_POSTAL'],
+                $data['LOCALISATION'][0]['ADRESSE']
+            );
+
+            if($coordinates != false) {
+                $fields['LONGITUDE']['values'] = array($coordinates['lng']);
+                $fields['LATITUDE']['values'] = array($coordinates['lat']);
+            }
         }
 
         //----- REMAINING FIELDS
@@ -440,7 +466,7 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
      *
      * @param array $data : the first level of '<BIEN />'
      *
-     * @return string : 'Y-m-d H:i:s'
+     * @return int : timestamp
      */
     protected function compute_datemaj($data) {
 
@@ -457,7 +483,7 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
             }
         }
 
-        return $date_maj;
+        return DateTime::createFromFormat('Y-m-d H:i:s' ,$date_maj)->format('U');
     }
 
     protected function convert_keycode($keycode) {
@@ -608,5 +634,58 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
         }
 
         return $out;
+    }
+
+    /**
+    * Get address coordinates from Google
+    *
+    * @param string $city
+    * @param string $country
+    * @param string $cp
+    * @param string $address1
+    * @param string $address2
+    * @return mixed : array of lat/lng or false
+    */
+    protected function _geocode($city = "", $country = "", $cp = "", $address1 = "", $address2 = "") {
+
+        $place = array();
+
+        if(!empty($address1) || !empty($address2)) {
+            $place[] = $address1 . (!empty($address2) ? " " . $address2 : "");
+        }
+
+        if(!empty($cp)) {
+            $place[] = $cp;
+        }
+
+        if(!empty($city)) {
+            $place[] = $city;
+        }
+
+        if(!empty($country)) {
+            $place[] = $country;
+        }
+
+        $place = urlencode(implode(',', $place));
+
+        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=" . $place;
+        $response = file_get_contents($url);
+
+        if(!empty($response)) {
+
+            $response = json_decode($response, true);
+
+            if(!array_key_exists('status', $response) || $response['status'] != "OK") {
+                return false;
+            }
+
+            if(empty($response['results'])) {
+                return false;
+            }
+
+            return $response['results'][0]['geometry']['location'];
+        }
+
+        return false;
     }
 }
