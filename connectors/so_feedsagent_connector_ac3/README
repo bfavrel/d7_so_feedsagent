@@ -1,0 +1,3 @@
+- Only non-empty fields can be exposed in SFA Generator. It can be necessary to create fake values in an 'xml_dev.xml', in order to make theses fields appear.
+- Councerning geolocation : it will only be activated if both '<ADRESSE/>', '<LONGITUDE/>' and '<LATITUDE/>' have been unionized.
+- For options fields : in order to let SFA Generator know the allowed values, a definition field's class must be created (it must implement interface provided).
