@@ -455,7 +455,24 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
         foreach($data as $group => $values) {
             foreach($values[0] as $tag => $value) {
                 if(array_key_exists($tag, $fields)) {
-                    $fields[$tag]['values'] = array(trim($value));
+
+                    $value = trim($value);
+
+                    // Because :
+                    // - "<COUP_COEUR>0</COUP_COEUR>"
+                    // - "<VISIOPHONE>Non</VISIOPHONE>"
+                    // - "<VISIBLE>true</VISIBLE>"
+                    //
+                    // TODO : use definitions classes as import filter.
+                    if($fields[$tag]['type'] == 'onoff') {
+                        if($value == '0' || $value == 'Non' || $value == 'false') {
+                            $value = 0;
+                        } else {
+                            $value = 1;
+                        }
+                    }
+
+                    $fields[$tag]['values'] = array($value);
                 }
             }
         }

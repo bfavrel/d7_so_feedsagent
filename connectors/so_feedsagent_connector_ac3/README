@@ -1,3 +1,11 @@
 - Only non-empty fields can be exposed in SFA Generator. It can be necessary to create fake values in an 'xml_dev.xml', in order to make theses fields appear.
 - Councerning geolocation : it will only be activated if both '<ADRESSE/>', '<LONGITUDE/>' and '<LATITUDE/>' have been unionized.
 - For options fields : in order to let SFA Generator know the allowed values, a definition field's class must be created (it must implement interface provided).
+
+@TODO :
+Create fields' definition classes for each aC3 booleans used. Because : (@see : SoFeedsAgentConnectorAC3.class.php:461)
+- "<COUP_COEUR>1</COUP_COEUR>"
+- "<VISIOPHONE>Oui</VISIOPHONE>"
+- "<PISCINE>1</PISCINE>"
+- "<VISIBLE>true</VISIBLE>"
+- ...?
