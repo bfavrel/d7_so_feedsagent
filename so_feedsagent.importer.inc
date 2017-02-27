@@ -2828,7 +2828,7 @@ function so_feedsagent_importer_batch_finished($success, $results, $operations) 
     if ($success != true && $is_cron != true) { // DEV : logs
         $error_operation = reset($operations);
         drupal_set_message(t("An unknown error occurred while processing item : '@item'.<br />Reference of the batch : '@batchid'", array(
-                    '@item' => $error_operation[1][0]['id'],
+                    '@item' => $error_operation[1][1]['id'],
                     '@batchid' => $batch['id'],
                         )
                 ), 'error');
