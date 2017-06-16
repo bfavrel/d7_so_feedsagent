@@ -311,6 +311,9 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
             ),
         );
 
+        // moving remaining field 'LIBRELE' of 'INFO_GENERALES' in 'OPERATION'
+        $data['OPERATION'][0]['LIBRELE'] = $data['INFO_GENERALES'][0]['LIBRELE'];
+
         unset($data['INFO_GENERALES']);
         unset($data['OPERATION'][0]['NUM_MANDAT']);
         unset($data['BIEN'][0]['SS_TYPE']);
