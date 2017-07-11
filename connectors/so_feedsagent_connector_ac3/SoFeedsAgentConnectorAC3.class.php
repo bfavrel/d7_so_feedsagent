@@ -21,6 +21,25 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
             return true;
         }
 
+        if(array_key_exists('script', $this->_definition) && !empty($this->_definition['script'])) {
+
+            $script_path = DRUPAL_ROOT . '/' . $this->_definition['script'];
+
+            if(is_file($script_path)) {
+
+                $file_time = DateTime::createFromFormat('U', filemtime($script_path));
+                $file_time->setTimezone(new DateTimeZone("Europe/Paris"));
+
+                $script_description = t("File was found. Last update : @date at @time.", array('@date' => $file_time->format('d/m/Y'), '@time' => $file_time->format('H:i:s')));
+
+            } else {
+                $script_description = t("FILE WAS NOT FOUND !");
+            }
+
+        } else {
+            $script_description = t("After saving, check here to see if file is found.");
+        }
+
         $form = array(
             '#type' => 'fieldset',
             '#title' => "Immo-Facile XML aC3",
@@ -32,6 +51,13 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
                 '#field_prefix' => "public://",
                 '#default_value' => array_key_exists('upload_directory', $this->_definition) ? $this->_definition['upload_directory'] : "",
                 '#required' => true,
+            ),
+
+            'script' => array(
+                '#type' => 'textfield',
+                '#title' => t("Import script path"),
+                '#description' => $script_description,
+                '#default_value' => array_key_exists('data_import', $this->_definition) ? $this->_definition['script'] : "sites/default/ac3/import_filters.inc",
             ),
         );
 
@@ -454,28 +480,49 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
             }
         }
 
+        if(!empty($this->_definition['script'])) {
+            require_once DRUPAL_ROOT . '/' . $this->_definition['script'];
+        }
+
         //----- REMAINING FIELDS
         foreach($data as $group => $values) {
             foreach($values[0] as $tag => $value) {
                 if(array_key_exists($tag, $fields)) {
 
-                    $value = trim($value);
+                    $data[$group][0][$tag] = trim($data[$group][0][$tag]);
 
-                    // Because :
-                    // - "<COUP_COEUR>0</COUP_COEUR>"
-                    // - "<VISIOPHONE>Non</VISIOPHONE>"
-                    // - "<VISIBLE>true</VISIBLE>"
-                    //
-                    // TODO : use definitions classes as import filter.
-                    if($fields[$tag]['type'] == 'onoff') {
-                        if($value == '0' || $value == 'Non' || $value == 'false') {
-                            $value = 0;
-                        } else {
-                            $value = 1;
-                        }
+                    $fields[$tag]['filtered_values'] = array();
+
+                    $field_filter = 'sfa_' . $tag . '_field_filter';
+                    $type_filter = 'sfa_' . $fields[$tag]['type'] . '_type_filter';
+
+                    if(is_callable($field_filter)) {
+
+                        $field_filter(
+                            $value,
+                            $fields[$tag]['filtered_values'],
+                            $data,
+                            $fields,
+                            $node,
+                            $this->_definition,
+                            $configuration
+                        );
+
+                    } elseif(is_callable($type_filter)) {
+
+                        $type_filter(
+                            $value,
+                            $fields[$tag]['filtered_values'],
+                            $tag,
+                            $data,
+                            $fields,
+                            $node,
+                            $this->_definition,
+                            $configuration
+                        );
                     }
 
-                    $fields[$tag]['values'] = array($value);
+                    $fields[$tag]['values'] = $fields[$tag]['filtered_values'];
                 }
             }
         }
