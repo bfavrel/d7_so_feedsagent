@@ -520,6 +520,8 @@ class SoFeedsAgentConnectorAC3 extends SoFeedsAgentConnectorAbstract
                             $this->_definition,
                             $configuration
                         );
+                    } else {
+                        $fields[$tag]['filtered_values'] = array($value);
                     }
 
                     $fields[$tag]['values'] = $fields[$tag]['filtered_values'];
